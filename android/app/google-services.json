@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "238711226350",
+    "project_id": "itdata-be5ad",
+    "storage_bucket": "itdata-be5ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238711226350:android:096a03b83490e18dea58ff",
+        "android_client_info": {
+          "package_name": "com.example.itdata"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqBxWQxnS0DSs4OxmnfH0riOdqo1Rfn_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
