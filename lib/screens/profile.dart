@@ -73,9 +73,11 @@ class _ProfilePageState extends State<ProfilePage> {
             child: BlocBuilder<UserDataCubit, UserStates>(
               builder: (context, state) {
                 if (state is UserLoaded) {
+                  print("SUCCESSSSSSS");
+                  print(state.user);
                   fullname.text = state.user["fullname"];
                   username.text = state.user["username"];
-                  phone.text = state.user["tel"].toString();
+                  phone.text = state.user["tel"];
                   address.text = state.user["address"];
                   password.text = state.user["password"];
                   return Column(

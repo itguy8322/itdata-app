@@ -15,7 +15,10 @@ class LandingPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [mainColor, Color.fromARGB(255, 48, 60, 132)],
+                  colors: [
+                    Color.fromRGBO(82, 101, 140, 1),
+                    Color.fromARGB(255, 48, 60, 132),
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -206,7 +209,7 @@ class LandingPage extends StatelessWidget {
                       Navigator.pushNamed(context, "/signup");
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: mainColor,
+                      backgroundColor: Color.fromRGBO(82, 101, 140, 1),
                       padding: EdgeInsets.symmetric(
                         horizontal: 30,
                         vertical: 15,
@@ -289,7 +292,7 @@ class LandingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 40, color: mainColor),
+          Icon(icon, size: 40, color: Color.fromRGBO(82, 101, 140, 1)),
           SizedBox(height: 10),
           Text(
             title,

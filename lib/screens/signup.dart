@@ -266,6 +266,9 @@ class _SignupPageState extends State<SignupPage> {
                                   "fullname": fullname.text,
                                   "username": username.text,
                                   "email": email.text,
+                                  "tel": number.text,
+                                  "address": address.text,
+                                  "bvn": "",
                                   "password": password.text,
                                   "wallet_bal": "1550.00",
                                 });

@@ -4,10 +4,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/cubits/transaction_cubit.dart';
 import 'package:itdata/cubits/user_data_cubit.dart';
 import 'package:itdata/main.dart';
 import 'package:itdata/screens/appdrawer.dart';
 import 'package:itdata/services/auth.dart';
+import 'package:itdata/states/transac_states.dart';
 import 'package:itdata/states/user_states.dart';
 
 class Dashboard extends StatefulWidget {
@@ -38,8 +40,10 @@ class _DashboardState extends State<Dashboard> {
     // Implement some initialization operations here.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user_d = BlocProvider.of<UserDataCubit>(context);
+      final transac = BlocProvider.of<TransactionCubit>(context);
 
       user_d.load_user_data(user?.email);
+      transac.load_transactions(user?.email, "transactions");
     });
   }
 
@@ -395,14 +399,12 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
-                    child: BlocBuilder<UserDataCubit, UserStates>(
+                    child: BlocBuilder<TransactionCubit, TransacStates>(
                       builder: (context, state) {
-                        return state is UserLoaded
-                            ? state.user.containsKey("transactions")
+                        return state is TransacLoaded
+                            ? state.transactions.isEmpty
                                 ? Column(
-                                  children: recent_tranc(
-                                    user_data["transactions"],
-                                  ),
+                                  children: recent_tranc(state.transactions),
                                 )
                                 : Center(child: Text("No recent transactions"))
                             : Center(child: Text("No recent transactions"));
@@ -415,6 +417,8 @@ class _DashboardState extends State<Dashboard> {
           ),
           onRefresh: () async {
             user_data_cubit.load_user_data(user?.email);
+            final transac = BlocProvider.of<TransactionCubit>(context);
+            transac.load_transactions(user?.email, "transactions");
           },
         ),
       ),
