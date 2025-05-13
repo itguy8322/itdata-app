@@ -1,20 +1,16 @@
 // ignore_for_file: non_constant_identifier_names
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/services/database.dart';
+import 'package:itdata/states/user_states.dart';
 
-class UserDataCubit extends Cubit<Map<String, dynamic>> {
-  UserDataCubit() : super({});
-  void set_user_id(String username) {
-    emit({"username": username});
-  }
+class UserDataCubit extends Cubit<UserStates> {
+  UserDataCubit() : super(UserInitial());
 
   void load_user_data(String? username) async {
     try {
-      final snapshot = await Database().loadData("users", username!);
-      Map<String, dynamic> data = Map<String, dynamic>.from(
-        snapshot.value as Map,
-      );
-      emit(data);
+      final data = await Database().loadData("users", username!);
+
+      emit(UserLoaded(data));
     } catch (e) {
       print("ERRORRRRR: ${e.toString()}");
       //Navigator.pop(context);
@@ -26,12 +22,12 @@ class UserDataCubit extends Cubit<Map<String, dynamic>> {
     String username,
     Map<String, dynamic> data,
   ) async {
-    emit({"isloading": true});
+    emit(UserLoading());
     try {
       await Database().updateData(path, username, data);
-      emit({"isloading": false});
+      emit(UserLoaded(data));
     } catch (e) {
-      emit({"isloading": false});
+      emit(UserError("Error updating user data"));
     }
   }
 }

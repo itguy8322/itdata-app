@@ -10,10 +10,12 @@ import 'package:itdata/cubits/login_cubit.dart';
 import 'package:itdata/cubits/storage_cubit.dart';
 import 'package:itdata/cubits/theme_cubit.dart';
 import 'package:itdata/cubits/user_data_cubit.dart';
+import 'package:itdata/screens/about.dart';
 import 'package:itdata/screens/dashboard.dart';
 import 'package:itdata/screens/login.dart';
 import 'package:itdata/screens/signup.dart';
 import 'package:itdata/screens/splashscreen.dart';
+import 'package:itdata/screens/termspolicies.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5815,80 +5817,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 }
 
-class AboutUsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/dashboard");
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          title: Text("About Us"),
-          backgroundColor: mainColor,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              SizedBox(
-                height: 60,
-                child: Image.asset("assets/images/data_app_logo.png", scale: 2),
-              ),
-              SizedBox(width: 5.0),
-              Text(
-                'IT Data',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: mainColor,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Welcome to IT Data, your one-stop solution for effortless mobile and subscription management. Our platform is designed to simplify your life by providing a seamless way to purchase data, airtime, and other essential subscriptions right from your Android device.\n\nAt IT Data, we are committed to offering:\n1. Convenience: Access all your mobile needs in one place, anytime, anywhere.\n2. Reliability: Enjoy a smooth and secure transaction process every time.\n3. Affordability: Get the best value for your money with competitive rates.',
-                style: TextStyle(fontSize: 16, height: 1.5),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Our Mission',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Our mission is to empower you with easy access to services that keep you connected and productive. Join thousands of satisfied users and experience the difference today!',
-                style: TextStyle(fontSize: 16, height: 1.5),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Contact Us',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 10),
-              Text(
-                'For any inquiries or assistance, please contact us at:\n\nEmail: itguy.data@gaimal.com.com\nPhone: +234 916 491 6848\nWhatsApp: +234 916 491 6848\nAddress: Bayero University, Kano, Kano State, Nigeria',
-                style: TextStyle(fontSize: 16, height: 1.5),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
-      },
-    );
-  }
-}
-
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
@@ -6974,42 +6902,6 @@ class _BVNVerificationPageState extends State<BVNVerificationPage> {
       ),
       onPopInvokedWithResult: (b, t) async {
         Navigator.popAndPushNamed(context, "/security");
-      },
-    );
-  }
-}
-
-class TermsAndPolicyPage extends StatelessWidget {
-  const TermsAndPolicyPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/dashboard");
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          title: Text("Terms & Policy"),
-          backgroundColor: mainColor,
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              Text(
-                "By using the IT Data application, you agree to comply with the terms and conditions outlined here. Please read them carefully.\nUsers must provide accurate information during registration.\nIt is the user’s responsibility to keep login details confidential.\nAny unauthorized use of your account must be reported immediately.\nAll payments are processed securely through our trusted partners.\nUsers are responsible for ensuring sufficient funds for transactions.\nOnce a transaction is completed, refunds are not guaranteed.\nThe application is intended for personal use only.\nUsers must not exploit the app for illegal activities.\nWe value your privacy and ensure your data is securely stored.\nPersonal information will not be shared without your consent, except as required by law.\nData App is not liable for:\nDelays or interruptions caused by third-party service providers.\nLosses due to user negligence or incorrect details.\nWe reserve the right to modify these terms at any time. Continued use of the app implies acceptance of updated terms.\n\nBy using this application, you agree to the above terms and policies.",
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-        ),
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
       },
     );
   }

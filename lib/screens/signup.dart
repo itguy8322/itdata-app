@@ -268,7 +268,6 @@ class _SignupPageState extends State<SignupPage> {
                                   "email": email.text,
                                   "password": password.text,
                                   "wallet_bal": "1550.00",
-                                  "transactions": [],
                                 });
                           } else {
                             status("Alert", "Password do not match!");

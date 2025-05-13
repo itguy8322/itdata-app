@@ -1,7 +1,7 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Database {
-  final FirebaseDatabase db = FirebaseDatabase.instance;
+  final FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<void> addData(
     String path,
@@ -9,10 +9,8 @@ class Database {
     Map<String, dynamic> data,
   ) async {
     String user = username.split("@")[0].replaceAll(".", "-");
-    DatabaseReference ref = db.ref().child(path);
-    await ref.set({user: {}});
-    DatabaseReference ref1 = db.ref().child(path).child(user);
-    await ref1.set(data);
+    await db.collection(path).doc(user).set(data);
+    await db.collection("transactions").doc(user).set({"transaction": []});
   }
 
   Future<void> updateData(
@@ -20,8 +18,8 @@ class Database {
     String username,
     Map<String, dynamic> data,
   ) async {
-    DatabaseReference ref = db.ref().child(path).child(username);
-    await ref.update(data);
+    String user = username.split("@")[0].replaceAll(".", "-");
+    await db.collection(path).doc(user).update(data);
   }
 
   Future<void> removeData(
@@ -29,14 +27,16 @@ class Database {
     String username,
     Map<String, dynamic> data,
   ) async {
-    DatabaseReference ref = db.ref().child(username);
-    await ref.remove();
+    String user = username.split("@")[0].replaceAll(".", "-");
+    db.collection(path).doc(user).delete();
+    db.collection("transactions").doc(user).delete();
   }
 
-  Future<DataSnapshot> loadData(String path, String username) async {
+  Future<Map<String, dynamic>> loadData(String path, String username) async {
     String user = username.split("@")[0].replaceAll(".", "-");
-    DatabaseReference ref = db.ref().child(path).child(user);
-    Future<DataSnapshot> data = ref.get();
-    return data;
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await db.collection(path).doc(user).get();
+    Map<String, dynamic>? data = snapshot.data();
+    return data ?? {};
   }
 }

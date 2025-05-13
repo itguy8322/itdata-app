@@ -8,6 +8,7 @@ import 'package:itdata/cubits/user_data_cubit.dart';
 import 'package:itdata/main.dart';
 import 'package:itdata/screens/appdrawer.dart';
 import 'package:itdata/services/auth.dart';
+import 'package:itdata/states/user_states.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -174,10 +175,14 @@ class _DashboardState extends State<Dashboard> {
       child: Scaffold(
         drawer: AppDrawer(),
         appBar: AppBar(
-          title: BlocBuilder<UserDataCubit, Map<String, dynamic>>(
-            builder:
-                (context, user_data) =>
-                    Text("IT Data (${user_data['username']})"),
+          title: BlocBuilder<UserDataCubit, UserStates>(
+            builder: (context, state) {
+              if (state is UserLoaded) {
+                return Text("IT Data (${state.user['username']})");
+              } else {
+                return Text("IT Data ()");
+              }
+            },
           ),
           backgroundColor: mainColor,
           actions: [
@@ -225,21 +230,21 @@ class _DashboardState extends State<Dashboard> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    BlocBuilder<
-                                      UserDataCubit,
-                                      Map<String, dynamic>
-                                    >(
-                                      builder:
-                                          (context, user_data) => Text(
-                                            show_balance == true
-                                                ? "₦${user_data['wallet_bal']}"
-                                                : "****",
-                                            style: TextStyle(
-                                              color: subColor,
-                                              fontSize: 26,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                    BlocBuilder<UserDataCubit, UserStates>(
+                                      builder: (context, state) {
+                                        return Text(
+                                          show_balance == true
+                                              ? state is UserLoaded
+                                                  ? "₦${state.user['wallet_bal']}"
+                                                  : "0.00"
+                                              : "****",
+                                          style: TextStyle(
+                                            color: subColor,
+                                            fontSize: 26,
+                                            fontWeight: FontWeight.w600,
                                           ),
+                                        );
+                                      },
                                     ),
                                     IconButton(
                                       onPressed: () {
@@ -390,12 +395,16 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
-                    child: BlocBuilder<UserDataCubit, Map<String, dynamic>>(
-                      builder: (context, user_data) {
-                        return user_data.containsKey("transactions")
-                            ? Column(
-                              children: recent_tranc(user_data["transactions"]),
-                            )
+                    child: BlocBuilder<UserDataCubit, UserStates>(
+                      builder: (context, state) {
+                        return state is UserLoaded
+                            ? state.user.containsKey("transactions")
+                                ? Column(
+                                  children: recent_tranc(
+                                    user_data["transactions"],
+                                  ),
+                                )
+                                : Center(child: Text("No recent transactions"))
                             : Center(child: Text("No recent transactions"));
                       },
                     ),

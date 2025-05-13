@@ -1,12 +1,9 @@
-class User {
-  final String email;
-  final String fullname;
-  final String username;
-  final String password;
-  User({
-    required this.fullname,
-    required this.username,
-    required this.email,
-    required this.password,
-  });
+// ignore_for_file: non_constant_identifier_names
+
+class UserInfo {
+  final Map<String, dynamic> data;
+  UserInfo({required this.data});
+  Map<String, dynamic> get_data() {
+    return data;
+  }
 }
