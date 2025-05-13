@@ -85,6 +85,7 @@ late IO.Socket socket;
 
 bool connection = false;
 void main() async {
+  print("Hello world");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
