@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
-import 'package:itdata/states/user_states.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
+import 'package:itdata/data/models/user/user.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -70,16 +71,16 @@ class _ProfilePageState extends State<ProfilePage> {
           padding: EdgeInsets.all(10),
           child: Form(
             key: _formKey,
-            child: BlocBuilder<UserDataCubit, UserStates>(
+            child: BlocBuilder<UserDataCubit, UserState>(
               builder: (context, state) {
-                if (state is UserLoaded) {
+                if (state.userDataSuccess) {
                   print("SUCCESSSSSSS");
-                  print(state.user);
-                  fullname.text = state.user["fullname"];
-                  username.text = state.user["username"];
-                  phone.text = state.user["tel"];
-                  address.text = state.user["address"];
-                  password.text = state.user["password"];
+                  print(state.userData);
+                  fullname.text = state.userData!.name!;
+                  username.text = state.userData!.id!;
+                  phone.text = state.userData!.phone!;
+                  address.text = state.userData!.address!;
+                  password.text = "password";
                   return Column(
                     children: [
                       SizedBox(height: 30), // Space between title and fields
@@ -198,29 +199,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: ElevatedButton(
                           onPressed: () {
                             // Handle sign-up logic (e.g., validation, API call)
-                            if (password.text == state.user['password']) {
-                              if (_formKey.currentState!.validate()) {
-                                state.user["fullname"] = fullname.text;
-                                state.user["username"] = fullname.text;
-                                state.user["tel"] = fullname.text;
-                                state.user["address"] = fullname.text;
-                                state.user["password"] = fullname.text;
-                                process();
-                                context.read<UserDataCubit>().update_data(
-                                  "users",
-                                  username.text,
-                                  state.user,
-                                );
-                              }
-                              // Proceed with registration
-                              //signup();
-                              // Optionally, navigate to the login page or dashboard
-                            } else {
-                              // Show error message for mismatched passwords
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Passwords do not match"),
-                                ),
+
+                            if (_formKey.currentState!.validate()) {
+                              UserData user = UserData();
+                              user.name = fullname.text;
+                              user.phone = phone.text;
+                              user.address = address.text;
+                              process();
+                              context.read<UserDataCubit>().update_data(
+                                "users",
+                                username.text,
+                                user,
                               );
                             }
                           },

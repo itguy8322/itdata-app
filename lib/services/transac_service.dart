@@ -3,43 +3,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TransacService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<void> addTransaction(
-    String path,
-    String username,
-    Map<String, dynamic> data,
-  ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
+  Future<void> add(String path, String user, Map<String, dynamic> data) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection(path).doc(user).get();
     Map<String, dynamic>? d = snapshot.data();
-    d?["transaction"].add(data);
-    await updateTransaction(path, username, d ?? {});
+    d?[path].add(data);
+    await update(path, user, d ?? {});
   }
 
-  Future<void> updateTransaction(
+  Future<void> update(
     String path,
-    String username,
+    String user,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
-
     await db.collection(path).doc(user).update(data);
   }
 
-  Future<void> deleteTransaction(
+  Future<void> delete(
     String path,
-    String username,
+    String user,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
     db.collection(path).doc(user).delete();
-    db.collection("transactions").doc(user).delete();
+    db.collection(path).doc(user).delete();
   }
 
-  Future<Map<String, dynamic>> loadtransactions(
-    String path,
-    String username,
-  ) async {
+  Future<Map<String, dynamic>> load(String path, String username) async {
     String user = username.split("@")[0].replaceAll(".", "-");
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection(path).doc(user).get();

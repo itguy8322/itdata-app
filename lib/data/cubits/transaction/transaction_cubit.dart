@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/services/transac_service.dart';
-import 'package:itdata/states/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transac_states.dart';
 
 class TransactionCubit extends Cubit<TransacStates> {
   TransactionCubit() : super(TransacInitial());
@@ -12,7 +12,7 @@ class TransactionCubit extends Cubit<TransacStates> {
   ) async {
     try {
       emit(TransacLoading());
-      await TransacService().addTransaction(path, username, data);
+      await TransacService().add(path, username, data);
       emit(TransacLoaded([]));
     } catch (e) {
       emit(TransacError("error"));
@@ -22,10 +22,7 @@ class TransactionCubit extends Cubit<TransacStates> {
   void load_transactions(String? username, String path) async {
     try {
       emit(TransacLoading());
-      final transactions = await TransacService().loadtransactions(
-        path,
-        username!,
-      );
+      final transactions = await TransacService().load(path, username!);
       emit(TransacLoaded(transactions["transactions"]));
     } catch (e) {
       emit(TransacError("error"));

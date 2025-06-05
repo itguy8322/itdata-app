@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_state.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -60,18 +61,16 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  BlocListener<AuthCubit, Map<String, dynamic>>(
-                    listener: (context, stat) {
-                      if (!stat["isloading"]) {
-                        if (stat["status"] == "logged") {
-                          print("AM LOGGED IN");
-                          Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, "/dashboard");
-                        } else {
-                          print("AM NOT LOGGED IN");
-                          Navigator.pop(context);
-                          status("Alert", stat["status"]);
-                        }
+                  BlocListener<AuthCubit, AuthState>(
+                    listener: (context, state) {
+                      if (state is SignupLoading) {
+                      } else if (state is SignupSuccess) {
+                        print("AM LOGGED IN");
+                        Navigator.pop(context);
+                        Navigator.popAndPushNamed(context, "/dashboard");
+                      } else if (state is SignupFailure) {
+                        Navigator.pop(context);
+                        status("Alert", state.message);
                       }
                     },
                     child: SizedBox(height: 50),
@@ -102,6 +101,7 @@ class _SignupPageState extends State<SignupPage> {
                       TextButton(
                         onPressed: () {
                           // Navigate to login page
+                          context.read<AuthCubit>().setInitial();
                           Navigator.popAndPushNamed(context, "/login");
                         },
                         child: Text(
@@ -132,20 +132,6 @@ class _SignupPageState extends State<SignupPage> {
                       }
                       return null;
                     },
-                  ),
-                  SizedBox(height: 10.0),
-                  TextFormField(
-                    controller: username,
-                    decoration: InputDecoration(
-                      labelText: 'Username (optional)',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
                   ),
                   SizedBox(height: 10.0),
                   TextFormField(
@@ -263,8 +249,8 @@ class _SignupPageState extends State<SignupPage> {
                             context
                                 .read<AuthCubit>()
                                 .signup(email.text, password.text, {
-                                  "fullname": fullname.text,
-                                  "username": username.text,
+                                  "name": fullname.text,
+                                  "username": email.text.split("@")[0],
                                   "email": email.text,
                                   "tel": number.text,
                                   "address": address.text,
@@ -297,6 +283,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
       onPopInvokedWithResult: (b, t) async {
+        context.read<AuthCubit>().setInitial();
         Navigator.popAndPushNamed(context, "/login");
       },
     );

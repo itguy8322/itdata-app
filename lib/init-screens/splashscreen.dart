@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_state.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -56,14 +57,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 }
               },
             ),
-            BlocListener<AuthCubit, Map<String, dynamic>>(
+            BlocListener<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state["status"] == "ok") {
+                if (state is LoginSucess) {
                   //print("LOGIN SUCCESS: ${state}");
                   Navigator.popAndPushNamed(context, "/dashboard");
-                } else {
+                } else if (state is LoginFailure) {
                   Navigator.popAndPushNamed(context, "/login");
-                  status("Alert", state["status"]);
+                  status("Alert", state.message);
                 }
               },
             ),

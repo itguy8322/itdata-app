@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/features/transactions/view_transaction.dart';
 import 'package:itdata/services/auth.dart';
-import 'package:itdata/states/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transac_states.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key});

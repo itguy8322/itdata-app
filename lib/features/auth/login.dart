@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_state.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -62,18 +64,25 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  BlocListener<AuthCubit, Map<String, dynamic>>(
-                    listener: (context, stat) {
-                      if (!stat["isloading"]) {
-                        if (stat["status"] == "logged") {
-                          print("AM LOGGED IN");
-                          Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, "/dashboard");
-                        } else {
-                          print("AM NOT LOGGED IN");
-                          Navigator.pop(context);
-                          status("Alert", stat["status"]);
-                        }
+                  BlocListener<AuthCubit, AuthState>(
+                    listener: (context, state) {
+                      if (state is LoginLoading) {
+                        process();
+                      }
+                      if (state is LoginSucess) {
+                        print("AM LOGGED IN");
+                        Navigator.pop(context);
+                        print("<============ USER DATA ===============>");
+                        print(state.userInfo);
+                        print("<============ USER DATA ===============>");
+                        print(state.userInfo!.email);
+                        context.read<UserDataCubit>().setUser(state.userInfo!);
+                        print("<============ PASSED ===============>");
+                        Navigator.popAndPushNamed(context, "/dashboard");
+                      } else if (state is LoginFailure) {
+                        print("AM NOT LOGGED IN");
+                        Navigator.pop(context);
+                        status("Alert", state.message);
                       }
                     },
                     child: SizedBox(height: 30),
@@ -159,62 +168,39 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      MultiBlocListener(
-                        listeners: [
-                          BlocListener<AuthCubit, Map<String, dynamic>>(
-                            listener: (context, state) {
-                              if (state["status"] == "ok") {
-                                Navigator.popAndPushNamed(
-                                  context,
-                                  "/dashboard",
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                            child: Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: Color.fromRGBO(82, 101, 140, 1),
+                              value: true,
+                              onChanged: (value) {
+                                storage.set_remember_me(
+                                  username.text,
+                                  password.text,
                                 );
-                              }
+                              },
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Navigate to login page
+                              storage.set_remember_me(
+                                username.text,
+                                password.text,
+                              );
                             },
+                            child: Text(
+                              'Remember me',
+                              style: TextStyle(
+                                color: Color.fromRGBO(82, 101, 140, 1),
+                              ),
+                            ),
                           ),
                         ],
-                        child: BlocBuilder<StorageCubit, Map<String, dynamic>>(
-                          builder: (context, state) {
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  width: 10,
-                                  child: Checkbox(
-                                    checkColor: Colors.white,
-                                    activeColor: Color.fromRGBO(
-                                      82,
-                                      101,
-                                      140,
-                                      1,
-                                    ),
-                                    value: state["remember_me"],
-                                    onChanged: (value) {
-                                      storage.set_remember_me(
-                                        username.text,
-                                        password.text,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    // Navigate to login page
-                                    storage.set_remember_me(
-                                      username.text,
-                                      password.text,
-                                    );
-                                  },
-                                  child: Text(
-                                    'Remember me',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(82, 101, 140, 1),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
                       ),
                     ],
                   ),
@@ -222,7 +208,6 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        process();
                         login.login(username.text, password.text);
                       }
                     },
@@ -244,6 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                       TextButton(
                         onPressed: () {
                           // Navigate to login page
+                          context.read<AuthCubit>().setInitial();
                           Navigator.popAndPushNamed(context, "/signup");
                         },
                         child: Text(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
-import 'package:itdata/states/user_states.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -21,7 +21,7 @@ class AppDrawer extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          BlocBuilder<UserDataCubit, UserStates>(
+                          BlocBuilder<UserDataCubit, UserState>(
                             builder:
                                 (context, state) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,7 +33,7 @@ class AppDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${state is UserLoaded ? state.user['fullname'] : ''}",
+                                      "${state.userDataSuccess ? state.userData!.name : ''}",
                                       style: TextStyle(
                                         color: theme["subColor"],
                                         fontSize: 18,
@@ -41,7 +41,7 @@ class AppDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${state is UserLoaded ? state.user['email'] : ''}",
+                                      "${state.userDataSuccess ? state.userData!.email : ''}",
                                       style: TextStyle(
                                         color: theme["subColor"],
                                       ),

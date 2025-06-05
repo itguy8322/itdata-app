@@ -18,6 +18,8 @@ import 'package:itdata/init-screens/splashscreen.dart';
 import 'package:itdata/features/about/termspolicies.dart';
 import 'package:itdata/features/transactions/transactions.dart';
 import 'package:itdata/features/transactions/view_transaction.dart';
+import 'package:itdata/services/auth.dart';
+import 'package:itdata/services/database.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
@@ -153,7 +155,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => StorageCubit()),
-        BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => AuthCubit(Auth(), DatabaseService())),
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => UserDataCubit()),
         BlocProvider(create: (_) => TransactionCubit()),

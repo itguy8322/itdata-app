@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
-import 'package:itdata/states/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transac_states.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ViewTransactionPage extends StatefulWidget {
