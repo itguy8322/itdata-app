@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:itdata/cubits/login_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -60,7 +60,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  BlocListener<LoginCubit, Map<String, dynamic>>(
+                  BlocListener<AuthCubit, Map<String, dynamic>>(
                     listener: (context, stat) {
                       if (!stat["isloading"]) {
                         if (stat["status"] == "logged") {
@@ -261,7 +261,7 @@ class _SignupPageState extends State<SignupPage> {
                           if (password.text == confirmPassword.text) {
                             process();
                             context
-                                .read<LoginCubit>()
+                                .read<AuthCubit>()
                                 .signup(email.text, password.text, {
                                   "fullname": fullname.text,
                                   "username": username.text,

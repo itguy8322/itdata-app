@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:itdata/cubits/login_cubit.dart';
-import 'package:itdata/cubits/storage_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/storage/storage_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loginCubit = BlocProvider.of<LoginCubit>(context);
+    final loginCubit = BlocProvider.of<AuthCubit>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 }
               },
             ),
-            BlocListener<LoginCubit, Map<String, dynamic>>(
+            BlocListener<AuthCubit, Map<String, dynamic>>(
               listener: (context, state) {
                 if (state["status"] == "ok") {
                   //print("LOGIN SUCCESS: ${state}");

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:itdata/cubits/login_cubit.dart';
-import 'package:itdata/cubits/storage_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/storage/storage_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final storage = BlocProvider.of<StorageCubit>(context);
-    final login = BlocProvider.of<LoginCubit>(context);
+    final login = BlocProvider.of<AuthCubit>(context);
     return PopScope(
       child: Scaffold(
         body: Padding(
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  BlocListener<LoginCubit, Map<String, dynamic>>(
+                  BlocListener<AuthCubit, Map<String, dynamic>>(
                     listener: (context, stat) {
                       if (!stat["isloading"]) {
                         if (stat["status"] == "logged") {
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       MultiBlocListener(
                         listeners: [
-                          BlocListener<LoginCubit, Map<String, dynamic>>(
+                          BlocListener<AuthCubit, Map<String, dynamic>>(
                             listener: (context, state) {
                               if (state["status"] == "ok") {
                                 Navigator.popAndPushNamed(

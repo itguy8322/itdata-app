@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:itdata/cubits/theme_cubit.dart';
-import 'package:itdata/cubits/user_data_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/states/user_states.dart';
 
 class AppDrawer extends StatelessWidget {

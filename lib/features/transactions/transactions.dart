@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:itdata/cubits/transaction_cubit.dart';
-import 'package:itdata/screens/view_transaction.dart';
+import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
+import 'package:itdata/features/transactions/view_transaction.dart';
 import 'package:itdata/services/auth.dart';
 import 'package:itdata/states/transac_states.dart';
 
