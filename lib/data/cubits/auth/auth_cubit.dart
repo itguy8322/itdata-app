@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/services/auth.dart';
 import 'package:itdata/services/database.dart';
 
-class LoginCubit extends Cubit<Map<String, dynamic>> {
-  LoginCubit() : super({});
+class AuthCubit extends Cubit<Map<String, dynamic>> {
+  AuthCubit() : super({});
   void login(String email, String password) async {
     emit({"isloading": true});
     try {
@@ -28,4 +28,6 @@ class LoginCubit extends Cubit<Map<String, dynamic>> {
       emit({"isloading": false, "status": e.message});
     }
   }
+
+  void logout() {}
 }

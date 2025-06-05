@@ -5,11 +5,11 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:itdata/cubits/login_cubit.dart';
-import 'package:itdata/cubits/storage_cubit.dart';
-import 'package:itdata/cubits/theme_cubit.dart';
-import 'package:itdata/cubits/transaction_cubit.dart';
-import 'package:itdata/cubits/user_data_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/storage_cubit.dart';
+import 'package:itdata/data/cubits/theme_cubit.dart';
+import 'package:itdata/data/cubits/transaction_cubit.dart';
+import 'package:itdata/data/cubits/user_data_cubit.dart';
 import 'package:itdata/screens/about.dart';
 import 'package:itdata/screens/dashboard.dart';
 import 'package:itdata/screens/login.dart';
@@ -153,7 +153,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => StorageCubit()),
-        BlocProvider(create: (_) => LoginCubit()),
+        BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => UserDataCubit()),
         BlocProvider(create: (_) => TransactionCubit()),
