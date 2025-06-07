@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
-class EduPin extends StatefulWidget {
-  const EduPin({super.key});
+class Cable extends StatefulWidget {
+  const Cable({super.key});
 
   @override
-  State<EduPin> createState() => _EduPinState();
+  State<Cable> createState() => _CableState();
 }
 
-class _EduPinState extends State<EduPin> {
+class _CableState extends State<Cable> {
   TextEditingController number = TextEditingController();
+  TextEditingController iuc_number = TextEditingController();
   TextEditingController amount = TextEditingController();
   TextEditingController pin1 = TextEditingController();
   TextEditingController pin2 = TextEditingController();
@@ -24,17 +25,43 @@ class _EduPinState extends State<EduPin> {
   final FocusNode pin_3 = FocusNode();
   final FocusNode pin_4 = FocusNode();
 
-  var exam = "none";
-  var quatity = "none";
+  var cable = "none";
+  var cable_plan = {};
+  bool check_iuc = false;
+  var iuc_data = "";
 
-  var quantities = {
-    "none": "Choose Quantity",
-    "1": "1 Quantity",
-    "2": "2 Quantities",
-    "3": "4 Quantities",
-    "4": "5 Quantities",
-    "5": "9 Quantities",
-  };
+  void validateMeterNumber() async {
+    print("am here");
+    int iuc = (int.tryParse(iuc_number.text))!;
+    final url = Uri.parse(
+      "https://postranet.com/api/validateiuc?smart_card_number=$iuc&cablename=${cable.toUpperCase()}",
+    );
+    final headers = {"Content-Type": "application/json"};
+    try {
+      print("am here1");
+      final response = await http.get(url, headers: headers);
+      print("am here2");
+      if (response.statusCode == 200) {
+        print("It's Working...");
+        var data = jsonDecode(response.body);
+
+        print("am here3");
+        check_iuc = false;
+        iuc_data = data["name"].toString();
+        setState(() {});
+      } else {
+        print("am here5");
+        check_iuc = false;
+        iuc_data = "Could not fetch data, try again.";
+        setState(() {});
+      }
+    } catch (e) {
+      print("am here6");
+      check_iuc = false;
+      iuc_data = "Could not fetch data, try again.";
+      setState(() {});
+    }
+  }
 
   Future<void> biametric_authentication() async {
     try {
@@ -267,12 +294,6 @@ class _EduPinState extends State<EduPin> {
                         ),
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
                     ),
                   ),
                   SizedBox(width: 10),
@@ -491,8 +512,8 @@ class _EduPinState extends State<EduPin> {
 
   @override
   Widget build(BuildContext context) {
-    if (reg_edu_listener == false) {
-      socket.on('edupin', (data) {
+    if (reg_cable_listener == false) {
+      socket.on('cable', (data) {
         print(data);
         try {
           Navigator.pop(context);
@@ -501,7 +522,7 @@ class _EduPinState extends State<EduPin> {
           print("Error");
         }
       });
-      reg_edu_listener = true;
+      reg_cable_listener = true;
     }
     return PopScope(
       child: Scaffold(
@@ -513,7 +534,7 @@ class _EduPinState extends State<EduPin> {
             icon: Icon(Icons.arrow_back),
           ),
           backgroundColor: mainColor,
-          title: Text("Edu Pin"),
+          title: Text("Cable"),
         ),
         body: Padding(
           padding: EdgeInsets.all(10),
@@ -529,17 +550,12 @@ class _EduPinState extends State<EduPin> {
                     border: OutlineInputBorder(),
                   ),
                   hint: Text(
-                    exam == "none"
-                        ? "Choose Exam Type"
-                        : exams[exam].toString(),
+                    cable == "none" ? "Choose Cable" : "",
                     style: TextStyle(color: mainColor),
                   ),
                   items: [
-                    for (var exam in exams.keys)
-                      (DropdownMenuItem(
-                        value: exam,
-                        child: Text(exam.toString()),
-                      )),
+                    for (var cable in cable_types)
+                      (DropdownMenuItem(value: cable, child: Text(cable))),
                   ],
                   validator: (value) {
                     if (value == null) {
@@ -549,13 +565,7 @@ class _EduPinState extends State<EduPin> {
                   },
                   onChanged: (value) {
                     setState(() {
-                      exam = value.toString();
-                      if (quatity != "") {
-                        var a = exams[exam].toString();
-                        var total = (int.tryParse(a)! * int.tryParse(quatity)!);
-
-                        amount.text = total.toString();
-                      }
+                      cable = value.toString();
                     });
                   },
                 ),
@@ -580,48 +590,49 @@ class _EduPinState extends State<EduPin> {
                   },
                 ),
                 SizedBox(height: 10),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    quantities[quatity].toString(),
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    for (var i in quantities.keys)
-                      (DropdownMenuItem(
-                        value: i,
-                        child: Text(quantities[i].toString()),
-                      )),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      quatity = value.toString();
-                      var a = exams[exam].toString();
-                      var total = (int.tryParse(a)! * int.tryParse(quatity)!);
-
-                      amount.text = total.toString();
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
+                check_iuc
+                    ? Row(
+                      children: [
+                        Image.asset("assets/images/loading.gif", scale: 25.0),
+                        Text(
+                          "Validating...",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )
+                    : iuc_data == "Could not fetch data, try again."
+                    ? Text(
+                      "$iuc_data",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                    : iuc_data != ""
+                    ? Text(
+                      "$iuc_data".toUpperCase(),
+                      style: TextStyle(
+                        color:
+                            iuc_data == "INVALID IUC NUMBER"
+                                ? Colors.red
+                                : Colors.green,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                    : SizedBox(height: 0.01),
                 TextFormField(
-                  readOnly: true,
-                  controller: amount,
+                  controller: iuc_number,
                   keyboardType: TextInputType.phone,
                   maxLength: 11,
+                  readOnly: check_iuc,
                   decoration: InputDecoration(
-                    labelText: 'Amount',
+                    labelText: 'IUC Number',
                     labelStyle: TextStyle(color: Colors.grey),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: mainColor),
@@ -634,8 +645,54 @@ class _EduPinState extends State<EduPin> {
                     }
                     return null;
                   },
+                  onChanged: (value) {
+                    if (value.length == 11) {
+                      setState(() {
+                        check_iuc = true;
+                      });
+                      validateMeterNumber();
+                    } else {
+                      setState(() {
+                        iuc_data = "";
+                      });
+                    }
+                  },
                 ),
                 SizedBox(height: 10),
+                cable != "none"
+                    ? DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: mainColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: Text(
+                        "Choose Cable Plan",
+                        style: TextStyle(color: mainColor),
+                      ),
+                      items: [
+                        for (var sub in cable_plans[cable])
+                          (DropdownMenuItem(
+                            value: sub,
+                            child: Text(
+                              "${sub['plan'].toString()} ${sub['sale_price'].toString()}",
+                            ),
+                          )),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          cable_plan = jsonDecode(value.toString());
+                        });
+                      },
+                    )
+                    : SizedBox(),
                 SizedBox(height: 10),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
