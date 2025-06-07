@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/auth/auth_state.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -52,239 +54,272 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  BlocListener<AuthCubit, AuthState>(
-                    listener: (context, state) {
-                      if (state is SignupLoading) {
-                      } else if (state is SignupSuccess) {
-                        print("AM LOGGED IN");
-                        Navigator.pop(context);
-                        Navigator.popAndPushNamed(context, "/dashboard");
-                      } else if (state is SignupFailure) {
-                        Navigator.pop(context);
-                        status("Alert", state.message);
-                      }
-                    },
-                    child: SizedBox(height: 50),
-                  ),
-                  Row(
-                    children: [
-                      Image.asset("assets/images/data_app_logo.png", scale: 40),
-                      Text(
-                        'IT Data',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30),
-                  Text("Create an account", style: TextStyle(fontSize: 20)),
-                  SizedBox(height: 10),
-
-                  // Already have an account?
-                  Row(
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, theme) {
+          return Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text("Already have an account? "),
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to login page
-                          context.read<AuthCubit>().setInitial();
-                          Navigator.popAndPushNamed(context, "/login");
+                      BlocListener<AuthCubit, AuthState>(
+                        listener: (context, state) {
+                          if (state is SignupLoading) {
+                          } else if (state is SignupSuccess) {
+                            print("AM LOGGED IN");
+                            Navigator.pop(context);
+                            Navigator.popAndPushNamed(context, "/dashboard");
+                          } else if (state is SignupFailure) {
+                            Navigator.pop(context);
+                            status("Alert", state.message);
+                          }
                         },
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Color.fromRGBO(82, 101, 140, 1),
+                        child: SizedBox(height: 50),
+                      ),
+                      Row(
+                        children: [
+                          Image.asset(
+                            "assets/images/data_app_logo.png",
+                            scale: 40,
                           ),
+                          Text(
+                            'IT Data',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: theme.primaryColor,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.03,
+                      ),
+
+                      // Already have an account?
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).height,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Create an account",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("Already have an account? "),
+                                TextButton(
+                                  onPressed: () {
+                                    // Navigate to login page
+                                    context.read<AuthCubit>().setInitial();
+                                    Navigator.popAndPushNamed(
+                                      context,
+                                      "/login",
+                                    );
+                                  },
+                                  child: Text(
+                                    'Login',
+                                    style: TextStyle(color: theme.primaryColor),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ), // Space between title and fields
+                            TextFormField(
+                              controller: fullname,
+                              decoration: InputDecoration(
+                                labelText: 'Full Name',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'All field required';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10.0),
+                            TextFormField(
+                              controller: email,
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'All field required';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10.0),
+                            TextFormField(
+                              controller: address,
+                              decoration: InputDecoration(
+                                labelText: 'Address',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'All field required';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10.0),
+                            TextFormField(
+                              controller: number,
+                              keyboardType: TextInputType.phone,
+                              maxLength: 11,
+                              decoration: InputDecoration(
+                                labelText: 'Phone Number',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'All field required';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10.0), // Spacing between fields
+                            TextFormField(
+                              controller: password,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'All field required';
+                                }
+                                return null;
+                              },
+                              obscureText: true, // Hide password
+                            ),
+                            SizedBox(height: 10.0), // Spacing between fields
+                            TextFormField(
+                              controller: confirmPassword,
+                              decoration: InputDecoration(
+                                labelText: 'Confirm Password',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'All field required';
+                                }
+                                return null;
+                              },
+                              obscureText: true, // Hide password
+                            ),
+                            SizedBox(height: 10.0),
+                            // Sign Up Button
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Handle sign-up logic (e.g., validation, API call)
+                                  if (_formKey.currentState!.validate()) {
+                                    if (password.text == confirmPassword.text) {
+                                      process();
+                                      context.read<AuthCubit>().signup(
+                                        email.text,
+                                        password.text,
+                                        {
+                                          "name": fullname.text,
+                                          "username": email.text.split("@")[0],
+                                          "email": email.text,
+                                          "tel": number.text,
+                                          "address": address.text,
+                                          "bvn": "",
+                                          "password": password.text,
+                                          "wallet_bal": "1550.00",
+                                        },
+                                      );
+                                    } else {
+                                      status("Alert", "Password do not match!");
+                                    }
+                                  }
+
+                                  // Optionally, navigate to the login page or dashboard
+                                },
+                                child: Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: theme.secondaryColor,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: theme.primaryColor,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 50,
+                                    vertical: 15,
+                                  ),
+                                  textStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: theme.secondaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 5), // Space between title and fields
-                  TextFormField(
-                    controller: fullname,
-                    decoration: InputDecoration(
-                      labelText: 'Full Name',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10.0),
-                  TextFormField(
-                    controller: email,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10.0),
-                  TextFormField(
-                    controller: address,
-                    decoration: InputDecoration(
-                      labelText: 'Address',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10.0),
-                  TextFormField(
-                    controller: number,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10.0), // Spacing between fields
-                  TextFormField(
-                    controller: password,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    obscureText: true, // Hide password
-                  ),
-                  SizedBox(height: 10.0), // Spacing between fields
-                  TextFormField(
-                    controller: confirmPassword,
-                    decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromRGBO(82, 101, 140, 1),
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    obscureText: true, // Hide password
-                  ),
-                  SizedBox(height: 10.0),
-                  // Sign Up Button
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle sign-up logic (e.g., validation, API call)
-                        if (_formKey.currentState!.validate()) {
-                          if (password.text == confirmPassword.text) {
-                            process();
-                            context
-                                .read<AuthCubit>()
-                                .signup(email.text, password.text, {
-                                  "name": fullname.text,
-                                  "username": email.text.split("@")[0],
-                                  "email": email.text,
-                                  "tel": number.text,
-                                  "address": address.text,
-                                  "bvn": "",
-                                  "password": password.text,
-                                  "wallet_bal": "1550.00",
-                                });
-                          } else {
-                            status("Alert", "Password do not match!");
-                          }
-                        }
-
-                        // Optionally, navigate to the login page or dashboard
-                      },
-                      child: Text('Sign Up'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(82, 101, 140, 1),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 50,
-                          vertical: 15,
-                        ),
-                        textStyle: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       onPopInvokedWithResult: (b, t) async {
         context.read<AuthCubit>().setInitial();
-        Navigator.popAndPushNamed(context, "/login");
+        //Navigator.popAndPushNamed(context, "/login");
       },
     );
   }

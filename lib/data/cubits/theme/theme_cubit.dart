@@ -5,7 +5,7 @@ import 'package:itdata/data/cubits/theme/theme_state.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   //final storage = FlutterSecureStorage();
 
-  ThemeCubit() : super(ThemeState.defaut());
+  ThemeCubit() : super(ThemeState.brown());
 
   void setToDefaultTheme(Color color) {
     emit(ThemeState.defaut());
