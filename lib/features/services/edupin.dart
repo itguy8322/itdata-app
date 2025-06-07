@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:local_auth/local_auth.dart';
 
 class EduPin extends StatefulWidget {
@@ -203,7 +207,7 @@ class _EduPinState extends State<EduPin> {
       pin2.text = "";
       pin3.text = "";
       pin4.text = "";
-      if (_pin == user_data["t_pin"]) {
+      if (_pin == "t_pin") {
         process();
       } else {
         Vibrate.vibrate();
@@ -230,7 +234,7 @@ class _EduPinState extends State<EduPin> {
     }
   }
 
-  void showBottomDrawer(BuildContext context) {
+  void showBottomDrawer(BuildContext context, ThemeState theme) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -254,7 +258,7 @@ class _EduPinState extends State<EduPin> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -263,7 +267,7 @@ class _EduPinState extends State<EduPin> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -283,7 +287,7 @@ class _EduPinState extends State<EduPin> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -292,7 +296,7 @@ class _EduPinState extends State<EduPin> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -306,7 +310,7 @@ class _EduPinState extends State<EduPin> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -315,7 +319,7 @@ class _EduPinState extends State<EduPin> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -329,7 +333,7 @@ class _EduPinState extends State<EduPin> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -338,7 +342,7 @@ class _EduPinState extends State<EduPin> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -355,7 +359,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "1",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -364,7 +368,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "2",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -373,7 +377,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "3",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -387,7 +391,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "4",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -396,7 +400,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "5",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -405,7 +409,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "6",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -419,7 +423,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "7",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -428,7 +432,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "8",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -437,7 +441,7 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "9",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -447,7 +451,7 @@ class _EduPinState extends State<EduPin> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (biometric) {
+                      if (true == true) {
                         biametric_authentication();
                       } else {
                         showDialog(
@@ -463,7 +467,11 @@ class _EduPinState extends State<EduPin> {
                         );
                       }
                     },
-                    icon: Icon(Icons.fingerprint, size: 28, color: mainColor),
+                    icon: Icon(
+                      Icons.fingerprint,
+                      size: 28,
+                      color: theme.primaryColor,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -471,14 +479,14 @@ class _EduPinState extends State<EduPin> {
                     },
                     child: Text(
                       "0",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   IconButton(
                     onPressed: () {
                       deletePin();
                     },
-                    icon: Icon(Icons.backspace, color: mainColor),
+                    icon: Icon(Icons.backspace, color: theme.primaryColor),
                   ),
                 ],
               ),
@@ -489,170 +497,165 @@ class _EduPinState extends State<EduPin> {
     );
   }
 
+  final exams = {};
   @override
   Widget build(BuildContext context) {
-    if (reg_edu_listener == false) {
-      socket.on('edupin', (data) {
-        print(data);
-        try {
-          Navigator.pop(context);
-          status(data["status"]);
-        } catch (e) {
-          print("Error");
-        }
-      });
-      reg_edu_listener = true;
-    }
     return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/dashboard");
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          backgroundColor: mainColor,
-          title: Text("Edu Pin"),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    exam == "none"
-                        ? "Choose Exam Type"
-                        : exams[exam].toString(),
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    for (var exam in exams.keys)
-                      (DropdownMenuItem(
-                        value: exam,
-                        child: Text(exam.toString()),
-                      )),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      exam = value.toString();
-                      if (quatity != "") {
-                        var a = exams[exam].toString();
-                        var total = (int.tryParse(a)! * int.tryParse(quatity)!);
-
-                        amount.text = total.toString();
-                      }
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: number,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    quantities[quatity].toString(),
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    for (var i in quantities.keys)
-                      (DropdownMenuItem(
-                        value: i,
-                        child: Text(quantities[i].toString()),
-                      )),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      quatity = value.toString();
-                      var a = exams[exam].toString();
-                      var total = (int.tryParse(a)! * int.tryParse(quatity)!);
-
-                      amount.text = total.toString();
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  readOnly: true,
-                  controller: amount,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  decoration: InputDecoration(
-                    labelText: 'Amount',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(25),
-                    backgroundColor: mainColor,
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      showBottomDrawer(context);
-                    }
-                  },
-                  child: Text("Pay", style: TextStyle(fontSize: 30)),
-                ),
-              ],
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, theme) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, "/dashboard");
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              backgroundColor: theme.primaryColor,
+              title: Text("Edu Pin"),
             ),
-          ),
-        ),
+            body: Padding(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: Text(
+                        exam == "none"
+                            ? "Choose Exam Type"
+                            : exams[exam].toString(),
+                        style: TextStyle(color: theme.primaryColor),
+                      ),
+                      items: [
+                        for (var exam in exams.keys)
+                          (DropdownMenuItem(
+                            value: exam,
+                            child: Text(exam.toString()),
+                          )),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          exam = value.toString();
+                          if (quatity != "") {
+                            var a = exams[exam].toString();
+                            var total =
+                                (int.tryParse(a)! * int.tryParse(quatity)!);
+
+                            amount.text = total.toString();
+                          }
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: number,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: Text(
+                        quantities[quatity].toString(),
+                        style: TextStyle(color: theme.primaryColor),
+                      ),
+                      items: [
+                        for (var i in quantities.keys)
+                          (DropdownMenuItem(
+                            value: i,
+                            child: Text(quantities[i].toString()),
+                          )),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          quatity = value.toString();
+                          var a = exams[exam].toString();
+                          var total =
+                              (int.tryParse(a)! * int.tryParse(quatity)!);
+
+                          amount.text = total.toString();
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      readOnly: true,
+                      controller: amount,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
+                      decoration: InputDecoration(
+                        labelText: 'Amount',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(25),
+                        backgroundColor: theme.primaryColor,
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          showBottomDrawer(context, theme);
+                        }
+                      },
+                      child: Text("Pay", style: TextStyle(fontSize: 30)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
       onPopInvokedWithResult: (b, t) async {
         Navigator.popAndPushNamed(context, "/dashboard");

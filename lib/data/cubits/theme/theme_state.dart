@@ -57,7 +57,7 @@ abstract class ThemeState with _$ThemeState {
   }
 
   factory ThemeState.brown() {
-    final brown = Color.fromRGBO(71, 26, 1, 1);
+    final brown = Color.fromARGB(255, 98, 12, 0);
     return ThemeState(
       primaryColor: brown,
       secondaryColor: Colors.white,

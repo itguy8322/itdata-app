@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:local_auth/local_auth.dart';
 
 class Data extends StatefulWidget {
   const Data({super.key});
@@ -200,49 +205,49 @@ class _DataState extends State<Data> {
   }
 
   void make_transaction() async {
-    final url = Uri.parse("$_url/user/make-purchase");
-    final headers = {"Content-Type": "application/x-www-form-urlencoded"};
-    final body = {
-      "service": "data",
-      "username": user_data["username"].toString(),
-      "data_id": dataplan['id'].toString(),
-      "number": number.text.toString(),
-    };
-    try {
-      final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
-        print("It's Working...");
-        var data = jsonDecode(response.body);
-        //print(data);
-        if (data["status"] == "success") {
-          user_data["wallet_bal"] = data["wallet_bal"];
-          transactions = data["transactions"];
+    // final url = Uri.parse("$_url/user/make-purchase");
+    // final headers = {"Content-Type": "application/x-www-form-urlencoded"};
+    // final body = {
+    //   "service": "data",
+    //   "username": user_data["username"].toString(),
+    //   "data_id": dataplan['id'].toString(),
+    //   "number": number.text.toString(),
+    // };
+    // try {
+    //   final response = await http.post(url, headers: headers, body: body);
+    //   if (response.statusCode == 200) {
+    //     print("It's Working...");
+    //     var data = jsonDecode(response.body);
+    //     //print(data);
+    //     if (data["status"] == "success") {
+    //       user_data["wallet_bal"] = data["wallet_bal"];
+    //       transactions = data["transactions"];
 
-          setState(() {});
-          //Navigator.pop(context);
-          //Navigator.popAndPushNamed(context, "/dashboard");
-          status(data["status"]);
-        } else {
-          print("It's Working...2");
-          data["wallet_bal"] ?? "0.0";
-          if (data["transactions"] != null) {
-            transactions = data["transactions"];
-          } else {
-            transactions = transactions;
-          }
-          setState(() {});
-          status(data["status"]);
-        }
-      } else {
-        Navigator.pop(context);
-        status("Check your internet connection and try again!");
-      }
-    } catch (e) {
-      Navigator.pop(context);
-      status(
-        "Could not connect, check your internet connection and try again! ${e.toString()}",
-      );
-    }
+    //       setState(() {});
+    //       //Navigator.pop(context);
+    //       //Navigator.popAndPushNamed(context, "/dashboard");
+    //       status(data["status"]);
+    //     } else {
+    //       print("It's Working...2");
+    //       data["wallet_bal"] ?? "0.0";
+    //       if (data["transactions"] != null) {
+    //         transactions = data["transactions"];
+    //       } else {
+    //         transactions = transactions;
+    //       }
+    //       setState(() {});
+    //       status(data["status"]);
+    //     }
+    //   } else {
+    //     Navigator.pop(context);
+    //     status("Check your internet connection and try again!");
+    //   }
+    // } catch (e) {
+    //   Navigator.pop(context);
+    //   status(
+    //     "Could not connect, check your internet connection and try again! ${e.toString()}",
+    //   );
+    // }
   }
 
   void enterPin(var pin) {
@@ -259,7 +264,7 @@ class _DataState extends State<Data> {
       pin2.text = "";
       pin3.text = "";
       pin4.text = "";
-      if (_pin == user_data["t_pin"]) {
+      if (_pin == "t_pin") {
         process();
         make_transaction();
       } else {
@@ -287,7 +292,7 @@ class _DataState extends State<Data> {
     }
   }
 
-  void showBottomDrawer(BuildContext context) {
+  void showBottomDrawer(BuildContext context, ThemeState theme) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -311,7 +316,7 @@ class _DataState extends State<Data> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -320,7 +325,7 @@ class _DataState extends State<Data> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -334,7 +339,7 @@ class _DataState extends State<Data> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -343,7 +348,7 @@ class _DataState extends State<Data> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -357,7 +362,7 @@ class _DataState extends State<Data> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -366,7 +371,7 @@ class _DataState extends State<Data> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -380,7 +385,7 @@ class _DataState extends State<Data> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -389,7 +394,7 @@ class _DataState extends State<Data> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -406,7 +411,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "1",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -415,7 +420,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "2",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -424,7 +429,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "3",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -438,7 +443,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "4",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -447,7 +452,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "5",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -456,7 +461,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "6",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -470,7 +475,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "7",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -479,7 +484,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "8",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -488,7 +493,7 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "9",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -498,7 +503,7 @@ class _DataState extends State<Data> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (biometric) {
+                      if (true == true) {
                         biametric_authentication();
                       } else {
                         showDialog(
@@ -514,7 +519,11 @@ class _DataState extends State<Data> {
                         );
                       }
                     },
-                    icon: Icon(Icons.fingerprint, size: 28, color: mainColor),
+                    icon: Icon(
+                      Icons.fingerprint,
+                      size: 28,
+                      color: theme.primaryColor,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -522,14 +531,14 @@ class _DataState extends State<Data> {
                     },
                     child: Text(
                       "0",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   IconButton(
                     onPressed: () {
                       deletePin();
                     },
-                    icon: Icon(Icons.backspace, color: mainColor),
+                    icon: Icon(Icons.backspace, color: theme.primaryColor),
                   ),
                 ],
               ),
@@ -540,129 +549,50 @@ class _DataState extends State<Data> {
     );
   }
 
+  List data_plans = [];
+  final networks = {};
+  final dataplans = {};
   @override
   Widget build(BuildContext context) {
-    if (reg_data_listener == false) {
-      socket.on('data', (data) {
-        print(data);
-        Navigator.pop(context);
-        status(data["status"]);
-      });
-      reg_data_listener = true;
-    }
     return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              data_plans = [];
-              Navigator.popAndPushNamed(context, "/dashboard");
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          backgroundColor: mainColor,
-          title: Text("Data"),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    network == ""
-                        ? "Choose Network"
-                        : networks[network].toString(),
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    for (var network in networks.keys)
-                      (DropdownMenuItem(
-                        value: network,
-                        child: Text("${networks[network]}"),
-                      )),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      data_plans = [];
-                      network = value.toString();
-                      if (datatype != "") {
-                        print(network);
-                        print(datatype);
-                        if (dataplans[network].containsKey(value.toString())) {
-                          setState(() {
-                            datatype = value.toString();
-                            data_plans = dataplans["$network"][datatype];
-                          });
-                        } else {
-                          setState(() {
-                            data_plans = [];
-                          });
-                          showDialog(
-                            context: context,
-                            builder:
-                                (context) => AlertDialog(
-                                  content: Text(
-                                    "No Data type: $datatype on this network!",
-                                  ),
-                                ),
-                          );
-                        }
-                      }
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: number,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                network != ""
-                    ? DropdownButtonFormField(
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, theme) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  // data_plans = [];
+                  Navigator.popAndPushNamed(context, "/dashboard");
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              backgroundColor: theme.primaryColor,
+              title: Text("Data"),
+            ),
+            body: Padding(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    DropdownButtonFormField(
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
                       hint: Text(
-                        "Choose Data Type",
-                        style: TextStyle(color: mainColor),
+                        network == ""
+                            ? "Choose Network"
+                            : networks[network].toString(),
+                        style: TextStyle(color: theme.primaryColor),
                       ),
                       items: [
-                        for (var _datatype in datatypes)
+                        for (var network in networks.keys)
                           (DropdownMenuItem(
-                            value: _datatype,
-                            child: Text(_datatype),
+                            value: network,
+                            child: Text("${networks[network]}"),
                           )),
                       ],
                       validator: (value) {
@@ -672,88 +602,168 @@ class _DataState extends State<Data> {
                         return null;
                       },
                       onChanged: (value) {
-                        if (dataplans["$network"].containsKey(value)) {
-                          setState(() {
-                            datatype = value.toString();
-                            data_plans = dataplans["$network"][datatype];
-                          });
-                        } else {
-                          setState(() {
-                            data_plans = [];
-                            network = "";
-                          });
-                          showDialog(
-                            context: context,
-                            builder:
-                                (context) => AlertDialog(
-                                  content: Text(
-                                    "No Data type: $value on this network!",
-                                  ),
-                                ),
-                          );
+                        setState(() {
+                          data_plans = [];
+                          network = value.toString();
+                          if (datatype != "") {
+                            print(network);
+                            print(datatype);
+                            if (dataplans[network].containsKey(
+                              value.toString(),
+                            )) {
+                              setState(() {
+                                datatype = value.toString();
+                                data_plans = dataplans["$network"][datatype];
+                              });
+                            } else {
+                              setState(() {
+                                data_plans = [];
+                              });
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      content: Text(
+                                        "No Data type: $datatype on this network!",
+                                      ),
+                                    ),
+                              );
+                            }
+                          }
+                        });
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: number,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    network != ""
+                        ? DropdownButtonFormField(
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: theme.primaryColor),
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          hint: Text(
+                            "Choose Data Type",
+                            style: TextStyle(color: theme.primaryColor),
+                          ),
+                          items: [
+                            for (var _datatype in [])
+                              (DropdownMenuItem(
+                                value: _datatype,
+                                child: Text(_datatype),
+                              )),
+                          ],
+                          validator: (value) {
+                            if (value == null) {
+                              return 'All field required';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            if (dataplans["$network"].containsKey(value)) {
+                              setState(() {
+                                datatype = value.toString();
+                                data_plans = dataplans["$network"][datatype];
+                              });
+                            } else {
+                              setState(() {
+                                data_plans = [];
+                                network = "";
+                              });
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      content: Text(
+                                        "No Data type: $value on this network!",
+                                      ),
+                                    ),
+                              );
+                            }
+                          },
+                        )
+                        : SizedBox(),
+                    SizedBox(height: 10),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: Text(
+                        dataplan.isEmpty
+                            ? "Choose Plan"
+                            : "${dataplan['plan']} ${dataplan['validate']} ${dataplan['sale_price']}",
+                        style: TextStyle(color: theme.primaryColor),
+                      ),
+                      items: [
+                        for (int i in List.generate(
+                          data_plans.length,
+                          (index) => index,
+                          growable: false,
+                        ))
+                          (DropdownMenuItem(
+                            value: i,
+                            child: Text(
+                              "${data_plans[i]['plan']} ${data_plans[i]['validate']} ${data_plans[i]['sale_price']}",
+                            ),
+                          )),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        var i = int.tryParse(value.toString());
+                        setState(() {
+                          dataplan = data_plans[i!];
+                        });
+                        print(dataplan);
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(25),
+                        backgroundColor: theme.primaryColor,
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          showBottomDrawer(context, theme);
                         }
                       },
-                    )
-                    : SizedBox(),
-                SizedBox(height: 10),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
+                      child: Text("Pay", style: TextStyle(fontSize: 30)),
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    dataplan.isEmpty
-                        ? "Choose Plan"
-                        : "${dataplan['plan']} ${dataplan['validate']} ${dataplan['sale_price']}",
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    for (int i in List.generate(
-                      data_plans.length,
-                      (index) => index,
-                      growable: false,
-                    ))
-                      (DropdownMenuItem(
-                        value: i,
-                        child: Text(
-                          "${data_plans[i]['plan']} ${data_plans[i]['validate']} ${data_plans[i]['sale_price']}",
-                        ),
-                      )),
                   ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    var i = int.tryParse(value.toString());
-                    setState(() {
-                      dataplan = data_plans[i!];
-                    });
-                    print(dataplan);
-                  },
                 ),
-                SizedBox(height: 10),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(25),
-                    backgroundColor: mainColor,
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      showBottomDrawer(context);
-                    }
-                  },
-                  child: Text("Pay", style: TextStyle(fontSize: 30)),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       onPopInvokedWithResult: (b, t) async {
         Navigator.popAndPushNamed(context, "/dashboard");

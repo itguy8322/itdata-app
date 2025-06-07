@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 
 class BVNVerifiaction extends StatefulWidget {
   const BVNVerifiaction({super.key});
@@ -15,8 +18,8 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
   void initState() {
     super.initState();
     // Implement some initialization operations here.
-    if (user_data["bvn"] != "") {
-      bvn.text = user_data["bvn"];
+    if ("bvn" != "") {
+      bvn.text = "bvn";
       setState(() {});
     }
   }
@@ -49,122 +52,124 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
   }
 
   void verifyBVN() async {
-    final url = Uri.parse("$_url/user/create-virtual-account");
-    final headers = {"Content-Type": "application/x-www-form-urlencoded"};
-    final body = {
-      "account_type": "static",
-      "bvn": bvn.text,
-      "username": user_data["username"].toString(),
-    };
-    try {
-      final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
-        print("It's Working...");
-        var data = jsonDecode(response.body);
-        //print(data);
-        if (data["status"] == "ok") {
-          user_data["bvn"] = data["bvn"];
-          virtual_accounts = data["virtual-accounts"];
-          setState(() {});
-          Navigator.pop(context);
-          //Navigator.popAndPushNamed(context, "/dashboard");
-          status("Virtual Account", data["status"]);
-        } else {
-          Navigator.pop(context);
-          status("Alert", data["status"]);
-        }
-      } else {
-        Navigator.pop(context);
-        status("Alert", "Check your internet connection and try again!");
-      }
-    } catch (e) {
-      Navigator.pop(context);
-      status(
-        "Alert",
-        "Could not connect, check your internet connection and try again! ${e.toString()}",
-      );
-    }
+    // final url = Uri.parse("$_url/user/create-virtual-account");
+    // final headers = {"Content-Type": "application/x-www-form-urlencoded"};
+    // final body = {
+    //   "account_type": "static",
+    //   "bvn": bvn.text,
+    //   "username": user_data["username"].toString(),
+    // };
+    // try {
+    //   final response = await http.post(url, headers: headers, body: body);
+    //   if (response.statusCode == 200) {
+    //     print("It's Working...");
+    //     var data = jsonDecode(response.body);
+    //     //print(data);
+    //     if (data["status"] == "ok") {
+    //       user_data["bvn"] = data["bvn"];
+    //       virtual_accounts = data["virtual-accounts"];
+    //       setState(() {});
+    //       Navigator.pop(context);
+    //       //Navigator.popAndPushNamed(context, "/dashboard");
+    //       status("Virtual Account", data["status"]);
+    //     } else {
+    //       Navigator.pop(context);
+    //       status("Alert", data["status"]);
+    //     }
+    //   } else {
+    //     Navigator.pop(context);
+    //     status("Alert", "Check your internet connection and try again!");
+    //   }
+    // } catch (e) {
+    //   Navigator.pop(context);
+    //   status(
+    //     "Alert",
+    //     "Could not connect, check your internet connection and try again! ${e.toString()}",
+    //   );
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/security");
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          title: Text("BVN Verification"),
-          backgroundColor: mainColor,
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 30), // Space between title and fields
-                TextFormField(
-                  controller: bvn,
-                  readOnly: user_data["bvn"] == "" ? false : true,
-                  decoration: InputDecoration(
-                    labelText: 'Enter BVN number',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                ),
-
-                SizedBox(height: 20.0), // Spacing between fields
-
-                SizedBox(height: 20.0), // Spacing between fields
-                // Sign Up Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Show error message for mismatched passwords
-                      if (_formKey.currentState!.validate()) {
-                        if (user_data["bvn"] == "") {
-                          process();
-                          verifyBVN();
-                        }
-                      }
-                    },
-                    child: Text(
-                      user_data["bvn"] == ""
-                          ? 'Verify'
-                          : "BVN already Verified",
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: mainColor,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15,
-                      ),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  textAlign: TextAlign.center,
-                  "Note: Your BVN name must be the same as your account name!",
-                ),
-              ],
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, theme) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, "/security");
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              title: Text("BVN Verification"),
+              backgroundColor: theme.primaryColor,
             ),
-          ),
-        ),
+            body: Padding(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 30), // Space between title and fields
+                    TextFormField(
+                      controller: bvn,
+                      readOnly: "bvn" == "" ? false : true,
+                      decoration: InputDecoration(
+                        labelText: 'Enter BVN number',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 20.0), // Spacing between fields
+
+                    SizedBox(height: 20.0), // Spacing between fields
+                    // Sign Up Button
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Show error message for mismatched passwords
+                          if (_formKey.currentState!.validate()) {
+                            if ("bvn" == "") {
+                              process();
+                              verifyBVN();
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.primaryColor,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 50,
+                            vertical: 15,
+                          ),
+                          textStyle: TextStyle(fontSize: 18),
+                        ),
+                        child: Text(
+                          "bvn" == "" ? 'Verify' : "BVN already Verified",
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      textAlign: TextAlign.center,
+                      "Note: Your BVN name must be the same as your account name!",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
       onPopInvokedWithResult: (b, t) async {
         Navigator.popAndPushNamed(context, "/security");

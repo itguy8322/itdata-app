@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:local_auth/local_auth.dart';
 
 class Electricity extends StatefulWidget {
@@ -60,36 +64,36 @@ class _ElectricityState extends State<Electricity> {
   }
 
   void validateMeterNumber() async {
-    print("am here");
-    int m = (int.tryParse(meter.text))!;
-    final url = Uri.parse(
-      "https://postranet.com/api/validatemeter?meternumber=$m&disconame=$disco_name&mtype=$metertype",
-    );
-    final headers = {"Content-Type": "application/json"};
-    try {
-      print("am here1");
-      final response = await http.get(url, headers: headers);
-      print("am here2");
-      if (response.statusCode == 200) {
-        print("It's Working...");
-        var data = jsonDecode(response.body);
+    // print("am here");
+    // int m = (int.tryParse(meter.text))!;
+    // final url = Uri.parse(
+    //   "https://postranet.com/api/validatemeter?meternumber=$m&disconame=$disco_name&mtype=$metertype",
+    // );
+    // final headers = {"Content-Type": "application/json"};
+    // try {
+    //   print("am here1");
+    //   final response = await http.get(url, headers: headers);
+    //   print("am here2");
+    //   if (response.statusCode == 200) {
+    //     print("It's Working...");
+    //     var data = jsonDecode(response.body);
 
-        print("am here3");
-        check_meter = false;
-        meter_data = data["name"].toString();
-        setState(() {});
-      } else {
-        print("am here5");
-        check_meter = false;
-        meter_data = "Could not fetch data, try again.";
-        setState(() {});
-      }
-    } catch (e) {
-      print("am here6");
-      check_meter = false;
-      meter_data = "Could not fetch data, try again.";
-      setState(() {});
-    }
+    //     print("am here3");
+    //     check_meter = false;
+    //     meter_data = data["name"].toString();
+    //     setState(() {});
+    //   } else {
+    //     print("am here5");
+    //     check_meter = false;
+    //     meter_data = "Could not fetch data, try again.";
+    //     setState(() {});
+    //   }
+    // } catch (e) {
+    //   print("am here6");
+    //   check_meter = false;
+    //   meter_data = "Could not fetch data, try again.";
+    //   setState(() {});
+    // }
   }
 
   Future<void> biametric_authentication() async {
@@ -259,7 +263,7 @@ class _ElectricityState extends State<Electricity> {
       pin2.text = "";
       pin3.text = "";
       pin4.text = "";
-      if (_pin == user_data["t_pin"]) {
+      if (_pin == "t_pin") {
         process();
       } else {
         Vibrate.vibrate();
@@ -286,7 +290,7 @@ class _ElectricityState extends State<Electricity> {
     }
   }
 
-  void showBottomDrawer(BuildContext context) {
+  void showBottomDrawer(BuildContext context, ThemeState theme) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -310,7 +314,7 @@ class _ElectricityState extends State<Electricity> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -319,7 +323,7 @@ class _ElectricityState extends State<Electricity> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -333,7 +337,7 @@ class _ElectricityState extends State<Electricity> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -342,7 +346,7 @@ class _ElectricityState extends State<Electricity> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -356,7 +360,7 @@ class _ElectricityState extends State<Electricity> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -365,7 +369,7 @@ class _ElectricityState extends State<Electricity> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -379,7 +383,7 @@ class _ElectricityState extends State<Electricity> {
                       obscureText: true,
                       obscuringCharacter: "⓿",
                       style: TextStyle(
-                        color: mainColor,
+                        color: theme.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -388,7 +392,7 @@ class _ElectricityState extends State<Electricity> {
                       decoration: InputDecoration(
                         labelStyle: TextStyle(color: Colors.grey),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: mainColor),
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
                         border: OutlineInputBorder(),
                       ),
@@ -405,7 +409,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "1",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -414,7 +418,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "2",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -423,7 +427,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "3",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -437,7 +441,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "4",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -446,7 +450,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "5",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -455,7 +459,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "6",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -469,7 +473,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "7",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -478,7 +482,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "8",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   TextButton(
@@ -487,7 +491,7 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "9",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                 ],
@@ -497,7 +501,7 @@ class _ElectricityState extends State<Electricity> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (biometric) {
+                      if (true == true) {
                         biametric_authentication();
                       } else {
                         showDialog(
@@ -513,7 +517,11 @@ class _ElectricityState extends State<Electricity> {
                         );
                       }
                     },
-                    icon: Icon(Icons.fingerprint, size: 28, color: mainColor),
+                    icon: Icon(
+                      Icons.fingerprint,
+                      size: 28,
+                      color: theme.primaryColor,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -521,14 +529,14 @@ class _ElectricityState extends State<Electricity> {
                     },
                     child: Text(
                       "0",
-                      style: TextStyle(fontSize: 40, color: mainColor),
+                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
                     ),
                   ),
                   IconButton(
                     onPressed: () {
                       deletePin();
                     },
-                    icon: Icon(Icons.backspace, color: mainColor),
+                    icon: Icon(Icons.backspace, color: theme.primaryColor),
                   ),
                 ],
               ),
@@ -539,234 +547,230 @@ class _ElectricityState extends State<Electricity> {
     );
   }
 
+  final electricity = {};
   @override
   Widget build(BuildContext context) {
-    if (reg_elec_listener == false) {
-      socket.on('electricity', (data) {
-        print(data);
-        try {
-          Navigator.pop(context);
-          status(data["status"]);
-        } catch (e) {
-          print("Error");
-        }
-      });
-      reg_elec_listener = true;
-    }
     return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/dashboard");
-            },
-            icon: Icon(Icons.arrow_back),
-          ),
-          backgroundColor: mainColor,
-          title: Text("Electricity"),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, theme) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, "/dashboard");
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              backgroundColor: theme.primaryColor,
+              title: Text("Electricity"),
+            ),
+            body: Padding(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: Text(
+                        disco_name == "none"
+                            ? "Choose Disco Name"
+                            : disco_name.toString(),
+                        style: TextStyle(color: theme.primaryColor),
+                      ),
+                      items: [
+                        for (var i in electricity.keys)
+                          (DropdownMenuItem(
+                            value: i,
+                            child: Text(electricity[i].toString()),
+                          )),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          disco_name = electricity[value.toString()];
+                          disco_id = (int.tryParse(value.toString()))!;
+                        });
+                      },
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    disco_name == "none"
-                        ? "Choose Disco Name"
-                        : disco_name.toString(),
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    for (var i in electricity.keys)
-                      (DropdownMenuItem(
-                        value: i,
-                        child: Text(electricity[i].toString()),
-                      )),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      disco_name = electricity[value.toString()];
-                      disco_id = (int.tryParse(value.toString()))!;
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: number,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: number,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
+                    SizedBox(height: 10),
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: Text(
+                        metertype == ""
+                            ? "Choose Meter type"
+                            : metertypes[metertype].toString(),
+                        style: TextStyle(color: theme.primaryColor),
+                      ),
+                      items: [
+                        DropdownMenuItem(value: "1", child: Text("PREPAID")),
+                        DropdownMenuItem(value: "2", child: Text("POSTPAID")),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          metertype = (metertypes[value.toString()])!;
+                        });
+                      },
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                  hint: Text(
-                    metertype == ""
-                        ? "Choose Meter type"
-                        : metertypes[metertype].toString(),
-                    style: TextStyle(color: mainColor),
-                  ),
-                  items: [
-                    DropdownMenuItem(value: "1", child: Text("PREPAID")),
-                    DropdownMenuItem(value: "2", child: Text("POSTPAID")),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      metertype = (metertypes[value.toString()])!;
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
-                check_meter
-                    ? Row(
-                      children: [
-                        Image.asset("assets/images/loading.gif", scale: 25.0),
-                        Text(
-                          "Validating...",
+                    SizedBox(height: 10),
+                    check_meter
+                        ? Row(
+                          children: [
+                            Image.asset(
+                              "assets/images/loading.gif",
+                              scale: 25.0,
+                            ),
+                            Text(
+                              "Validating...",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                        : meter_data == "Could not fetch data, try again."
+                        ? Text(
+                          "$meter_data",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.red,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
+                        )
+                        : meter_data != ""
+                        ? Text(
+                          "$meter_data".toUpperCase(),
+                          style: TextStyle(
+                            color:
+                                meter_data == "INVALID METER NUMBER"
+                                    ? Colors.red
+                                    : Colors.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                        : SizedBox(height: 0.01),
+                    TextFormField(
+                      controller: meter,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
+                      readOnly: check_meter,
+                      decoration: InputDecoration(
+                        labelText: 'Meter Number',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
                         ),
-                      ],
-                    )
-                    : meter_data == "Could not fetch data, try again."
-                    ? Text(
-                      "$meter_data",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                        border: OutlineInputBorder(),
                       ),
-                    )
-                    : meter_data != ""
-                    ? Text(
-                      "$meter_data".toUpperCase(),
-                      style: TextStyle(
-                        color:
-                            meter_data == "INVALID METER NUMBER"
-                                ? Colors.red
-                                : Colors.green,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        if (value.length == 11) {
+                          setState(() {
+                            check_meter = true;
+                          });
+                          validateMeterNumber();
+                        } else {
+                          setState(() {
+                            meter_data = "";
+                          });
+                        }
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: amount,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
+                      decoration: InputDecoration(
+                        labelText: 'Amount',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
                       ),
-                    )
-                    : SizedBox(height: 0.01),
-                TextFormField(
-                  controller: meter,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  readOnly: check_meter,
-                  decoration: InputDecoration(
-                    labelText: 'Meter Number',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    if (value.length == 11) {
-                      setState(() {
-                        check_meter = true;
-                      });
-                      validateMeterNumber();
-                    } else {
-                      setState(() {
-                        meter_data = "";
-                      });
-                    }
-                  },
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: amount,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  decoration: InputDecoration(
-                    labelText: 'Amount',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor),
+                    SizedBox(height: 10),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(25),
+                        backgroundColor: theme.primaryColor,
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate() &&
+                            int.tryParse(amount.text.toString())! >= 500) {
+                          showBottomDrawer(context, theme);
+                        } else {
+                          _status(
+                            "Amount Error",
+                            "The amount must not be less than N500",
+                          );
+                        }
+                      },
+                      child: Text("Pay", style: TextStyle(fontSize: 30)),
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'All field required';
-                    }
-                    return null;
-                  },
+                  ],
                 ),
-                SizedBox(height: 10),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(25),
-                    backgroundColor: mainColor,
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate() &&
-                        int.tryParse(amount.text.toString())! >= 500) {
-                      showBottomDrawer(context);
-                    } else {
-                      _status(
-                        "Amount Error",
-                        "The amount must not be less than N500",
-                      );
-                    }
-                  },
-                  child: Text("Pay", style: TextStyle(fontSize: 30)),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       onPopInvokedWithResult: (b, t) async {
         Navigator.popAndPushNamed(context, "/dashboard");

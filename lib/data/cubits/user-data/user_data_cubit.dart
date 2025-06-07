@@ -54,7 +54,7 @@ class UserDataCubit extends Cubit<UserState> {
           userDataSuccess: false,
         ),
       );
-      final _data = await DatabaseService().updateData(
+      await DatabaseService().updateData(
         path,
         username,
         UserData.fromUserData(data),

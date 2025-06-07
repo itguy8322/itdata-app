@@ -3,19 +3,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_state.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, Map<String, dynamic>>(
+    return BlocBuilder<ThemeCubit, ThemeState>(
       builder:
           (context, theme) => Drawer(
             child: Column(
               children: <Widget>[
                 DrawerHeader(
-                  decoration: BoxDecoration(color: theme["mainColor"]),
+                  decoration: BoxDecoration(color: theme.backgroundColor),
                   child: Column(
                     children: [
                       Row(
@@ -35,16 +36,14 @@ class AppDrawer extends StatelessWidget {
                                     Text(
                                       "${state.userDataSuccess ? state.userData!.name : ''}",
                                       style: TextStyle(
-                                        color: theme["subColor"],
+                                        color: theme.textColor,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       "${state.userDataSuccess ? state.userData!.email : ''}",
-                                      style: TextStyle(
-                                        color: theme["subColor"],
-                                      ),
+                                      style: TextStyle(color: theme.textColor),
                                     ),
                                   ],
                                 ),
@@ -186,7 +185,8 @@ class AppDrawer extends StatelessWidget {
                                         );
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: theme["mainColor"],
+                                        backgroundColor:
+                                            theme.elevatedBackgroundColor,
                                       ),
                                       child: Text("Yes"),
                                     ),
@@ -195,7 +195,7 @@ class AppDrawer extends StatelessWidget {
                                         Navigator.pop(context);
                                       },
                                       style: TextButton.styleFrom(
-                                        backgroundColor: theme["mainColor"],
+                                        backgroundColor: theme.primaryColor,
                                       ),
                                       child: Text("No"),
                                     ),
