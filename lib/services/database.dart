@@ -6,41 +6,37 @@ class DatabaseService {
 
   Future<void> addUser(
     String path,
-    String username,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username;
-    await db.collection(path).doc(user).set(data);
-    await db.collection("transactions").doc(user).set({"transaction": []});
-    await db.collection("notification").doc(user).set({"notifications": []});
+    await db.collection(path).doc(id).set(data);
+    await db.collection("transactions").doc(id).set({"transaction": []});
+    await db.collection("notification").doc(id).set({"notifications": []});
   }
 
   Future<UserData> updateData(
     String path,
-    String username,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username;
-    await db.collection(path).doc(user).update(data);
-    final _data = await loadData(path, username);
+    await db.collection(path).doc(id).update(data);
+    final _data = await loadData(path, id);
     return _data;
   }
 
   Future<void> removeData(
     String path,
-    String username,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username;
-    db.collection(path).doc(user).delete();
-    db.collection("transactions").doc(user).delete();
-    db.collection("notifications").doc(user).delete();
+    db.collection(path).doc(id).delete();
+    db.collection("transactions").doc(id).delete();
+    db.collection("notifications").doc(id).delete();
   }
 
-  Future<UserData> loadData(String path, String username) async {
-    String user = username;
+  Future<UserData> loadData(String path, String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection(path).doc(user).get();
+        await db.collection(path).doc(id).get();
     Map<String, dynamic>? data = snapshot.data();
     return UserData.fromJson(data!);
   }

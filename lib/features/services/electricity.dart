@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
-import 'package:local_auth/local_auth.dart';
+// import 'package:local_auth/local_auth.dart';
 
 class Electricity extends StatefulWidget {
   const Electricity({super.key});
@@ -21,8 +22,8 @@ class _ElectricityState extends State<Electricity> {
   TextEditingController pin3 = TextEditingController();
   TextEditingController pin4 = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final LocalAuthentication _localAuth = LocalAuthentication();
-  bool _isAuthenticated = false;
+  // final LocalAuthentication _localAuth = LocalAuthentication();
+  // bool _isAuthenticated = false;
 
   final FocusNode pin_1 = FocusNode();
   final FocusNode pin_2 = FocusNode();
@@ -97,156 +98,73 @@ class _ElectricityState extends State<Electricity> {
   }
 
   Future<void> biametric_authentication() async {
-    try {
-      bool isBiometricSupported = await _localAuth.isDeviceSupported();
-      if (!isBiometricSupported) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Warning!"),
-              content: Text(
-                "Biometric authentication is not supported on this device!",
-              ),
-            );
-          },
-        );
-        print("Error 1");
-        return;
-      }
-      bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
-      if (!canCheckBiometrics) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Warning!"),
-              content: Text("No biometric features are available!"),
-            );
-          },
-        );
-        print("Error 2");
-        return;
-      }
+    // try {
+    //   bool isBiometricSupported = await _localAuth.isDeviceSupported();
+    //   if (!isBiometricSupported) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //           title: Text("Warning!"),
+    //           content: Text(
+    //             "Biometric authentication is not supported on this device!",
+    //           ),
+    //         );
+    //       },
+    //     );
+    //     print("Error 1");
+    //     return;
+    //   }
+    //   bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+    //   if (!canCheckBiometrics) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //           title: Text("Warning!"),
+    //           content: Text("No biometric features are available!"),
+    //         );
+    //       },
+    //     );
+    //     print("Error 2");
+    //     return;
+    //   }
 
-      _isAuthenticated = await _localAuth.authenticate(
-        localizedReason: 'Authenticate with your fingerprint',
-        options: const AuthenticationOptions(
-          useErrorDialogs: false,
-          biometricOnly: true,
-          stickyAuth: true,
-        ),
-      );
-      if (_isAuthenticated) {
-        status("success");
-      } else {
-        Navigator.pop(context);
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Warning!"),
-              content: Text("Fingerprint not recognized!"),
-            );
-          },
-        );
-      }
-      setState(() {});
-    } catch (e) {
-      print(e.toString());
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Warning!"),
-            content: Text("An unexpected error occured!"),
-          );
-        },
-      );
-    }
-  }
-
-  void status(var status) {
-    Navigator.popAndPushNamed(context, "/dashboard");
-    showDialog(
-      context: context,
-      builder: (context) {
-        if (status == "success") {
-          return AlertDialog(
-            title: SizedBox(
-              height: 80,
-              child: Image.asset("assets/images/success.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Successful!",
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "pending") {
-          return AlertDialog(
-            title: Icon(Icons.pending, color: Colors.orange, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Pending!",
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return AlertDialog(
-            title: Icon(Icons.warning_rounded, color: Colors.red, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Failed!",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  void process() {
-    print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: SizedBox(
-              height: 60,
-              child: Image.asset("assets/images/loading.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Processing, please wait...")],
-            ),
-          ),
-    );
+    //   _isAuthenticated = await _localAuth.authenticate(
+    //     localizedReason: 'Authenticate with your fingerprint',
+    //     options: const AuthenticationOptions(
+    //       useErrorDialogs: false,
+    //       biometricOnly: true,
+    //       stickyAuth: true,
+    //     ),
+    //   );
+    //   if (_isAuthenticated) {
+    //     status("success");
+    //   } else {
+    //     Navigator.pop(context);
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //           title: Text("Warning!"),
+    //           content: Text("Fingerprint not recognized!"),
+    //         );
+    //       },
+    //     );
+    //   }
+    //   setState(() {});
+    // } catch (e) {
+    //   print(e.toString());
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return AlertDialog(
+    //         title: Text("Warning!"),
+    //         content: Text("An unexpected error occured!"),
+    //       );
+    //     },
+    //   );
+    // }
   }
 
   void enterPin(var pin) {
@@ -264,7 +182,7 @@ class _ElectricityState extends State<Electricity> {
       pin3.text = "";
       pin4.text = "";
       if (_pin == "t_pin") {
-        process();
+        showProcessDialog(context);
       } else {
         Vibrate.vibrate();
         Navigator.pop(context);

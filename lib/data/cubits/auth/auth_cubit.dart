@@ -32,7 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
       print("It's Working...");
       await _auth.create(email, password);
       await _databaseService.addUser("users", email, data);
-      String id = email.split("@")[0];
+      String id = data["id"];
       UserData user = await DatabaseService().loadData("users", id);
       emit(SignupSuccess(userInfo: user));
     } on FirebaseAuthException catch (e) {

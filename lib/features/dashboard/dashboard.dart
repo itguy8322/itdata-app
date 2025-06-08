@@ -4,6 +4,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/alert_dialog.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
@@ -12,7 +13,7 @@ import 'package:itdata/features/dashboard/recent-transaction.dart';
 import 'package:itdata/features/dashboard/services-widgets.dart';
 import 'package:itdata/features/dashboard/appdrawer.dart';
 import 'package:itdata/services/auth.dart';
-import 'package:itdata/data/cubits/transaction/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transaction_state.dart';
 import 'package:itdata/data/cubits/user-data/user_state.dart';
 
 class Dashboard extends StatefulWidget {
@@ -32,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
         },
       );
     } catch (e) {
-      status("Error", e.toString());
+      showAlertDialog(context, "Error", e.toString());
     }
   }
 
@@ -50,14 +51,6 @@ class _DashboardState extends State<Dashboard> {
     //   //user_d.load_user_data(user?.email);
     //   //transac.load_transactions(user?.email, "transactions");
     // });
-  }
-
-  void status(var _title, var status) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
-    );
   }
 
   @override
@@ -103,122 +96,119 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Column(
                     children: [
-                      Container(
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: theme.primaryColor,
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              height: 120,
-                              child: Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Wallet balance",
-                                          style: TextStyle(
-                                            color: theme.textColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        BlocBuilder<UserDataCubit, UserState>(
-                                          builder: (context, state) {
-                                            return Text(
-                                              show_balance == true
-                                                  ? state.userDataSuccess
-                                                      ? "₦${state.userData!.wallet_bal}"
-                                                      : "0.00"
-                                                  : "****",
-                                              style: TextStyle(
-                                                color: theme.textColor,
-                                                fontSize: 26,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
-                                            show_balance =
-                                                show_balance == false
-                                                    ? true
-                                                    : false;
-                                            setState(() {});
-                                          },
-                                          icon: Icon(
-                                            Icons.remove_red_eye,
-                                            color: theme.textColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: theme.primaryColor,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
                               ),
                             ),
-                            Positioned(
-                              top: 90,
-                              width: MediaQuery.of(context).size.width,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      padding: EdgeInsets.all(10),
-                                      side: BorderSide(
-                                        color: Colors.white,
-                                        width: 3,
+                            height: 120,
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Wallet balance",
+                                        style: TextStyle(
+                                          color: theme.textColor,
+                                        ),
                                       ),
-                                      backgroundColor: theme.primaryColor,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.popAndPushNamed(
-                                        context,
-                                        "/fundWallet",
-                                      );
-                                    },
-                                    icon: Icon(Icons.add),
-                                    label: Text("Fund Wallet  "),
+                                    ],
                                   ),
-                                  ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      padding: EdgeInsets.all(10),
-                                      side: BorderSide(
-                                        color: Colors.white,
-                                        width: 3,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      BlocBuilder<UserDataCubit, UserState>(
+                                        builder: (context, state) {
+                                          return Text(
+                                            show_balance == true
+                                                ? state.userDataSuccess
+                                                    ? "₦${state.userData!.wallet_bal}"
+                                                    : "0.00"
+                                                : "****",
+                                            style: TextStyle(
+                                              color: theme.textColor,
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      backgroundColor: theme.primaryColor,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.popAndPushNamed(
-                                        context,
-                                        "/transactions",
-                                      );
-                                    },
-                                    icon: Icon(Icons.history),
-                                    label: Text("Transactions"),
+                                      IconButton(
+                                        onPressed: () {
+                                          show_balance =
+                                              show_balance == false
+                                                  ? true
+                                                  : false;
+                                          setState(() {});
+                                        },
+                                        icon: Icon(
+                                          Icons.remove_red_eye,
+                                          color: theme.textColor,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Positioned(
+                            top: 90,
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    padding: EdgeInsets.all(10),
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
+                                    backgroundColor: theme.primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.popAndPushNamed(
+                                      context,
+                                      "/fundWallet",
+                                    );
+                                  },
+                                  icon: Icon(Icons.add),
+                                  label: Text("Fund Wallet  "),
+                                ),
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    padding: EdgeInsets.all(10),
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
+                                    backgroundColor: theme.primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.popAndPushNamed(
+                                      context,
+                                      "/transactions",
+                                    );
+                                  },
+                                  icon: Icon(Icons.history),
+                                  label: Text("Transactions"),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 30),
                       Row(
@@ -240,14 +230,11 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(10),
-                        child: BlocBuilder<TransactionCubit, TransacStates>(
+                        child: BlocBuilder<TransactionCubit, TransactionStates>(
                           builder: (context, state) {
-                            return state is TransacLoaded
-                                ? state.transactions.isEmpty
-                                    ? RecentTransactions(transactions: [])
-                                    : Center(
-                                      child: Text("No recent transactions"),
-                                    )
+                            final transactions = state.transactions!;
+                            return transactions.isEmpty
+                                ? RecentTransactions(transactions: [])
                                 : Center(child: Text("No recent transactions"));
                           },
                         ),
@@ -259,7 +246,7 @@ class _DashboardState extends State<Dashboard> {
               onRefresh: () async {
                 user_data_cubit.load_user_data(user?.email);
                 final transac = BlocProvider.of<TransactionCubit>(context);
-                transac.load_transactions(user?.email, "transactions");
+                transac.loadTransactions(user?.email, "transactions");
               },
             ),
           );

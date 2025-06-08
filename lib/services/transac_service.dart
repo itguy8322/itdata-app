@@ -28,12 +28,12 @@ class TransacService {
     db.collection(path).doc(user).delete();
   }
 
-  Future<Map<String, dynamic>> load(String path, String username) async {
+  Future<List<Map<String, dynamic>>> load(String path, String username) async {
     String user = username.split("@")[0].replaceAll(".", "-");
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection(path).doc(user).get();
     Map<String, dynamic>? data = snapshot.data();
     print(data);
-    return data ?? {};
+    return [];
   }
 }

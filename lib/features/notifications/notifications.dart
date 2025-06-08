@@ -1,5 +1,9 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/notification/notification_list_cubit.dart';
+import 'package:itdata/data/cubits/notification/notification_list_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 
@@ -39,8 +43,10 @@ class _NotificationsState extends State<Notifications> {
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
-              child:
-                  notifications.isEmpty
+              child: BlocBuilder<NotificationListCubit, NotificationsListState>(
+                builder: (context, state) {
+                  final notifications = state.notifications!;
+                  return notifications.isEmpty
                       ? Center(child: Text("No Notifications yet!"))
                       : RefreshIndicator(
                         color: theme.primaryColor,
@@ -55,11 +61,11 @@ class _NotificationsState extends State<Notifications> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text("${notification['title']}"),
-                                    Text("${notification['date'].toString()}"),
+                                    Text("${notification.title}"),
+                                    Text("${notification.date.toString()}"),
                                   ],
                                 ),
-                                subtitle: Text("${notification['content']}"),
+                                subtitle: Text("${notification.content}"),
                               ),
                             );
                           },
@@ -111,7 +117,9 @@ class _NotificationsState extends State<Notifications> {
                           //   );
                           // }
                         },
-                      ),
+                      );
+                },
+              ),
             ),
           );
         },

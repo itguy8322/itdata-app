@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:local_auth/local_auth.dart';
@@ -73,7 +76,7 @@ class _DataState extends State<Data> {
         ),
       );
       if (_isAuthenticated) {
-        process();
+        showProcessDialog(context);
         make_transaction();
       } else {
         Navigator.pop(context);
@@ -100,108 +103,6 @@ class _DataState extends State<Data> {
         },
       );
     }
-  }
-
-  void status(var status) {
-    Navigator.popAndPushNamed(context, "/dashboard");
-    showDialog(
-      context: context,
-      builder: (context) {
-        if (status == "success") {
-          return AlertDialog(
-            title: SizedBox(
-              height: 80,
-              child: Image.asset("assets/images/success.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Successful!",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "pending") {
-          return AlertDialog(
-            title: Icon(Icons.pending, color: Colors.orange, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Pending!",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "fail") {
-          return AlertDialog(
-            title: Icon(Icons.warning_rounded, color: Colors.red, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Failed!",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "Insufficient balance") {
-          return AlertDialog(
-            title: Icon(Icons.close, color: Colors.red, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Insufficient balance",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return AlertDialog(content: Text(status));
-        }
-      },
-    );
-  }
-
-  void process() {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: SizedBox(
-              height: 60,
-              child: Image.asset("assets/images/loading.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Processing, please wait...")],
-            ),
-          ),
-    );
-    //status("pending");
   }
 
   void make_transaction() async {
@@ -265,7 +166,7 @@ class _DataState extends State<Data> {
       pin3.text = "";
       pin4.text = "";
       if (_pin == "t_pin") {
-        process();
+        showProcessDialog(context);
         make_transaction();
       } else {
         Vibrate.vibrate();

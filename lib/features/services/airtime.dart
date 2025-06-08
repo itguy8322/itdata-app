@@ -30,89 +30,6 @@ class _AirtimeState extends State<Airtime> {
     "sns": "SHARE AND SELL",
   };
 
-  void status(var status) {
-    Navigator.popAndPushNamed(context, "/dashboard");
-    showDialog(
-      context: context,
-      builder: (context) {
-        if (status == "success") {
-          return AlertDialog(
-            title: SizedBox(
-              height: 80,
-              child: Image.asset("assets/images/success.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Successful!",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "pending") {
-          return AlertDialog(
-            title: Icon(Icons.pending, color: Colors.orange, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Pending!",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "fail") {
-          return AlertDialog(
-            title: Icon(Icons.warning_rounded, color: Colors.red, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Transaction Failed!",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (status == "Insufficient balance") {
-          return AlertDialog(
-            title: Icon(Icons.close, color: Colors.red, size: 50),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Insufficient balance",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return AlertDialog(content: Text(status));
-        }
-      },
-    );
-  }
-
   void make_transaction() async {
     // final url = Uri.parse("$_url/user/make-purchase");
     // final headers = {"Content-Type": "application/x-www-form-urlencoded"};
@@ -161,25 +78,6 @@ class _AirtimeState extends State<Airtime> {
     //     "Could not connect, check your internet connection and try again! ${e.toString()}",
     //   );
     // }
-  }
-
-  void process() {
-    print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: SizedBox(
-              height: 60,
-              child: Image.asset("assets/images/loading.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Processing, please wait...")],
-            ),
-          ),
-    );
   }
 
   final networks = {};

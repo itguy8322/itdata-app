@@ -15,10 +15,11 @@ abstract class ThemeState with _$ThemeState {
     required Color elevatedBtnTextColor,
     required Color texButtonColor,
     required Color elevatedBackgroundColor,
+    required Color gradiantColor,
   }) = _ThemeState;
 
   factory ThemeState.defaut() {
-    final _default = Color.fromRGBO(82, 101, 140, 1);
+    final _default = Color.fromARGB(255, 49, 67, 101);
     return ThemeState(
       primaryColor: _default,
       secondaryColor: Colors.white,
@@ -27,6 +28,7 @@ abstract class ThemeState with _$ThemeState {
       elevatedBtnTextColor: Colors.white,
       texButtonColor: _default,
       elevatedBackgroundColor: _default,
+      gradiantColor: Color.fromARGB(255, 82, 101, 140),
     );
   }
 
@@ -40,6 +42,7 @@ abstract class ThemeState with _$ThemeState {
       elevatedBtnTextColor: Colors.white,
       texButtonColor: blue,
       elevatedBackgroundColor: blue,
+      gradiantColor: Colors.blue[500]!,
     );
   }
 
@@ -53,6 +56,7 @@ abstract class ThemeState with _$ThemeState {
       elevatedBtnTextColor: Colors.white,
       texButtonColor: orange,
       elevatedBackgroundColor: orange,
+      gradiantColor: Colors.orange[500]!,
     );
   }
 
@@ -66,6 +70,7 @@ abstract class ThemeState with _$ThemeState {
       elevatedBtnTextColor: Colors.white,
       texButtonColor: brown,
       elevatedBackgroundColor: brown,
+      gradiantColor: Color.fromARGB(255, 140, 17, 1),
     );
   }
 }

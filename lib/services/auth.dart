@@ -9,10 +9,7 @@ class Auth {
   }
 
   Future<void> create(String email, String password) async {
-    final data = await auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    await auth.createUserWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> logout() async {

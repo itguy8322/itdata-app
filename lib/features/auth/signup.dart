@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/alert_dialog.dart';
+import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/auth/auth_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
@@ -23,33 +25,6 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  void process() {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: SizedBox(
-              height: 60,
-              child: Image.asset("assets/images/loading.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Processing, please wait...")],
-            ),
-          ),
-    );
-    //status("pending");
-  }
-
-  void status(var _title, var status) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +49,7 @@ class _SignupPageState extends State<SignupPage> {
                             Navigator.popAndPushNamed(context, "/dashboard");
                           } else if (state is SignupFailure) {
                             Navigator.pop(context);
-                            status("Alert", state.message);
+                            showAlertDialog(context, "Alert", state.message!);
                           }
                         },
                         child: SizedBox(height: 50),
@@ -97,7 +72,7 @@ class _SignupPageState extends State<SignupPage> {
                         ],
                       ),
                       SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.03,
+                        height: MediaQuery.sizeOf(context).height * 0.05,
                       ),
 
                       // Already have an account?
@@ -105,6 +80,14 @@ class _SignupPageState extends State<SignupPage> {
                         width: MediaQuery.sizeOf(context).height,
                         child: Column(
                           children: [
+                            Text(
+                              "Sign Up.",
+                              style: TextStyle(
+                                color: theme.primaryColor,
+                                fontSize: 44,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             Text(
                               "Create an account",
                               style: TextStyle(fontSize: 20),
@@ -125,7 +108,10 @@ class _SignupPageState extends State<SignupPage> {
                                   },
                                   child: Text(
                                     'Login',
-                                    style: TextStyle(color: theme.primaryColor),
+                                    style: TextStyle(
+                                      color: theme.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -264,23 +250,26 @@ class _SignupPageState extends State<SignupPage> {
                                   // Handle sign-up logic (e.g., validation, API call)
                                   if (_formKey.currentState!.validate()) {
                                     if (password.text == confirmPassword.text) {
-                                      process();
-                                      context.read<AuthCubit>().signup(
-                                        email.text,
-                                        password.text,
-                                        {
-                                          "name": fullname.text,
-                                          "username": email.text.split("@")[0],
-                                          "email": email.text,
-                                          "tel": number.text,
-                                          "address": address.text,
-                                          "bvn": "",
-                                          "password": password.text,
-                                          "wallet_bal": "1550.00",
-                                        },
-                                      );
+                                      showProcessDialog(context);
+                                      context
+                                          .read<AuthCubit>()
+                                          .signup(email.text, password.text, {
+                                            "id": email.text.split("@")[0],
+                                            "name": fullname.text,
+                                            "email": email.text,
+                                            "tel": number.text,
+                                            "address": address.text,
+                                            "pin": "0000",
+                                            "bvn": "",
+                                            "password": password.text,
+                                            "wallet_bal": "1550.00",
+                                          });
                                     } else {
-                                      status("Alert", "Password do not match!");
+                                      showAlertDialog(
+                                        context,
+                                        "Alert",
+                                        "Password do not match!",
+                                      );
                                     }
                                   }
 

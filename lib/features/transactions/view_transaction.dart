@@ -7,22 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
-import 'package:itdata/data/cubits/transaction/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transaction_state.dart';
+import 'package:itdata/data/models/transaction/transaction.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ViewTransactionPage extends StatefulWidget {
-  final int index;
-  const ViewTransactionPage({super.key, required this.index});
+  final Transaction? transaction;
+  const ViewTransactionPage({super.key, required this.transaction});
 
   @override
-  State<ViewTransactionPage> createState() => _ViewTransactionPageState(index);
+  State<ViewTransactionPage> createState() => _ViewTransactionPageState();
 }
 
 class _ViewTransactionPageState extends State<ViewTransactionPage> {
   final screen = GlobalKey();
-  final int index;
-
-  _ViewTransactionPageState(this.index);
   share_receipt() async {
     final boundary =
         screen.currentContext?.findRenderObject() as RenderRepaintBoundary;
@@ -63,303 +61,247 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
     }
   }
 
-  Widget data(List<dynamic> transactions) {
+  Widget data(Transaction transaction) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Provider"),
-            Text(transactions[index]["provider"].toUpperCase()),
+            Text(transaction.provider!.toUpperCase()),
           ],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Data Plan"), Text(transactions[index]["plan"])],
+          children: [Text("Data Plan"), Text(transaction.plan!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Type"),
-            Text(transactions[index]["type"].toUpperCase()),
-          ],
+          children: [Text("Type"), Text(transaction.type!.toUpperCase())],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Amount"),
-            Text("₦${transactions[index]["amount"].toString()}"),
+            Text("₦${transaction.amount!.toString()}"),
           ],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Recepiant"), Text(transactions[index]["tel"])],
+          children: [Text("Recepiant"), Text(transaction.tel!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Balance"),
-            Text("₦${transactions[index]['wallet_bal'].toString()}"),
-          ],
+          children: [Text("Balance"), Text("₦${transaction.tel.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Transaction Reference"),
-            Text(transactions[index]["reference_id"]),
-          ],
+          children: [Text("Transaction Reference"), Text(transaction.id!)],
         ),
       ],
     );
   }
 
-  Widget airtime(List<dynamic> transactions) {
+  Widget airtime(Transaction transaction) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("provider"),
-            Text(transactions[index]["provider"].toUpperCase()),
+            Text(transaction.provider!.toUpperCase()),
           ],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Amount"),
-            Text("₦${transactions[index]["amount"].toString()}"),
-          ],
+          children: [Text("Amount"), Text("₦${transaction.amount.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Recepiant"), Text(transactions[index]["tel"])],
+          children: [Text("Recepiant"), Text(transaction.tel!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Balance"),
-            Text("₦${transactions[index]['wallet_bal'].toString()}"),
-          ],
+          children: [Text("Balance"), Text("₦balance.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Transaction Reference"),
-            Text(transactions[index]["reference_id"]),
-          ],
+          children: [Text("Transaction Reference"), Text(transaction.id!)],
         ),
       ],
     );
   }
 
-  Widget wallet_funding(List<dynamic> transactions) {
+  Widget wallet_funding(Transaction transaction) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Amount"),
-            Text("₦${transactions[index]["amount"].toString()}"),
-          ],
+          children: [Text("Amount"), Text("₦${transaction.amount.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Balance"),
-            Text("₦${transactions[index]['wallet_bal'].toString()}"),
-          ],
+          children: [Text("Balance"), Text("₦Balance.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Transaction Reference"),
-            Text(transactions[index]["reference_id"]),
-          ],
+          children: [Text("Transaction Reference"), Text(transaction.id!)],
         ),
       ],
     );
   }
 
-  Widget electric(List<dynamic> transactions) {
+  Widget electric(Transaction transaction) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Disco Provider"),
-            Text(transactions[index]["provider"].toUpperCase()),
+            Text(transaction.provider!.toUpperCase()),
           ],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Amount"),
-            Text("₦${transactions[index]["amount"].toString()}"),
-          ],
+          children: [Text("Amount"), Text("₦${transaction.amount.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Recepiant"), Text(transactions[index]["tel"])],
+          children: [Text("Recepiant"), Text(transaction.tel!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Units"),
-            Text(transactions[index]["unit"].toString()),
-          ],
+          children: [Text("Units"), Text(transaction.units.toString())],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("PIN"), Text(transactions[index]["pin"])],
+          children: [Text("PIN"), Text(transaction.pin!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Balance"),
-            Text("₦${transactions[index]['wallet_bal'].toString()}"),
-          ],
+          children: [Text("Balance"), Text("₦balance")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Transaction Reference"),
-            Text(transactions[index]["reference_id"]),
-          ],
+          children: [Text("Transaction Reference"), Text(transaction.id!)],
         ),
       ],
     );
   }
 
-  Widget edupin(List<dynamic> transactions) {
+  Widget edupin(Transaction transaction) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Exam Type"), Text(transactions[index]["exam"])],
+          children: [Text("Exam Type"), Text("transaction")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Amount"),
-            Text("₦${transactions[index]["amount"].toString()}"),
-          ],
+          children: [Text("Amount"), Text("₦${transaction.amount.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("PIN"), Text(transactions[index]["pin"])],
+          children: [Text("PIN"), Text(transaction.pin!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Recepiant"), Text(transactions[index]["tel"])],
+          children: [Text("Recepiant"), Text(transaction.tel!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Balance"),
-            Text("₦${transactions[index]['wallet_bal'].toString()}"),
-          ],
+          children: [Text("Balance"), Text("₦balance")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Transaction Reference"),
-            Text(transactions[index]["reference_id"]),
-          ],
+          children: [Text("Transaction Reference"), Text(transaction.id!)],
         ),
       ],
     );
   }
 
-  Widget cable(List<dynamic> transactions) {
+  Widget cable(Transaction transaction) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Provider"),
-            Text(transactions[index]["provider"].toUpperCase()),
+            Text(transaction.provider!.toUpperCase()),
           ],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Plan"), Text(transactions[index]["plan"])],
+          children: [Text("Plan"), Text(transaction.plan!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Amount"),
-            Text("₦${transactions[index]["amount"].toString()}"),
-          ],
+          children: [Text("Amount"), Text("₦${transaction.amount.toString()}")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Recepiant"), Text(transactions[index]["tel"])],
+          children: [Text("Recepiant"), Text(transaction.tel!)],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Balance"),
-            Text("₦${transactions[index]['wallet_bal'].toString()}"),
-          ],
+          children: [Text("Balance"), Text("₦balance")],
         ),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Transaction Reference"),
-            Text(transactions[index]["reference_id"]),
-          ],
+          children: [Text("Transaction Reference"), Text(transaction.id!)],
         ),
       ],
     );
   }
 
-  Widget _content(List<dynamic> transactions) {
-    var service = transactions[index]["service"].toString().toUpperCase();
+  Widget _content(Transaction transaction) {
+    var service = transaction.service!.toUpperCase();
     if (service == "DATA PURCHASE") {
-      return data(transactions);
+      return data(transaction);
     } else if (service == "AIRTIME PURCHASE") {
-      return airtime(transactions);
+      return airtime(transaction);
     } else if (service == "EDU PIN PURCHASE") {
-      return edupin(transactions);
+      return edupin(transaction);
     } else if (service == "ELECTRIC PURCHASE") {
-      return electric(transactions);
+      return electric(transaction);
     } else if (service == "WALLET FUNDING") {
-      return wallet_funding(transactions);
+      return wallet_funding(transaction);
     } else {
-      return cable(transactions);
+      return cable(transaction);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final transaction = widget.transaction!;
     return PopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -374,121 +316,96 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
         ),
         body: Padding(
           padding: EdgeInsets.all(10),
-          child: BlocBuilder<TransactionCubit, TransacStates>(
+          child: BlocBuilder<TransactionCubit, TransactionStates>(
             builder: (context, state) {
-              return state is TransacLoaded
-                  ? state.transactions.isNotEmpty
-                      ? ListView(
+              return ListView(
+                children: [
+                  RepaintBoundary(
+                    key: screen,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      color: Colors.white,
+                      child: Column(
                         children: [
-                          RepaintBoundary(
-                            key: screen,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Image.asset(
-                                        "assets/images/data_app_logo.png",
-                                        scale: 40.0,
-                                      ),
-                                      Text("Transaction Receipt"),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        state.transactions[index]["service"]
-                                            .toString()
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color.fromRGBO(
-                                            82,
-                                            101,
-                                            140,
-                                            1,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        state.transactions[index]["status"]
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color:
-                                              state.transactions[index]["status"] ==
-                                                      "success"
-                                                  ? Colors.green
-                                                  : state.transactions[index]["status"] ==
-                                                      "pending"
-                                                  ? Colors.orange
-                                                  : Colors.red,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(state.transactions[index]["date"]),
-                                      Divider(
-                                        thickness: 1.0,
-                                        color: Color.fromRGBO(82, 101, 140, 1),
-                                      ),
-                                    ],
-                                  ),
-                                  _content(state.transactions),
-                                  Divider(
-                                    thickness: 1.0,
-                                    color: Color.fromRGBO(82, 101, 140, 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color.fromRGBO(
-                                    82,
-                                    101,
-                                    140,
-                                    1,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  share_receipt();
-                                },
-                                icon: Icon(Icons.share),
-                                label: Text("Share Receipt"),
+                              Image.asset(
+                                "assets/images/data_app_logo.png",
+                                scale: 40.0,
                               ),
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color.fromRGBO(
-                                    82,
-                                    101,
-                                    140,
-                                    1,
-                                  ),
+                              Text("Transaction Receipt"),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Column(
+                            children: [
+                              Text(
+                                transaction.service.toString().toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(82, 101, 140, 1),
                                 ),
-                                onPressed: () {
-                                  downloadReceipt();
-                                },
-                                icon: Icon(Icons.download),
-                                label: Text("Download Receipt"),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                transaction.status!.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color:
+                                      transaction.status == "success"
+                                          ? Colors.green
+                                          : transaction.status == "pending"
+                                          ? Colors.orange
+                                          : Colors.red,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(transaction.date!),
+                              Divider(
+                                thickness: 1.0,
+                                color: Color.fromRGBO(82, 101, 140, 1),
                               ),
                             ],
                           ),
+                          _content(transaction),
+                          Divider(
+                            thickness: 1.0,
+                            color: Color.fromRGBO(82, 101, 140, 1),
+                          ),
                         ],
-                      )
-                      : SizedBox()
-                  : SizedBox();
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(82, 101, 140, 1),
+                        ),
+                        onPressed: () {
+                          share_receipt();
+                        },
+                        icon: Icon(Icons.share),
+                        label: Text("Share Receipt"),
+                      ),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(82, 101, 140, 1),
+                        ),
+                        onPressed: () {
+                          downloadReceipt();
+                        },
+                        icon: Icon(Icons.download),
+                        label: Text("Download Receipt"),
+                      ),
+                    ],
+                  ),
+                ],
+              );
             },
           ),
         ),

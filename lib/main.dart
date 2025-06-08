@@ -11,6 +11,7 @@ import 'package:itdata/features/about/about.dart';
 import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:itdata/features/auth/login.dart';
 import 'package:itdata/features/auth/signup.dart';
+import 'package:itdata/init-screens/landing_page.dart';
 import 'package:itdata/init-screens/splashscreen.dart';
 import 'package:itdata/features/about/termspolicies.dart';
 import 'package:itdata/features/transactions/transactions.dart';
@@ -79,12 +80,11 @@ class MyApp extends StatelessWidget {
         "/signup": (context) => SignupPage(),
         "/dashboard": (context) => Dashboard(),
         "/transactions": (context) => TransactionsPage(),
-        "/transaction": (context) => ViewTransactionPage(index: 0),
+        "/transaction": (context) => ViewTransactionPage(transaction: null),
         "/profile": (context) => ProfilePage(),
         "/termspolicy": (context) => TermsAndPolicyPage(),
         "/about_us": (context) => AboutUsPage(),
-
-        // "/landing": (context) => LandingPage(),
+        "/landing": (context) => LandingPage(),
         // "/forgot_password": (context) => ForgotPasswordPage(),
         // "/change_password": (context) => ChangeNewPasswordPage(),
         // "/fundWallet": (context) => FundWalletPage(),

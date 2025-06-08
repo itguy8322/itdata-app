@@ -1,266 +1,278 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header Section
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromRGBO(82, 101, 140, 1),
-                    Color.fromARGB(255, 48, 60, 132),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Header Section
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [theme.gradiantColor, theme.primaryColor],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Text(
+                        'Welcome to DataPlus',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'The easiest way to purchase data, airtime, pay bills, and manage your subscriptions.',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Navigate to sign up page
+                          Navigator.pushNamed(context, "/login");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 15,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Get Started',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    'Welcome to DataPlus',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'The easiest way to purchase data, airtime, pay bills, and manage your subscriptions.',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to sign up page
-                      Navigator.pushNamed(context, "/login");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 15,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text(
-                      'Get Started',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            // Features Section
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Why Choose Us?',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Experience seamless transactions, quick service delivery, and reliable support tailored for your needs.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
-                  SizedBox(height: 30),
-
-                  // Grid Layout for Features
-                  GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: _calculateCrossAxisCount(context),
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                    ),
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: 8,
-                    itemBuilder: (context, index) {
-                      final features = [
-                        [
-                          Icons.wifi,
-                          'Data Purchase',
-                          'Affordable plans for all networks',
-                        ],
-                        [
-                          Icons.phone_android,
-                          'Airtime',
-                          'Instant recharge anytime',
-                        ],
-                        [
-                          Icons.tv,
-                          'TV Subscriptions',
-                          'Support for major TV providers',
-                        ],
-                        [
-                          Icons.receipt,
-                          'Bill Payments',
-                          'Pay utility bills effortlessly',
-                        ],
-                        [
-                          Icons.account_balance_wallet,
-                          'Wallet',
-                          'Easily manage your funds',
-                        ],
-                        [
-                          Icons.security,
-                          'Secure',
-                          'Advanced data security and encryption',
-                        ],
-                        [
-                          Icons.support_agent,
-                          '24/7 Support',
-                          'Dedicated customer service',
-                        ],
-                        [
-                          Icons.insights,
-                          'Track Expenses',
-                          'Monitor your spending trends',
-                        ],
-                      ];
-                      return _buildFeature(
-                        features[index][0] as IconData,
-                        features[index][1] as String,
-                        features[index][2] as String,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            // Testimonials Section
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'What Our Users Say',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Join thousands of satisfied customers who trust DataPlus for their daily transactions.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
-                  ),
-                  SizedBox(height: 20),
-                  _buildTestimonial(
-                    'John Doe',
-                    'Fantastic app! Seamless and reliable. Highly recommend to everyone.',
-                  ),
-                  _buildTestimonial(
-                    'Jane Smith',
-                    'Great customer service and very easy to use. My go-to app for transactions.',
-                  ),
-                ],
-              ),
-            ),
-
-            // Footer Section
-            Container(
-              color: Colors.grey.shade200,
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Ready to Simplify Your Transactions?',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to sign in or sign up
-                      Navigator.pushNamed(context, "/signup");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(82, 101, 140, 1),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 15,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text(
-                      'Join Now',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Contact Us',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                // Features Section
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset("assets/images/phone.png", scale: 80),
-                      Text("   +2349164916848"),
+                      Text(
+                        'Why Choose Us?',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Experience seamless transactions, quick service delivery, and reliable support tailored for your needs.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                      SizedBox(height: 30),
+                      Text(
+                        "Our Services",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      // Grid Layout for Features
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: _calculateCrossAxisCount(context),
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                        ),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: 8,
+                        itemBuilder: (context, index) {
+                          final features = [
+                            [
+                              Icons.wifi,
+                              'Data Purchase',
+                              'Affordable plans for all networks',
+                            ],
+                            [
+                              Icons.phone_android,
+                              'Airtime',
+                              'Instant recharge anytime',
+                            ],
+                            [
+                              Icons.tv,
+                              'TV Subscriptions',
+                              'Support for major TV providers',
+                            ],
+                            [
+                              Icons.receipt,
+                              'Bill Payments',
+                              'Pay utility bills effortlessly',
+                            ],
+                            [
+                              Icons.account_balance_wallet,
+                              'Wallet',
+                              'Easily manage your funds',
+                            ],
+                            [
+                              Icons.security,
+                              'Secure',
+                              'Advanced data security and encryption',
+                            ],
+                            [
+                              Icons.support_agent,
+                              '24/7 Support',
+                              'Dedicated customer service',
+                            ],
+                            [
+                              Icons.insights,
+                              'Track Expenses',
+                              'Monitor your spending trends',
+                            ],
+                          ];
+                          return _buildFeature(
+                            features[index][0] as IconData,
+                            features[index][1] as String,
+                            features[index][2] as String,
+                          );
+                        },
+                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                ),
+
+                // Testimonials Section
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset("assets/images/whatsapp.png", scale: 50),
-                      Text("   +2349024255041"),
+                      Text(
+                        'What Our Users Say',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Join thousands of satisfied customers who trust DataPlus for their daily transactions.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                      SizedBox(height: 20),
+                      _buildTestimonial(
+                        'John Doe',
+                        'Fantastic app! Seamless and reliable. Highly recommend to everyone.',
+                      ),
+                      _buildTestimonial(
+                        'Jane Smith',
+                        'Great customer service and very easy to use. My go-to app for transactions.',
+                      ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    '© 2024 DataPlus. All rights reserved.',
-                    style: TextStyle(color: Colors.black54),
+                ),
+
+                // Footer Section
+                Container(
+                  color: Colors.grey.shade200,
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Ready to Simplify Your Transactions?',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Navigate to sign in or sign up
+                          Navigator.pushNamed(context, "/signup");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.backgroundColor,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 15,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Join Now',
+                          style: TextStyle(
+                            color: theme.elevatedBtnTextColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Contact Us',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/phone.png", scale: 80),
+                          Text("   +2349164916848"),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/whatsapp.png", scale: 50),
+                          Text("   +2349024255041"),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '© 2024 DataPlus. All rights reserved.',
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -289,26 +301,30 @@ class LandingPage extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 40, color: Color.fromRGBO(82, 101, 140, 1)),
-          SizedBox(height: 10),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: 5),
-          Text(
-            description,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, color: Colors.black54),
-          ),
-        ],
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, theme) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 40, color: theme.primaryColor),
+              SizedBox(height: 10),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                description,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

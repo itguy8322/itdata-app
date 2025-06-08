@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/auth/auth_state.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
@@ -72,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                       BlocListener<AuthCubit, AuthState>(
                         listener: (context, state) {
                           if (state is LoginLoading) {
-                            process();
+                            showProcessDialog(context);
                           }
                           if (state is LoginSucess) {
                             print("AM LOGGED IN");
@@ -112,11 +113,21 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: MediaQuery.sizeOf(context).height * 0.2),
+                      SizedBox(
+                        height: MediaQuery.sizeOf(context).height * 0.15,
+                      ),
                       SizedBox(
                         width: MediaQuery.sizeOf(context).height,
                         child: Column(
                           children: [
+                            Text(
+                              "Sign In.",
+                              style: TextStyle(
+                                color: theme.primaryColor,
+                                fontSize: 44,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             Text(
                               "Sign in to your account",
                               style: TextStyle(
@@ -259,7 +270,10 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                   child: Text(
                                     'Create Account',
-                                    style: TextStyle(color: theme.primaryColor),
+                                    style: TextStyle(
+                                      color: theme.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -272,7 +286,8 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 'Go to main page',
                                 style: TextStyle(
-                                  color: Color.fromRGBO(82, 101, 140, 1),
+                                  color: theme.primaryColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -283,9 +298,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Text(
                             'Test Mode',
-                            style: TextStyle(
-                              color: Color.fromRGBO(82, 101, 140, 1),
-                            ),
+                            style: TextStyle(color: theme.primaryColor),
                           ),
                         ],
                       ),
