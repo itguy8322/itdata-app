@@ -2,9 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/alert_dialog.dart';
 import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/auth/auth_state.dart';
+import 'package:itdata/data/cubits/input-validations/input-validatiions/email-input.dart';
+import 'package:itdata/data/cubits/input-validations/input-validatiions/text_input.dart';
+import 'package:itdata/data/cubits/input-validations/input_validation_cubit.dart';
+import 'package:itdata/data/cubits/input-validations/input_validation_state.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
@@ -18,39 +23,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController username = TextEditingController();
-  final TextEditingController password = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController email = TextEditingController(text: "");
+  final TextEditingController password = TextEditingController(text: "");
   @override
   void initState() {
     super.initState();
-  }
-
-  void status(var _title, var status) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
-    );
-  }
-
-  void process() {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: SizedBox(
-              height: 60,
-              child: Image.asset("assets/images/loading.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Processing, please wait...")],
-            ),
-          ),
-    );
-    //status("pending");
   }
 
   @override
@@ -65,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                           } else if (state is LoginFailure) {
                             print("AM NOT LOGGED IN");
                             Navigator.pop(context);
-                            status("Alert", state.message);
+                            showAlertDialog(context, "Alert", state.message!);
                           }
                         },
                         child: SizedBox(height: 30),
@@ -138,47 +114,87 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                               height: 30,
                             ), // Space between title and fields
-                            TextFormField(
-                              controller: username,
-                              decoration: InputDecoration(
-                                labelText: 'Username',
-                                labelStyle: TextStyle(color: Colors.grey),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: theme.primaryColor,
+                            BlocBuilder<
+                              InputValidationCubit,
+                              InputValidationState
+                            >(
+                              builder: (context, state) {
+                                return TextFormField(
+                                  controller: email,
+                                  decoration: InputDecoration(
+                                    error:
+                                        state.emailInput.error ==
+                                                EmailInputError.empty
+                                            ? Text(
+                                              "Email required",
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                              ),
+                                            )
+                                            : state.emailInput.error ==
+                                                EmailInputError.invalid
+                                            ? Text(
+                                              "Invalid email address",
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                              ),
+                                            )
+                                            : null,
+                                    labelText: 'Email',
+                                    labelStyle: TextStyle(color: Colors.grey),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: theme.primaryColor,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                    ),
                                   ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.red),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'All field required';
-                                }
-                                return null;
+                                  onChanged: (value) {
+                                    context
+                                        .read<InputValidationCubit>()
+                                        .onEamilInputChanged(value);
+                                  },
+                                );
                               },
                             ),
                             SizedBox(height: 16.0), // Spacing between fields
-                            TextFormField(
-                              controller: password,
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                labelStyle: TextStyle(color: Colors.grey),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: theme.primaryColor,
+                            BlocBuilder<
+                              InputValidationCubit,
+                              InputValidationState
+                            >(
+                              builder: (context, state) {
+                                return TextFormField(
+                                  controller: password,
+                                  decoration: InputDecoration(
+                                    error:
+                                        state.textInput.error ==
+                                                TextInputError.empty
+                                            ? Text(
+                                              "Password required",
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                              ),
+                                            )
+                                            : null,
+                                    labelText: 'Password',
+                                    labelStyle: TextStyle(color: Colors.grey),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: theme.primaryColor,
+                                      ),
+                                    ),
+                                    border: OutlineInputBorder(),
                                   ),
-                                ),
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'All field required';
-                                }
-                                return null;
+                                  onChanged: (value) {
+                                    context
+                                        .read<InputValidationCubit>()
+                                        .onTextInputChanged(value);
+                                  },
+                                  obscureText: true, // Hide password
+                                );
                               },
-                              obscureText: true, // Hide password
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                                         value: true,
                                         onChanged: (value) {
                                           storage.set_remember_me(
-                                            username.text,
+                                            email.text,
                                             password.text,
                                           );
                                         },
@@ -217,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                                       onPressed: () {
                                         // Navigate to login page
                                         storage.set_remember_me(
-                                          username.text,
+                                          email.text,
                                           password.text,
                                         );
                                       },
@@ -235,24 +251,41 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                               height: 24.0,
                             ), // Spacing before the login button
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  login.login(username.text, password.text);
-                                }
+                            BlocBuilder<
+                              InputValidationCubit,
+                              InputValidationState
+                            >(
+                              builder: (context, state) {
+                                return ElevatedButton(
+                                  onPressed: () async {
+                                    if (state.emailInput.isValid! &&
+                                        state.textInput.isValid!) {
+                                      login.login(email.text, password.text);
+                                    } else {
+                                      context
+                                          .read<InputValidationCubit>()
+                                          .onEamilInputChanged(email.text);
+                                      context
+                                          .read<InputValidationCubit>()
+                                          .onTextInputChanged(password.text);
+                                    }
+                                  },
+                                  child: Text(
+                                    'Login',
+                                    style: TextStyle(
+                                      color: theme.secondaryColor,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: theme.primaryColor,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 50,
+                                      vertical: 15,
+                                    ),
+                                    textStyle: TextStyle(fontSize: 18),
+                                  ),
+                                );
                               },
-                              child: Text(
-                                'Login',
-                                style: TextStyle(color: theme.secondaryColor),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.primaryColor,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 50,
-                                  vertical: 15,
-                                ),
-                                textStyle: TextStyle(fontSize: 18),
-                              ),
                             ),
                             SizedBox(height: 10),
                             Row(
@@ -263,6 +296,9 @@ class _LoginPageState extends State<LoginPage> {
                                   onPressed: () {
                                     // Navigate to login page
                                     context.read<AuthCubit>().setInitial();
+                                    context
+                                        .read<InputValidationCubit>()
+                                        .reInitialize();
                                     Navigator.popAndPushNamed(
                                       context,
                                       "/signup",

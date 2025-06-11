@@ -19,11 +19,11 @@ class _ChangePinState extends State<ChangePin> {
   TextEditingController pin3 = TextEditingController();
   TextEditingController pin4 = TextEditingController();
 
-  void status(var _title, var status) {
+  void status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 
@@ -116,8 +116,8 @@ class _ChangePinState extends State<ChangePin> {
         }
       }
     } else {
-      var old_pin = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
-      if ("t_pin" == old_pin) {
+      var oldPin = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
+      if ("t_pin" == oldPin) {
         set_pin = true;
         pin1.text = "";
         pin2.text = "";

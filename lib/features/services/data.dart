@@ -160,12 +160,12 @@ class _DataState extends State<Data> {
       pin3.text = pin.toString();
     } else {
       pin4.text = pin.toString();
-      var _pin = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
+      var pin0 = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
       pin1.text = "";
       pin2.text = "";
       pin3.text = "";
       pin4.text = "";
-      if (_pin == "t_pin") {
+      if (pin0 == "t_pin") {
         showProcessDialog(context);
         make_transaction();
       } else {
@@ -514,7 +514,7 @@ class _DataState extends State<Data> {
                             )) {
                               setState(() {
                                 datatype = value.toString();
-                                data_plans = dataplans["$network"][datatype];
+                                data_plans = dataplans[network][datatype];
                               });
                             } else {
                               setState(() {
@@ -581,10 +581,10 @@ class _DataState extends State<Data> {
                             return null;
                           },
                           onChanged: (value) {
-                            if (dataplans["$network"].containsKey(value)) {
+                            if (dataplans[network].containsKey(value)) {
                               setState(() {
                                 datatype = value.toString();
-                                data_plans = dataplans["$network"][datatype];
+                                data_plans = dataplans[network][datatype];
                               });
                             } else {
                               setState(() {

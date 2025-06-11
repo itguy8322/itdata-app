@@ -104,7 +104,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                             SnackBar(content: Text("Passwords do not match")),
                           );
                         },
-                        child: Text('Change Password'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.primaryColor,
                           padding: EdgeInsets.symmetric(
@@ -113,6 +112,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           ),
                           textStyle: TextStyle(fontSize: 18),
                         ),
+                        child: Text('Change Password'),
                       ),
                     ),
                   ],

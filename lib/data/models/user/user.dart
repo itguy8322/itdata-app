@@ -6,7 +6,7 @@ class UserData {
   String? email;
   String? phone;
   String? address;
-  int? wallet_bal;
+  double? wallet_bal;
   String? bvn;
   String? nin;
   List<Map<String, dynamic>>? permanentAccounts;
@@ -27,9 +27,9 @@ class UserData {
       id: json['id'],
       name: json['name'],
       email: json['email'],
-      phone: json['phone'],
+      phone: json['tel'],
       address: json['address'],
-      wallet_bal: int.tryParse(json['wallet_bal']),
+      wallet_bal: double.tryParse(json['wallet_bal']),
       bvn: json['bvn'],
       nin: json['nin'],
       permanentAccounts: json['permanentAccounts'],
@@ -41,7 +41,7 @@ class UserData {
       "id": user.id,
       "name": user.name,
       "email": user.email,
-      "phone": user.phone,
+      "tel": user.phone,
       "address": user.address,
       "wallet_bal": user.wallet_bal,
       "bvn": user.bvn,

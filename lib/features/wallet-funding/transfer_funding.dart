@@ -20,11 +20,11 @@ class _TransferFundingState extends State<TransferFunding> {
     // Implement some initialization operations here.
   }
 
-  void status(var _title, var status) {
+  void status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 

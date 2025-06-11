@@ -147,7 +147,7 @@ class _CableState extends State<Cable> {
                         )
                         : iuc_data == "Could not fetch data, try again."
                         ? Text(
-                          "$iuc_data",
+                          iuc_data,
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 15,
@@ -156,7 +156,7 @@ class _CableState extends State<Cable> {
                         )
                         : iuc_data != ""
                         ? Text(
-                          "$iuc_data".toUpperCase(),
+                          iuc_data.toUpperCase(),
                           style: TextStyle(
                             color:
                                 iuc_data == "INVALID IUC NUMBER"

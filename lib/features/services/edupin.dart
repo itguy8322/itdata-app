@@ -120,12 +120,12 @@ class _EduPinState extends State<EduPin> {
       pin3.text = pin.toString();
     } else {
       pin4.text = pin.toString();
-      var _pin = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
+      var pin0 = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
       pin1.text = "";
       pin2.text = "";
       pin3.text = "";
       pin4.text = "";
-      if (_pin == "t_pin") {
+      if (pin0 == "t_pin") {
         showProcessDialog(context);
       } else {
         Vibrate.vibrate();

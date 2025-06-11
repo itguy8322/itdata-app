@@ -20,6 +20,8 @@ class AuthCubit extends Cubit<AuthState> {
       await Auth().authenticate(email, password);
       String id = email.split("@")[0];
       UserData user = await DatabaseService().loadData("users", id);
+      print("======= USER DATA ======");
+      print(user.name);
       emit(LoginSucess(userInfo: user));
     } on FirebaseAuthException catch (e) {
       emit(LoginFailure(message: "Error: ${e.message}"));
@@ -28,11 +30,12 @@ class AuthCubit extends Cubit<AuthState> {
 
   void signup(String email, String password, Map<String, dynamic> data) async {
     emit(SignupLoading());
+    String id = data["id"];
     try {
       print("It's Working...");
       await _auth.create(email, password);
-      await _databaseService.addUser("users", email, data);
-      String id = data["id"];
+      await _databaseService.addUser("users", id, data);
+      
       UserData user = await DatabaseService().loadData("users", id);
       emit(SignupSuccess(userInfo: user));
     } on FirebaseAuthException catch (e) {

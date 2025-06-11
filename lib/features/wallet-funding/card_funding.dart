@@ -4,6 +4,8 @@ import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 
 class CardFunding extends StatefulWidget {
+  const CardFunding({super.key});
+
   @override
   _CardFundingState createState() => _CardFundingState();
 }

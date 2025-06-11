@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 
-class Notification extends StatefulWidget {
-  const Notification({super.key});
+class NotificationSetting extends StatefulWidget {
+  const NotificationSetting({super.key});
 
   @override
-  State<Notification> createState() => _NotificationState();
+  State<NotificationSetting> createState() => _NotificationState();
 }
 
-class _NotificationState extends State<Notification> {
+class _NotificationState extends State<NotificationSetting> {
   @override
   void initState() {
     super.initState();

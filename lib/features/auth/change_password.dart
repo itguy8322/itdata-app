@@ -19,11 +19,11 @@ class _ChangeNewPasswordState extends State<ChangeNewPassword> {
     super.initState();
   }
 
-  void status(var _title, var status) {
+  void status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 
@@ -162,7 +162,6 @@ class _ChangeNewPasswordState extends State<ChangeNewPassword> {
                             //change_password();
                           }
                         },
-                        child: Text('Change Password'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.primaryColor,
                           padding: EdgeInsets.symmetric(
@@ -171,6 +170,7 @@ class _ChangeNewPasswordState extends State<ChangeNewPassword> {
                           ),
                           textStyle: TextStyle(fontSize: 18),
                         ),
+                        child: Text('Change Password'),
                       ),
                       SizedBox(height: 10),
                       Row(

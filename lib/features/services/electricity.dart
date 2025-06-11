@@ -56,11 +56,11 @@ class _ElectricityState extends State<Electricity> {
     "1": "prepaid",
     "2": "postpaid",
   };
-  void _status(var _title, var status) {
+  void _status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 
@@ -176,12 +176,12 @@ class _ElectricityState extends State<Electricity> {
       pin3.text = pin.toString();
     } else {
       pin4.text = pin.toString();
-      var _pin = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
+      var pin0 = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
       pin1.text = "";
       pin2.text = "";
       pin3.text = "";
       pin4.text = "";
-      if (_pin == "t_pin") {
+      if (pin0 == "t_pin") {
         showProcessDialog(context);
       } else {
         Vibrate.vibrate();
@@ -591,7 +591,7 @@ class _ElectricityState extends State<Electricity> {
                         )
                         : meter_data == "Could not fetch data, try again."
                         ? Text(
-                          "$meter_data",
+                          meter_data,
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 15,
@@ -600,7 +600,7 @@ class _ElectricityState extends State<Electricity> {
                         )
                         : meter_data != ""
                         ? Text(
-                          "$meter_data".toUpperCase(),
+                          meter_data.toUpperCase(),
                           style: TextStyle(
                             color:
                                 meter_data == "INVALID METER NUMBER"

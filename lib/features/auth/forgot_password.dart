@@ -15,17 +15,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController verification_code = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool code_sent = false;
-  var _status = "";
+  final _status = "";
   @override
   void initState() {
     super.initState();
   }
 
-  void status(var _title, var status) {
+  void status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 
@@ -162,7 +162,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       Text("Forgot Password", style: TextStyle(fontSize: 20)),
                       SizedBox(height: 5),
                       code_sent
-                          ? Text("$_status")
+                          ? Text(_status)
                           : Text("Enter your username/email"),
                       SizedBox(height: 30),
                       code_sent != true
@@ -222,7 +222,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             }
                           }
                         },
-                        child: Text(code_sent ? 'Verify' : 'Send Code'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.primaryColor,
                           padding: EdgeInsets.symmetric(
@@ -231,6 +230,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                           textStyle: TextStyle(fontSize: 18),
                         ),
+                        child: Text(code_sent ? 'Verify' : 'Send Code'),
                       ),
                       SizedBox(height: 10),
                     ],

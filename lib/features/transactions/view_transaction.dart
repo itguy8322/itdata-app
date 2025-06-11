@@ -27,9 +27,9 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
     var image = await boundary.toImage(pixelRatio: ui.window.devicePixelRatio);
     var byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     var pngBytes = byteData!.buffer.asUint8List();
-    var file_path = "/storage/emulated/0/Download/DataApp_Receipt.png";
-    File(file_path).writeAsBytesSync(pngBytes);
-    Share.shareXFiles([XFile(file_path)]);
+    var filePath = "/storage/emulated/0/Download/DataApp_Receipt.png";
+    File(filePath).writeAsBytesSync(pngBytes);
+    Share.shareXFiles([XFile(filePath)]);
   }
 
   downloadReceipt() async {

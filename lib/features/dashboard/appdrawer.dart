@@ -8,6 +8,8 @@ import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_state.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
@@ -34,16 +36,16 @@ class AppDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${state.userDataSuccess ? state.userData!.name : ''}",
+                                      "${state.userDataSuccess ? state.userData!.name : ''}".toUpperCase(),
                                       style: TextStyle(
-                                        color: theme.textColor,
+                                        color: theme.secondaryColor,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       "${state.userDataSuccess ? state.userData!.email : ''}",
-                                      style: TextStyle(color: theme.textColor),
+                                      style: TextStyle(color: theme.secondaryColor),
                                     ),
                                   ],
                                 ),

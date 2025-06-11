@@ -10,7 +10,7 @@ class UserDataCubit extends Cubit<UserState> {
   void setUser(UserData user) {
     print("[SETTING USER DATA]");
     print(user.name);
-    emit(state.copyWith(userData: user));
+    emit(state.copyWith(userData: user, userDataSuccess: true));
   }
 
   void load_user_data(String? username) async {

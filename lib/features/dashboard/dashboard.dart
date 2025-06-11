@@ -65,9 +65,9 @@ class _DashboardState extends State<Dashboard> {
               title: BlocBuilder<UserDataCubit, UserState>(
                 builder: (context, state) {
                   if (state.userDataSuccess) {
-                    return Text("IT Data (${state.userData!.id})");
+                    return Text("IT Data (${state.userData!.id})", style: TextStyle(color: theme.secondaryColor),);
                   } else {
-                    return Text("IT Data ()");
+                    return Text("IT Data ()", style: TextStyle(color: theme.secondaryColor),);
                   }
                 },
               ),
@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
                   onPressed: () {
                     Navigator.popAndPushNamed(context, "/notification");
                   },
-                  icon: Icon(Icons.notifications),
+                  icon: Icon(Icons.notifications,color: theme.secondaryColor,),
                 ),
               ],
               elevation: 0.0,
@@ -86,14 +86,16 @@ class _DashboardState extends State<Dashboard> {
               color: theme.primaryColor,
               child: ListView(
                 children: [
-                  BlocListener<UserDataCubit, UserState>(
-                    listener: (context, state) {
-                      print("LOADING DATA");
-                      context.read<UserDataCubit>().load_user_data(
-                        state.userData!.id,
-                      );
-                    },
-                  ),
+                  // MultiBlocListener(listeners: [
+                  //   BlocListener<UserDataCubit, UserState>(
+                  //   listener: (context, state) {
+                  //     print("LOADING DATA");
+                  //     context.read<UserDataCubit>().load_user_data(
+                  //       state.userData!.id,
+                  //     );
+                  //   },
+                  // )
+                  // ], child: SizedBox()),
                   Column(
                     children: [
                       Stack(
@@ -117,7 +119,7 @@ class _DashboardState extends State<Dashboard> {
                                       Text(
                                         "Wallet balance",
                                         style: TextStyle(
-                                          color: theme.textColor,
+                                          color: theme.secondaryColor,
                                         ),
                                       ),
                                     ],
@@ -128,14 +130,21 @@ class _DashboardState extends State<Dashboard> {
                                     children: [
                                       BlocBuilder<UserDataCubit, UserState>(
                                         builder: (context, state) {
+                                          String wallet_bal = "";
+                                          if (state.userData != null){
+                                            if (state.userData!.wallet_bal != null){
+                                              wallet_bal = state.userData!.wallet_bal!.toString();
+                                            }
+                                          }
+                                          
                                           return Text(
                                             show_balance == true
                                                 ? state.userDataSuccess
-                                                    ? "₦${state.userData!.wallet_bal}"
+                                                    ? "₦$wallet_bal"
                                                     : "0.00"
                                                 : "****",
                                             style: TextStyle(
-                                              color: theme.textColor,
+                                              color: theme.secondaryColor,
                                               fontSize: 26,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -152,7 +161,7 @@ class _DashboardState extends State<Dashboard> {
                                         },
                                         icon: Icon(
                                           Icons.remove_red_eye,
-                                          color: theme.textColor,
+                                          color: theme.secondaryColor,
                                         ),
                                       ),
                                     ],
@@ -170,9 +179,9 @@ class _DashboardState extends State<Dashboard> {
                                 ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
                                     elevation: 0,
-                                    padding: EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(17),
                                     side: BorderSide(
-                                      color: Colors.white,
+                                      color: theme.secondaryColor,
                                       width: 3,
                                     ),
                                     backgroundColor: theme.primaryColor,
@@ -183,15 +192,15 @@ class _DashboardState extends State<Dashboard> {
                                       "/fundWallet",
                                     );
                                   },
-                                  icon: Icon(Icons.add),
-                                  label: Text("Fund Wallet  "),
+                                  icon: Icon(Icons.add, color: theme.secondaryColor,),
+                                  label: Text("Fund Wallet", style: TextStyle(color: theme.secondaryColor),),
                                 ),
                                 ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
                                     elevation: 0,
-                                    padding: EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(17),
                                     side: BorderSide(
-                                      color: Colors.white,
+                                      color: theme.secondaryColor,
                                       width: 3,
                                     ),
                                     backgroundColor: theme.primaryColor,
@@ -202,8 +211,8 @@ class _DashboardState extends State<Dashboard> {
                                       "/transactions",
                                     );
                                   },
-                                  icon: Icon(Icons.history),
-                                  label: Text("Transactions"),
+                                  icon: Icon(Icons.history, color: theme.secondaryColor,),
+                                  label: Text("Transactions", style: TextStyle(color: theme.secondaryColor),),
                                 ),
                               ],
                             ),

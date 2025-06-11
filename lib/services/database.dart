@@ -20,8 +20,8 @@ class DatabaseService {
     Map<String, dynamic> data,
   ) async {
     await db.collection(path).doc(id).update(data);
-    final _data = await loadData(path, id);
-    return _data;
+    final data0 = await loadData(path, id);
+    return data0;
   }
 
   Future<void> removeData(
