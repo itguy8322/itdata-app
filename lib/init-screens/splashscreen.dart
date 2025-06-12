@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/auth/auth_state.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
+import 'package:itdata/features/auth/login.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -53,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (state["remember_me"] == true) {
                   loginCubit.login(state["username"], state["password"]);
                 } else {
-                  Navigator.popAndPushNamed(context, "/login");
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                 }
               },
             ),
@@ -61,9 +63,9 @@ class _SplashScreenState extends State<SplashScreen> {
               listener: (context, state) {
                 if (state is LoginSucess) {
                   //print("LOGIN SUCCESS: ${state}");
-                  Navigator.popAndPushNamed(context, "/dashboard");
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                 } else if (state is LoginFailure) {
-                  Navigator.popAndPushNamed(context, "/login");
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                   status("Alert", state.message);
                 }
               },

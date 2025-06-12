@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 
 class Cable extends StatefulWidget {
   const Cable({super.key});
@@ -60,202 +61,197 @@ class _CableState extends State<Cable> {
   final cable_plans = {};
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "/dashboard");
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              backgroundColor: theme.primaryColor,
-              title: Text("Cable"),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
+            backgroundColor: theme.primaryColor,
+            title: Text("Cable", style: TextStyle(color: theme.secondaryColor),),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: Text(
+                      cable == "none" ? "Choose Cable" : "",
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                    items: [
+                      for (var cable in ["cable_types"])
+                        (DropdownMenuItem(value: cable, child: Text(cable))),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        cable = value.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: number,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  check_iuc
+                      ? Row(
+                        children: [
+                          Image.asset(
+                            "assets/images/loading.gif",
+                            scale: 25.0,
+                          ),
+                          Text(
+                            "Validating...",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )
+                      : iuc_data == "Could not fetch data, try again."
+                      ? Text(
+                        iuc_data,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
-                        border: OutlineInputBorder(),
+                      )
+                      : iuc_data != ""
+                      ? Text(
+                        iuc_data.toUpperCase(),
+                        style: TextStyle(
+                          color:
+                              iuc_data == "INVALID IUC NUMBER"
+                                  ? Colors.red
+                                  : Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                      : SizedBox(height: 0.01),
+                  TextFormField(
+                    controller: iuc_number,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    readOnly: check_iuc,
+                    decoration: InputDecoration(
+                      labelText: 'IUC Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        cable == "none" ? "Choose Cable" : "",
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (var cable in ["cable_types"])
-                          (DropdownMenuItem(value: cable, child: Text(cable))),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      if (value.length == 11) {
                         setState(() {
-                          cable = value.toString();
+                          check_iuc = true;
                         });
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: number,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
+                        validateMeterNumber();
+                      } else {
+                        setState(() {
+                          iuc_data = "";
+                        });
+                      }
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  cable != "none"
+                      ? DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
                         ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    check_iuc
-                        ? Row(
-                          children: [
-                            Image.asset(
-                              "assets/images/loading.gif",
-                              scale: 25.0,
-                            ),
-                            Text(
-                              "Validating...",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                        hint: Text(
+                          "Choose Cable Plan",
+                          style: TextStyle(color: theme.primaryColor),
+                        ),
+                        items: [
+                          for (var sub in cable_plans[cable])
+                            (DropdownMenuItem(
+                              value: sub,
+                              child: Text(
+                                "${sub['plan'].toString()} ${sub['sale_price'].toString()}",
                               ),
-                            ),
-                          ],
-                        )
-                        : iuc_data == "Could not fetch data, try again."
-                        ? Text(
-                          iuc_data,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                        : iuc_data != ""
-                        ? Text(
-                          iuc_data.toUpperCase(),
-                          style: TextStyle(
-                            color:
-                                iuc_data == "INVALID IUC NUMBER"
-                                    ? Colors.red
-                                    : Colors.green,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                        : SizedBox(height: 0.01),
-                    TextFormField(
-                      controller: iuc_number,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      readOnly: check_iuc,
-                      decoration: InputDecoration(
-                        labelText: 'IUC Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        if (value.length == 11) {
+                            )),
+                        ],
+                        validator: (value) {
+                          if (value == null) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
                           setState(() {
-                            check_iuc = true;
+                            cable_plan = jsonDecode(value.toString());
                           });
-                          validateMeterNumber();
-                        } else {
-                          setState(() {
-                            iuc_data = "";
-                          });
-                        }
-                      },
+                        },
+                      )
+                      : SizedBox(),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      backgroundColor: theme.primaryColor,
                     ),
-                    SizedBox(height: 10),
-                    cable != "none"
-                        ? DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(),
-                          ),
-                          hint: Text(
-                            "Choose Cable Plan",
-                            style: TextStyle(color: theme.primaryColor),
-                          ),
-                          items: [
-                            for (var sub in cable_plans[cable])
-                              (DropdownMenuItem(
-                                value: sub,
-                                child: Text(
-                                  "${sub['plan'].toString()} ${sub['sale_price'].toString()}",
-                                ),
-                              )),
-                          ],
-                          validator: (value) {
-                            if (value == null) {
-                              return 'All field required';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              cable_plan = jsonDecode(value.toString());
-                            });
-                          },
-                        )
-                        : SizedBox(),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(25),
-                        backgroundColor: theme.primaryColor,
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showPinButtons(context);
-                        }
-                      },
-                      child: Text("Pay", style: TextStyle(fontSize: 30)),
-                    ),
-                  ],
-                ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        showPinButtons(context);
+                      }
+                    },
+                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
+          ),
+        );
       },
     );
   }

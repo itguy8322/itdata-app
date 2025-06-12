@@ -4,6 +4,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 // import 'package:local_auth/local_auth.dart';
 
 class Electricity extends StatefulWidget {
@@ -468,230 +469,225 @@ class _ElectricityState extends State<Electricity> {
   final electricity = {};
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "/dashboard");
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              backgroundColor: theme.primaryColor,
-              title: Text("Electricity"),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+            backgroundColor: theme.primaryColor,
+            title: Text("Electricity"),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        disco_name == "none"
-                            ? "Choose Disco Name"
-                            : disco_name.toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (var i in electricity.keys)
-                          (DropdownMenuItem(
-                            value: i,
-                            child: Text(electricity[i].toString()),
-                          )),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          disco_name = electricity[value.toString()];
-                          disco_id = (int.tryParse(value.toString()))!;
-                        });
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: number,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
+                    hint: Text(
+                      disco_name == "none"
+                          ? "Choose Disco Name"
+                          : disco_name.toString(),
+                      style: TextStyle(color: theme.primaryColor),
                     ),
-                    SizedBox(height: 10),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+                    items: [
+                      for (var i in electricity.keys)
+                        (DropdownMenuItem(
+                          value: i,
+                          child: Text(electricity[i].toString()),
+                        )),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        disco_name = electricity[value.toString()];
+                        disco_id = (int.tryParse(value.toString()))!;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: number,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        metertype == ""
-                            ? "Choose Meter type"
-                            : metertypes[metertype].toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        DropdownMenuItem(value: "1", child: Text("PREPAID")),
-                        DropdownMenuItem(value: "2", child: Text("POSTPAID")),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          metertype = (metertypes[value.toString()])!;
-                        });
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    check_meter
-                        ? Row(
-                          children: [
-                            Image.asset(
-                              "assets/images/loading.gif",
-                              scale: 25.0,
-                            ),
-                            Text(
-                              "Validating...",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        )
-                        : meter_data == "Could not fetch data, try again."
-                        ? Text(
-                          meter_data,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: Text(
+                      metertype == ""
+                          ? "Choose Meter type"
+                          : metertypes[metertype].toString(),
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                    items: [
+                      DropdownMenuItem(value: "1", child: Text("PREPAID")),
+                      DropdownMenuItem(value: "2", child: Text("POSTPAID")),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        metertype = (metertypes[value.toString()])!;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  check_meter
+                      ? Row(
+                        children: [
+                          Image.asset(
+                            "assets/images/loading.gif",
+                            scale: 25.0,
                           ),
-                        )
-                        : meter_data != ""
-                        ? Text(
-                          meter_data.toUpperCase(),
-                          style: TextStyle(
-                            color:
-                                meter_data == "INVALID METER NUMBER"
-                                    ? Colors.red
-                                    : Colors.green,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            "Validating...",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
-                        : SizedBox(height: 0.01),
-                    TextFormField(
-                      controller: meter,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      readOnly: check_meter,
-                      decoration: InputDecoration(
-                        labelText: 'Meter Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
+                        ],
+                      )
+                      : meter_data == "Could not fetch data, try again."
+                      ? Text(
+                        meter_data,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        if (value.length == 11) {
-                          setState(() {
-                            check_meter = true;
-                          });
-                          validateMeterNumber();
-                        } else {
-                          setState(() {
-                            meter_data = "";
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: amount,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Amount',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
+                      )
+                      : meter_data != ""
+                      ? Text(
+                        meter_data.toUpperCase(),
+                        style: TextStyle(
+                          color:
+                              meter_data == "INVALID METER NUMBER"
+                                  ? Colors.red
+                                  : Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        border: OutlineInputBorder(),
+                      )
+                      : SizedBox(height: 0.01),
+                  TextFormField(
+                    controller: meter,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    readOnly: check_meter,
+                    decoration: InputDecoration(
+                      labelText: 'Meter Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(25),
-                        backgroundColor: theme.primaryColor,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      if (value.length == 11) {
+                        setState(() {
+                          check_meter = true;
+                        });
+                        validateMeterNumber();
+                      } else {
+                        setState(() {
+                          meter_data = "";
+                        });
+                      }
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: amount,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Amount',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate() &&
-                            int.tryParse(amount.text.toString())! >= 500) {
-                          showBottomDrawer(context, theme);
-                        } else {
-                          _status(
-                            "Amount Error",
-                            "The amount must not be less than N500",
-                          );
-                        }
-                      },
-                      child: Text("Pay", style: TextStyle(fontSize: 30)),
+                      border: OutlineInputBorder(),
                     ),
-                  ],
-                ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      backgroundColor: theme.primaryColor,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate() &&
+                          int.tryParse(amount.text.toString())! >= 500) {
+                        showBottomDrawer(context, theme);
+                      } else {
+                        _status(
+                          "Amount Error",
+                          "The amount must not be less than N500",
+                        );
+                      }
+                    },
+                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
+          ),
+        );
       },
     );
   }

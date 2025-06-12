@@ -82,121 +82,118 @@ class _ChangeNewPasswordState extends State<ChangeNewPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: 30),
-                      Row(
-                        children: [
-                          Image.asset(
-                            "assets/images/data_app_logo.png",
-                            scale: 40,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 30),
+                    Row(
+                      children: [
+                        Image.asset(
+                          "assets/images/data_app_logo.png",
+                          scale: 40,
+                        ),
+                        Text(
+                          'IT Data',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: theme.primaryColor,
                           ),
-                          Text(
-                            'IT Data',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: theme.primaryColor,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 70),
+                    Text("Change Passowrd", style: TextStyle(fontSize: 20)),
+                    SizedBox(height: 30), // Space between title and fields
+                    TextFormField(
+                      controller: password,
+                      decoration: InputDecoration(
+                        labelText: 'Enter new password',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
                       ),
-                      SizedBox(height: 70),
-                      Text("Change Passowrd", style: TextStyle(fontSize: 20)),
-                      SizedBox(height: 30), // Space between title and fields
-                      TextFormField(
-                        controller: password,
-                        decoration: InputDecoration(
-                          labelText: 'Enter new password',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: theme.primaryColor),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16.0), // Spacing between fields
+                    TextFormField(
+                      controller: cpassword,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm password',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.primaryColor),
+                        ),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'All field required';
+                        }
+                        return null;
+                      },
+                      obscureText: true, // Hide password
+                    ),
+    
+                    SizedBox(height: 24.0), // Spacing before the login button
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          process();
+                          //change_password();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.primaryColor,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                      child: Text('Change Password'),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to login page
+                            Navigator.popAndPushNamed(context, "/login");
+                          },
+                          child: Text(
+                            'Back to login Page',
+                            style: TextStyle(color: theme.primaryColor),
                           ),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'All field required';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0), // Spacing between fields
-                      TextFormField(
-                        controller: cpassword,
-                        decoration: InputDecoration(
-                          labelText: 'Confirm password',
-                          labelStyle: TextStyle(color: Colors.grey),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: theme.primaryColor),
-                          ),
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'All field required';
-                          }
-                          return null;
-                        },
-                        obscureText: true, // Hide password
-                      ),
-
-                      SizedBox(height: 24.0), // Spacing before the login button
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            process();
-                            //change_password();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.primaryColor,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 15,
-                          ),
-                          textStyle: TextStyle(fontSize: 18),
-                        ),
-                        child: Text('Change Password'),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              // Navigate to login page
-                              Navigator.popAndPushNamed(context, "/login");
-                            },
-                            child: Text(
-                              'Back to login Page',
-                              style: TextStyle(color: theme.primaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {},
+          ),
+        );
+      },
     );
   }
 }

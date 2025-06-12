@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/services/airtime.dart';
+import 'package:itdata/features/services/cable.dart';
+import 'package:itdata/features/services/data.dart';
+import 'package:itdata/features/services/edupin.dart';
+import 'package:itdata/features/services/electricity.dart';
 
 class ServicesWidgets extends StatefulWidget {
   const ServicesWidgets({super.key});
@@ -16,15 +21,15 @@ class _ServicesWidgetsState extends State<ServicesWidgets> {
       onTap: () {
         print(title);
         if (title == "Data Purchase") {
-          Navigator.popAndPushNamed(context, "/data");
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Data()));
         } else if (title == "Airtime") {
-          Navigator.popAndPushNamed(context, "/airtime");
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Airtime()));
         } else if (title == "TV Subscriptions") {
-          Navigator.popAndPushNamed(context, "/cable");
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Cable()));
         } else if (title == "Education") {
-          Navigator.popAndPushNamed(context, "/edupin");
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>EduPin()));
         } else if (title == "Bill Payments") {
-          Navigator.popAndPushNamed(context, "/electricity");
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Electricity()));
         } else {
           // status(
           //   "More",

@@ -128,120 +128,117 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: 30),
-                      Row(
-                        children: [
-                          Image.asset(
-                            "assets/images/data_app_logo.png",
-                            scale: 40,
-                          ),
-                          Text(
-                            'IT Data',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: theme.primaryColor,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 70),
-                      Text("Forgot Password", style: TextStyle(fontSize: 20)),
-                      SizedBox(height: 5),
-                      code_sent
-                          ? Text(_status)
-                          : Text("Enter your username/email"),
-                      SizedBox(height: 30),
-                      code_sent != true
-                          ? // Space between title and fields
-                          TextFormField(
-                            controller: username,
-                            decoration: InputDecoration(
-                              labelText: 'Username/email',
-                              labelStyle: TextStyle(color: Colors.grey),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: theme.primaryColor,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'All field required';
-                              }
-                              return null;
-                            },
-                          )
-                          :
-                          // Spacing between fields
-                          TextFormField(
-                            controller: verification_code,
-                            decoration: InputDecoration(
-                              labelText: 'Code',
-                              labelStyle: TextStyle(color: Colors.grey),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: theme.primaryColor,
-                                ),
-                              ),
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'All field required';
-                              }
-                              return null;
-                            },
-                            obscureText: true, // Hide password
-                          ),
-                      SizedBox(height: 24.0), // Spacing before the login button
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            process();
-                            if (code_sent == false) {
-                              send_verification_code();
-                            } else {
-                              verify_code();
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.primaryColor,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 15,
-                          ),
-                          textStyle: TextStyle(fontSize: 18),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 30),
+                    Row(
+                      children: [
+                        Image.asset(
+                          "assets/images/data_app_logo.png",
+                          scale: 40,
                         ),
-                        child: Text(code_sent ? 'Verify' : 'Send Code'),
+                        Text(
+                          'IT Data',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: theme.primaryColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 70),
+                    Text("Forgot Password", style: TextStyle(fontSize: 20)),
+                    SizedBox(height: 5),
+                    code_sent
+                        ? Text(_status)
+                        : Text("Enter your username/email"),
+                    SizedBox(height: 30),
+                    code_sent != true
+                        ? // Space between title and fields
+                        TextFormField(
+                          controller: username,
+                          decoration: InputDecoration(
+                            labelText: 'Username/email',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: theme.primaryColor,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'All field required';
+                            }
+                            return null;
+                          },
+                        )
+                        :
+                        // Spacing between fields
+                        TextFormField(
+                          controller: verification_code,
+                          decoration: InputDecoration(
+                            labelText: 'Code',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: theme.primaryColor,
+                              ),
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'All field required';
+                            }
+                            return null;
+                          },
+                          obscureText: true, // Hide password
+                        ),
+                    SizedBox(height: 24.0), // Spacing before the login button
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          process();
+                          if (code_sent == false) {
+                            send_verification_code();
+                          } else {
+                            verify_code();
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.primaryColor,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                        textStyle: TextStyle(fontSize: 18),
                       ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
+                      child: Text(code_sent ? 'Verify' : 'Send Code'),
+                    ),
+                    SizedBox(height: 10),
+                  ],
                 ),
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {},
+          ),
+        );
+      },
     );
   }
 }

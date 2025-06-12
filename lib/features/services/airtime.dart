@@ -6,6 +6,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:local_auth/local_auth.dart';
 
 class Airtime extends StatefulWidget {
@@ -83,152 +84,147 @@ class _AirtimeState extends State<Airtime> {
   final networks = {};
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "/dashboard");
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              backgroundColor: theme.primaryColor,
-              title: Text("Airtime"),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+            backgroundColor: theme.primaryColor,
+            title: Text("Airtime",style: TextStyle(color: theme.secondaryColor),),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        network == ""
-                            ? "Choose Network"
-                            : networks[network].toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (var network in networks.keys)
-                          (DropdownMenuItem(
-                            value: network,
-                            child: Text("${networks[network]}"),
-                          )),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          network = value.toString();
-                        });
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: number,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
+                    hint: Text(
+                      network == ""
+                          ? "Choose Network"
+                          : networks[network].toString(),
+                      style: TextStyle(color: theme.primaryColor),
                     ),
-                    SizedBox(height: 10),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+                    items: [
+                      for (var network in networks.keys)
+                        (DropdownMenuItem(
+                          value: network,
+                          child: Text("${networks[network]}"),
+                        )),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        network = value.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: number,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        airtimetypes[airtimetype].toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        DropdownMenuItem(value: "vtu", child: Text("VTU")),
-                        DropdownMenuItem(
-                          value: "sns",
-                          child: Text("SHARE N SELL"),
-                        ),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          airtimetype = (airtimetypes[value.toString()])!;
-                        });
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: amount,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Amount',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(25),
-                        backgroundColor: theme.primaryColor,
+                    hint: Text(
+                      airtimetypes[airtimetype].toString(),
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                    items: [
+                      DropdownMenuItem(value: "vtu", child: Text("VTU")),
+                      DropdownMenuItem(
+                        value: "sns",
+                        child: Text("SHARE N SELL"),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showPinButtons(context);
-                        }
-                      },
-                      child: Text("Pay", style: TextStyle(fontSize: 30)),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        airtimetype = (airtimetypes[value.toString()])!;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: amount,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Amount',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
                     ),
-                  ],
-                ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      backgroundColor: theme.primaryColor,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        showPinButtons(context);
+                      }
+                    },
+                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
+          ),
+        );
       },
     );
   }

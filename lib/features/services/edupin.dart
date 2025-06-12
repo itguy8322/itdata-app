@@ -4,6 +4,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 // import 'package:local_auth/local_auth.dart';
 
 class EduPin extends StatefulWidget {
@@ -418,165 +419,160 @@ class _EduPinState extends State<EduPin> {
   final exams = {};
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, "/dashboard");
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              backgroundColor: theme.primaryColor,
-              title: Text("Edu Pin"),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+            backgroundColor: theme.primaryColor,
+            title: Text("Edu Pin", style: TextStyle(color: theme.secondaryColor),),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        exam == "none"
-                            ? "Choose Exam Type"
-                            : exams[exam].toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (var exam in exams.keys)
-                          (DropdownMenuItem(
-                            value: exam,
-                            child: Text(exam.toString()),
-                          )),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          exam = value.toString();
-                          if (quatity != "") {
-                            var a = exams[exam].toString();
-                            var total =
-                                (int.tryParse(a)! * int.tryParse(quatity)!);
-
-                            amount.text = total.toString();
-                          }
-                        });
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: number,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
+                    hint: Text(
+                      exam == "none"
+                          ? "Choose Exam Type"
+                          : exams[exam].toString(),
+                      style: TextStyle(color: theme.primaryColor),
                     ),
-                    SizedBox(height: 10),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      hint: Text(
-                        quantities[quatity].toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (var i in quantities.keys)
-                          (DropdownMenuItem(
-                            value: i,
-                            child: Text(quantities[i].toString()),
-                          )),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          quatity = value.toString();
+                    items: [
+                      for (var exam in exams.keys)
+                        (DropdownMenuItem(
+                          value: exam,
+                          child: Text(exam.toString()),
+                        )),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        exam = value.toString();
+                        if (quatity != "") {
                           var a = exams[exam].toString();
                           var total =
                               (int.tryParse(a)! * int.tryParse(quatity)!);
-
+    
                           amount.text = total.toString();
-                        });
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      readOnly: true,
-                      controller: amount,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Amount',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
                         }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(25),
-                        backgroundColor: theme.primaryColor,
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: number,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showBottomDrawer(context, theme);
-                        }
-                      },
-                      child: Text("Pay", style: TextStyle(fontSize: 30)),
+                      border: OutlineInputBorder(),
                     ),
-                  ],
-                ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: Text(
+                      quantities[quatity].toString(),
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                    items: [
+                      for (var i in quantities.keys)
+                        (DropdownMenuItem(
+                          value: i,
+                          child: Text(quantities[i].toString()),
+                        )),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        quatity = value.toString();
+                        var a = exams[exam].toString();
+                        var total =
+                            (int.tryParse(a)! * int.tryParse(quatity)!);
+    
+                        amount.text = total.toString();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    readOnly: true,
+                    controller: amount,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Amount',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      backgroundColor: theme.primaryColor,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        showBottomDrawer(context, theme);
+                      }
+                    },
+                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
+          ),
+        );
       },
     );
   }

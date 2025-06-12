@@ -6,6 +6,13 @@ import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_state.dart';
+import 'package:itdata/features/about/about.dart';
+import 'package:itdata/features/about/termspolicies.dart';
+import 'package:itdata/features/notifications/notifications.dart';
+import 'package:itdata/features/settings/profile.dart';
+import 'package:itdata/features/settings/settings.dart';
+import 'package:itdata/features/transactions/transactions.dart';
+import 'package:itdata/features/wallet-funding/fund_wallet.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -69,7 +76,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Dashboard
                           Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, "/fundWallet");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>FundWallet()));
                           // Close drawer
                         },
                       ),
@@ -84,7 +91,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Pay Bills
                           Navigator.pop(context); // Close drawer
-                          Navigator.popAndPushNamed(context, "/transactions");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -98,7 +105,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Pay Bills
                           Navigator.pop(context); // Close drawer
-                          Navigator.popAndPushNamed(context, "/notification");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Notifications()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -109,10 +116,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Usage History
                           Navigator.pop(context);
-                          Navigator.popAndPushNamed(
-                            context,
-                            "/profile",
-                          ); // Close drawer
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage())); // Close drawer
                         },
                       ),
                       Divider(thickness: 1),
@@ -124,7 +128,7 @@ class AppDrawer extends StatelessWidget {
                           // Navigate to Account Settings
                           Navigator.pop(context); // Close drawer
                           if (2 == 2) {
-                            Navigator.popAndPushNamed(context, "/settings");
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
                           } else {
                             showDialog(
                               context: context,
@@ -148,7 +152,7 @@ class AppDrawer extends StatelessWidget {
                           // Navigate to View Bills
                           Navigator.pop(context);
 
-                          Navigator.popAndPushNamed(context, "/termspolicy");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndPolicyPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -159,7 +163,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Usage History
                           Navigator.pop(context); // Close drawer
-                          Navigator.popAndPushNamed(context, "/about_us");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AboutUsPage()));
                         },
                       ),
                       Divider(thickness: 1),

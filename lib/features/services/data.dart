@@ -455,219 +455,214 @@ class _DataState extends State<Data> {
   final dataplans = {};
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  // data_plans = [];
-                  Navigator.popAndPushNamed(context, "/dashboard");
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              backgroundColor: theme.primaryColor,
-              title: Text("Data"),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                // data_plans = [];
+                Navigator.popAndPushNamed(context, "/dashboard");
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: [
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+            backgroundColor: theme.primaryColor,
+            title: Text("Data", style: TextStyle(color: theme.secondaryColor),),
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        network == ""
-                            ? "Choose Network"
-                            : networks[network].toString(),
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (var network in networks.keys)
-                          (DropdownMenuItem(
-                            value: network,
-                            child: Text("${networks[network]}"),
-                          )),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          data_plans = [];
-                          network = value.toString();
-                          if (datatype != "") {
-                            print(network);
-                            print(datatype);
-                            if (dataplans[network].containsKey(
-                              value.toString(),
-                            )) {
-                              setState(() {
-                                datatype = value.toString();
-                                data_plans = dataplans[network][datatype];
-                              });
-                            } else {
-                              setState(() {
-                                data_plans = [];
-                              });
-                              showDialog(
-                                context: context,
-                                builder:
-                                    (context) => AlertDialog(
-                                      content: Text(
-                                        "No Data type: $datatype on this network!",
-                                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: Text(
+                      network == ""
+                          ? "Choose Network"
+                          : networks[network].toString(),
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
+                    items: [
+                      for (var network in networks.keys)
+                        (DropdownMenuItem(
+                          value: network,
+                          child: Text("${networks[network]}"),
+                        )),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        data_plans = [];
+                        network = value.toString();
+                        if (datatype != "") {
+                          print(network);
+                          print(datatype);
+                          if (dataplans[network].containsKey(
+                            value.toString(),
+                          )) {
+                            setState(() {
+                              datatype = value.toString();
+                              data_plans = dataplans[network][datatype];
+                            });
+                          } else {
+                            setState(() {
+                              data_plans = [];
+                            });
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    content: Text(
+                                      "No Data type: $datatype on this network!",
                                     ),
-                              );
-                            }
+                                  ),
+                            );
                           }
-                        });
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      controller: number,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 11,
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
                         }
-                        return null;
-                      },
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: number,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 11,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
+                      ),
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    network != ""
-                        ? DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  network != ""
+                      ? DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
                           ),
-                          hint: Text(
-                            "Choose Data Type",
-                            style: TextStyle(color: theme.primaryColor),
-                          ),
-                          items: [
-                            for (var _datatype in [])
-                              (DropdownMenuItem(
-                                value: _datatype,
-                                child: Text(_datatype),
-                              )),
-                          ],
-                          validator: (value) {
-                            if (value == null) {
-                              return 'All field required';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            if (dataplans[network].containsKey(value)) {
-                              setState(() {
-                                datatype = value.toString();
-                                data_plans = dataplans[network][datatype];
-                              });
-                            } else {
-                              setState(() {
-                                data_plans = [];
-                                network = "";
-                              });
-                              showDialog(
-                                context: context,
-                                builder:
-                                    (context) => AlertDialog(
-                                      content: Text(
-                                        "No Data type: $value on this network!",
-                                      ),
+                          border: OutlineInputBorder(),
+                        ),
+                        hint: Text(
+                          "Choose Data Type",
+                          style: TextStyle(color: theme.primaryColor),
+                        ),
+                        items: [
+                          for (var _datatype in [])
+                            (DropdownMenuItem(
+                              value: _datatype,
+                              child: Text(_datatype),
+                            )),
+                        ],
+                        validator: (value) {
+                          if (value == null) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          if (dataplans[network].containsKey(value)) {
+                            setState(() {
+                              datatype = value.toString();
+                              data_plans = dataplans[network][datatype];
+                            });
+                          } else {
+                            setState(() {
+                              data_plans = [];
+                              network = "";
+                            });
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    content: Text(
+                                      "No Data type: $value on this network!",
                                     ),
-                              );
-                            }
-                          },
-                        )
-                        : SizedBox(),
-                    SizedBox(height: 10),
-                    DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
+                                  ),
+                            );
+                          }
+                        },
+                      )
+                      : SizedBox(),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      hint: Text(
-                        dataplan.isEmpty
-                            ? "Choose Plan"
-                            : "${dataplan['plan']} ${dataplan['validate']} ${dataplan['sale_price']}",
-                        style: TextStyle(color: theme.primaryColor),
-                      ),
-                      items: [
-                        for (int i in List.generate(
-                          data_plans.length,
-                          (index) => index,
-                          growable: false,
-                        ))
-                          (DropdownMenuItem(
-                            value: i,
-                            child: Text(
-                              "${data_plans[i]['plan']} ${data_plans[i]['validate']} ${data_plans[i]['sale_price']}",
-                            ),
-                          )),
-                      ],
-                      validator: (value) {
-                        if (value == null) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        var i = int.tryParse(value.toString());
-                        setState(() {
-                          dataplan = data_plans[i!];
-                        });
-                        print(dataplan);
-                      },
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 10),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(25),
-                        backgroundColor: theme.primaryColor,
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          showBottomDrawer(context, theme);
-                        }
-                      },
-                      child: Text("Pay", style: TextStyle(fontSize: 30)),
+                    hint: Text(
+                      dataplan.isEmpty
+                          ? "Choose Plan"
+                          : "${dataplan['plan']} ${dataplan['validate']} ${dataplan['sale_price']}",
+                      style: TextStyle(color: theme.primaryColor),
                     ),
-                  ],
-                ),
+                    items: [
+                      for (int i in List.generate(
+                        data_plans.length,
+                        (index) => index,
+                        growable: false,
+                      ))
+                        (DropdownMenuItem(
+                          value: i,
+                          child: Text(
+                            "${data_plans[i]['plan']} ${data_plans[i]['validate']} ${data_plans[i]['sale_price']}",
+                          ),
+                        )),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return 'All field required';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      var i = int.tryParse(value.toString());
+                      setState(() {
+                        dataplan = data_plans[i!];
+                      });
+                      print(dataplan);
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      backgroundColor: theme.primaryColor,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        showBottomDrawer(context, theme);
+                      }
+                    },
+                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
+          ),
+        );
       },
     );
   }

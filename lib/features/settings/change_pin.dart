@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/settings/security.dart';
 
 class ChangePin extends StatefulWidget {
   const ChangePin({super.key});
@@ -203,299 +204,294 @@ class _ChangePinState extends State<ChangePin> {
         pin_alert = false;
       });
     }
-    return PopScope(
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, theme) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  setState(() {
-                    new_pin = "";
-                    conf_pin = "";
-                    pin_status = "";
-                    set_pin = false;
-                  });
-                  Navigator.popAndPushNamed(context, "/security");
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              title: Text(
-                set_pin ? "Set Transaction Pin" : "Change Transaction PIN",
-              ),
-              backgroundColor: theme.primaryColor,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                setState(() {
+                  new_pin = "";
+                  conf_pin = "";
+                  pin_status = "";
+                  set_pin = false;
+                });
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Security()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    set_pin
-                        ? new_pin.isEmpty
-                            ? "$pin_status Enter new pin"
-                            : "$pin_status Confirm pin"
-                        : "$pin_status Enter old pin",
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 50,
-                        child: TextFormField(
-                          readOnly: true,
-                          obscureText: true,
-                          obscuringCharacter: "⓿",
-                          style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+            title: Text(
+              set_pin ? "Set Transaction Pin" : "Change Transaction PIN", style: TextStyle(color: theme.secondaryColor)
+            ),
+            backgroundColor: theme.primaryColor,
+          ),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  set_pin
+                      ? new_pin.isEmpty
+                          ? "$pin_status Enter new pin"
+                          : "$pin_status Confirm pin"
+                      : "$pin_status Enter old pin",
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 50,
+                      child: TextFormField(
+                        readOnly: true,
+                        obscureText: true,
+                        obscuringCharacter: "⓿",
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        controller: pin1,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
                           ),
-                          controller: pin1,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.grey),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(),
-                          ),
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(width: 10),
-                      SizedBox(
-                        width: 50,
-                        child: TextFormField(
-                          readOnly: true,
-                          obscureText: true,
-                          obscuringCharacter: "⓿",
-                          style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(width: 10),
+                    SizedBox(
+                      width: 50,
+                      child: TextFormField(
+                        readOnly: true,
+                        obscureText: true,
+                        obscuringCharacter: "⓿",
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        controller: pin2,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
                           ),
-                          controller: pin2,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.grey),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(),
-                          ),
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(width: 10),
-                      SizedBox(
-                        width: 50,
-                        child: TextFormField(
-                          readOnly: true,
-                          obscureText: true,
-                          obscuringCharacter: "⓿",
-                          style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(width: 10),
+                    SizedBox(
+                      width: 50,
+                      child: TextFormField(
+                        readOnly: true,
+                        obscureText: true,
+                        obscuringCharacter: "⓿",
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        controller: pin3,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
                           ),
-                          controller: pin3,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.grey),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(),
-                          ),
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(width: 10),
-                      SizedBox(
-                        width: 50,
-                        child: TextFormField(
-                          readOnly: true,
-                          obscureText: true,
-                          obscuringCharacter: "⓿",
-                          style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(width: 10),
+                    SizedBox(
+                      width: 50,
+                      child: TextFormField(
+                        readOnly: true,
+                        obscureText: true,
+                        obscuringCharacter: "⓿",
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        controller: pin4,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
                           ),
-                          controller: pin4,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(color: Colors.grey),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: theme.primaryColor),
-                            ),
-                            border: OutlineInputBorder(),
-                          ),
+                          border: OutlineInputBorder(),
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          enterPin(1);
-                        },
-                        child: Text(
-                          "1",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(2);
-                        },
-                        child: Text(
-                          "2",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(3);
-                        },
-                        child: Text(
-                          "3",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          enterPin(4);
-                        },
-                        child: Text(
-                          "4",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(5);
-                        },
-                        child: Text(
-                          "5",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(6);
-                        },
-                        child: Text(
-                          "6",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          enterPin(7);
-                        },
-                        child: Text(
-                          "7",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(8);
-                        },
-                        child: Text(
-                          "8",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(9);
-                        },
-                        child: Text(
-                          "9",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.fingerprint,
-                          size: 28,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        enterPin(1);
+                      },
+                      child: Text(
+                        "1",
+                        style: TextStyle(
+                          fontSize: 40,
                           color: theme.primaryColor,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          enterPin(0);
-                        },
-                        child: Text(
-                          "0",
-                          style: TextStyle(
-                            fontSize: 40,
-                            color: theme.primaryColor,
-                          ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(2);
+                      },
+                      child: Text(
+                        "2",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          deletePin();
-                        },
-                        icon: Icon(Icons.backspace, color: theme.primaryColor),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(3);
+                      },
+                      child: Text(
+                        "3",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        enterPin(4);
+                      },
+                      child: Text(
+                        "4",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(5);
+                      },
+                      child: Text(
+                        "5",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(6);
+                      },
+                      child: Text(
+                        "6",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        enterPin(7);
+                      },
+                      child: Text(
+                        "7",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(8);
+                      },
+                      child: Text(
+                        "8",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(9);
+                      },
+                      child: Text(
+                        "9",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.fingerprint,
+                        size: 28,
+                        color: theme.primaryColor,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        enterPin(0);
+                      },
+                      child: Text(
+                        "0",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        deletePin();
+                      },
+                      icon: Icon(Icons.backspace, color: theme.primaryColor),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        },
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/security");
+          ),
+        );
       },
     );
   }

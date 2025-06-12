@@ -6,9 +6,12 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/data/cubits/transaction/transaction_state.dart';
 import 'package:itdata/data/models/transaction/transaction.dart';
+import 'package:itdata/features/transactions/transactions.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ViewTransactionPage extends StatefulWidget {
@@ -302,117 +305,116 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final transaction = widget.transaction!;
-    return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/transactions");
-            },
-            icon: Icon(Icons.arrow_back),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
+            ),
+            title: Text("Transation"),
+            backgroundColor: theme.primaryColor,
           ),
-          title: Text("Transation"),
-          backgroundColor: Color.fromRGBO(82, 101, 140, 1),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: BlocBuilder<TransactionCubit, TransactionStates>(
-            builder: (context, state) {
-              return ListView(
-                children: [
-                  RepaintBoundary(
-                    key: screen,
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                "assets/images/data_app_logo.png",
-                                scale: 40.0,
-                              ),
-                              Text("Transaction Receipt"),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Column(
-                            children: [
-                              Text(
-                                transaction.service.toString().toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(82, 101, 140, 1),
+          body: Padding(
+            padding: EdgeInsets.all(10),
+            child: BlocBuilder<TransactionCubit, TransactionStates>(
+              builder: (context, state) {
+                return ListView(
+                  children: [
+                    RepaintBoundary(
+                      key: screen,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        color: theme.secondaryColor,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.asset(
+                                  "assets/images/data_app_logo.png",
+                                  scale: 40.0,
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                transaction.status!.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color:
-                                      transaction.status == "success"
-                                          ? Colors.green
-                                          : transaction.status == "pending"
-                                          ? Colors.orange
-                                          : Colors.red,
-                                  fontWeight: FontWeight.w500,
+                                Text("Transaction Receipt"),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Column(
+                              children: [
+                                Text(
+                                  transaction.service.toString().toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.primaryColor,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(transaction.date!),
-                              Divider(
-                                thickness: 1.0,
-                                color: Color.fromRGBO(82, 101, 140, 1),
-                              ),
-                            ],
-                          ),
-                          _content(transaction),
-                          Divider(
-                            thickness: 1.0,
-                            color: Color.fromRGBO(82, 101, 140, 1),
-                          ),
-                        ],
+                                SizedBox(height: 5),
+                                Text(
+                                  transaction.status!.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color:
+                                        transaction.status == "success"
+                                            ? Colors.green
+                                            : transaction.status == "pending"
+                                            ? Colors.orange
+                                            : Colors.red,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(transaction.date!),
+                                Divider(
+                                  thickness: 1.0,
+                                  color: theme.primaryColor,
+                                ),
+                              ],
+                            ),
+                            _content(transaction),
+                            Divider(
+                              thickness: 1.0,
+                              color: theme.primaryColor,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(82, 101, 140, 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primaryColor,
+                          ),
+                          onPressed: () {
+                            share_receipt();
+                          },
+                          icon: Icon(Icons.share),
+                          label: Text("Share Receipt"),
                         ),
-                        onPressed: () {
-                          share_receipt();
-                        },
-                        icon: Icon(Icons.share),
-                        label: Text("Share Receipt"),
-                      ),
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(82, 101, 140, 1),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primaryColor,
+                          ),
+                          onPressed: () {
+                            downloadReceipt();
+                          },
+                          icon: Icon(Icons.download),
+                          label: Text("Download Receipt"),
                         ),
-                        onPressed: () {
-                          downloadReceipt();
-                        },
-                        icon: Icon(Icons.download),
-                        label: Text("Download Receipt"),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
-        ),
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/transactions");
-      },
+        );
+      }
     );
   }
 }
