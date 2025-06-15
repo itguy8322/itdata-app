@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:itdata/core/dialogs/process_dialog.dart';
+import 'package:itdata/core/dialogs/status_dialog.dart';
+import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
+import 'package:itdata/data/cubits/services/edu/edu_cubit.dart';
+import 'package:itdata/data/cubits/services/edu/edu_state.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
 import 'package:itdata/features/dashboard/dashboard.dart';
 // import 'package:local_auth/local_auth.dart';
 
@@ -112,310 +119,6 @@ class _EduPinState extends State<EduPin> {
     // }
   }
 
-  void enterPin(var pin) {
-    if (pin1.text.isEmpty) {
-      pin1.text = pin.toString();
-    } else if (pin2.text.isEmpty) {
-      pin2.text = pin.toString();
-    } else if (pin3.text.isEmpty) {
-      pin3.text = pin.toString();
-    } else {
-      pin4.text = pin.toString();
-      var pin0 = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
-      pin1.text = "";
-      pin2.text = "";
-      pin3.text = "";
-      pin4.text = "";
-      if (pin0 == "t_pin") {
-        showProcessDialog(context);
-      } else {
-        Vibrate.vibrate();
-        Navigator.pop(context);
-        showDialog(
-          context: context,
-          builder:
-              (context) =>
-                  AlertDialog(content: Text("Incorrect pin, try again.")),
-        );
-      }
-    }
-  }
-
-  void deletePin() {
-    if (pin4.text.isNotEmpty) {
-      pin4.text = "";
-    } else if (pin3.text.isNotEmpty) {
-      pin3.text = "";
-    } else if (pin2.text.isNotEmpty) {
-      pin2.text = "";
-    } else {
-      pin1.text = "";
-    }
-  }
-
-  void showBottomDrawer(BuildContext context, ThemeState theme) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("Enter Pin"),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin1,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'All field required';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin2,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin3,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin4,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      enterPin(1);
-                    },
-                    child: Text(
-                      "1",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(2);
-                    },
-                    child: Text(
-                      "2",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(3);
-                    },
-                    child: Text(
-                      "3",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      enterPin(4);
-                    },
-                    child: Text(
-                      "4",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(5);
-                    },
-                    child: Text(
-                      "5",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(6);
-                    },
-                    child: Text(
-                      "6",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      enterPin(7);
-                    },
-                    child: Text(
-                      "7",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(8);
-                    },
-                    child: Text(
-                      "8",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(9);
-                    },
-                    child: Text(
-                      "9",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      if (true == true) {
-                        biametric_authentication();
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Warning"),
-                              content: Text(
-                                "Enable biometric in the app settings to use biometric for authentication.",
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                    icon: Icon(
-                      Icons.fingerprint,
-                      size: 28,
-                      color: theme.primaryColor,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(0);
-                    },
-                    child: Text(
-                      "0",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      deletePin();
-                    },
-                    icon: Icon(Icons.backspace, color: theme.primaryColor),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   final exams = {};
   @override
   Widget build(BuildContext context) {
@@ -436,139 +139,190 @@ class _EduPinState extends State<EduPin> {
             padding: EdgeInsets.all(10),
             child: Form(
               key: _formKey,
-              child: ListView(
-                children: [
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
+              child: BlocBuilder<UserDataCubit, UserState>(
+                builder: (context, user) {
+                  return ListView(
+                    children: [
+                      MultiBlocListener(
+                        listeners: [
+                          BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
+                            listener: (context,state){
+                              print(" ====== object ===== ");
+                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
+                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
+                                    print("===== NOT EMPTY YEEEEEH");
+                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
+                                    Navigator.pop(context);
+                                    if (user.userData?.pin == pin){
+                                      showProcessDialog(context);
+                                    }
+                                    else{
+                                      showStatusDialog(context, "Incorrect pin, try again.");
+                                    }
+                                    context.read<SetpinButtonsCubit>().clearPin();
+                                  }
+                            }
+                          )
+                        ], 
+                        child: SizedBox()
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    hint: Text(
-                      exam == "none"
-                          ? "Choose Exam Type"
-                          : exams[exam].toString(),
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                    items: [
-                      for (var exam in exams.keys)
-                        (DropdownMenuItem(
-                          value: exam,
-                          child: Text(exam.toString()),
-                        )),
-                    ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        exam = value.toString();
-                        if (quatity != "") {
-                          var a = exams[exam].toString();
-                          var total =
-                              (int.tryParse(a)! * int.tryParse(quatity)!);
-    
-                          amount.text = total.toString();
+                      BlocBuilder<EduCubit, EduState>(
+                        builder: (context, edu) {
+                          return DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: theme.primaryColor),
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: Text(
+                              exam == "none"
+                                  ? "Choose Exam Type"
+                                  : exams[exam].toString(),
+                              style: TextStyle(color: theme.primaryColor),
+                            ),
+                            items: [
+                              for (var exam in edu.examsTypes.keys)
+                                (DropdownMenuItem(
+                                  value: exam,
+                                  child: Text(exam.toString()),
+                                )),
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return 'All field required';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                                exam = value.toString();
+                                context.read<EduCubit>().onTypeSelected(exam);
+                                if (edu.quantity.isNotEmpty) {
+                                  var a = edu.examsTypes[exam]['price'].toString();
+                                  var total =
+                                      (int.tryParse(a)! * int.tryParse(quatity)!);
+                          
+                                  amount.text = total.toString();
+                                  
+                                }
+                              
+                            },
+                          );
                         }
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: number,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
+                      SizedBox(height: 10),
+                      BlocBuilder<EduCubit, EduState>(
+                        builder: (context, edu) {
+                          return DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: theme.primaryColor),
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: Text(
+                              quantities[quatity].toString(),
+                              style: TextStyle(color: theme.primaryColor),
+                            ),
+                            items: [
+                              for (var i in quantities.keys)
+                                (DropdownMenuItem(
+                                  value: i,
+                                  child: Text(quantities[i].toString()),
+                                )),
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return 'All field required';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                                quatity = value.toString();
+                                if (edu.exam.isNotEmpty){
+                                  var a = edu.examsTypes[edu.exam]['price'].toString();
+                                var total =
+                                    (int.tryParse(a)! * int.tryParse(quatity)!);
+                          
+                                amount.text = total.toString();
+                                }
+                                
+                              context.read<EduCubit>().onQuantitySelected(amount.text);
+                            },
+                          );
+                        }
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    hint: Text(
-                      quantities[quatity].toString(),
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                    items: [
-                      for (var i in quantities.keys)
-                        (DropdownMenuItem(
-                          value: i,
-                          child: Text(quantities[i].toString()),
-                        )),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        readOnly: true,
+                        controller: amount,
+                        keyboardType: TextInputType.phone,
+                        maxLength: 11,
+                        decoration: InputDecoration(
+                          labelText: 'Amount',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                      ),
+                      
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: number,
+                        keyboardType: TextInputType.phone,
+                        maxLength: 11,
+                        decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          context.read<EduCubit>().onNumberEntered(value);
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(10),
+                          backgroundColor: theme.primaryColor,
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            //showPinButtons(context);
+                            PinButtonWidget(context: context, title: 'Enter pin', onEnteredPins: (pin){
+                              print("Entered PIN: $pin");
+                              if (user.userData?.pin == pin){
+                                showProcessDialog(context);
+                              }
+                              else{
+                                showStatusDialog(context, "Incorrect pin, try again.");
+                              }
+                            });
+                          }
+                        },
+                        child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                      ),
                     ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        quatity = value.toString();
-                        var a = exams[exam].toString();
-                        var total =
-                            (int.tryParse(a)! * int.tryParse(quatity)!);
-    
-                        amount.text = total.toString();
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    readOnly: true,
-                    controller: amount,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      labelText: 'Amount',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(10),
-                      backgroundColor: theme.primaryColor,
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        showBottomDrawer(context, theme);
-                      }
-                    },
-                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
-                  ),
-                ],
+                  );
+                }
               ),
             ),
           ),

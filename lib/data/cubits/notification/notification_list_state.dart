@@ -7,6 +7,7 @@ part 'notification_list_state.freezed.dart';
 @freezed
 abstract class NotificationsListState with _$NotificationsListState {
   const factory NotificationsListState({
+    required String userId,
     required List<Notification>? notifications,
     required bool loadingInProgress,
     required bool loadingSuccess,
@@ -15,6 +16,7 @@ abstract class NotificationsListState with _$NotificationsListState {
 
   factory NotificationsListState.initial() {
     return NotificationsListState(
+      userId: '',
       notifications: [],
       loadingInProgress: false,
       loadingSuccess: false,

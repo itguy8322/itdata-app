@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/services/data/data_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/features/services/airtime.dart';
@@ -21,6 +22,7 @@ class _ServicesWidgetsState extends State<ServicesWidgets> {
       onTap: () {
         print(title);
         if (title == "Data Purchase") {
+          context.read<DataCubit>().reInitialize();
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Data()));
         } else if (title == "Airtime") {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Airtime()));

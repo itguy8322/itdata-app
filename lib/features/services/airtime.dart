@@ -1,11 +1,21 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:itdata/core/dialogs/process_dialog.dart';
+import 'package:itdata/core/dialogs/status_dialog.dart';
 import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
+import 'package:itdata/data/cubits/network-providers/network_providers_cubit.dart';
+import 'package:itdata/data/cubits/network-providers/network_providers_state.dart';
+import 'package:itdata/data/cubits/services/airtime/airtime_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
 import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -101,126 +111,177 @@ class _AirtimeState extends State<Airtime> {
             padding: EdgeInsets.all(10),
             child: Form(
               key: _formKey,
-              child: ListView(
-                children: [
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
+              child: BlocBuilder<UserDataCubit, UserState>(
+                builder: (context, user) {
+                  return ListView(
+                    children: [
+                      MultiBlocListener(
+                        listeners: [
+                          BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
+                            listener: (context,state){
+                              print(" ====== object ===== ");
+                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
+                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
+                                    print("===== NOT EMPTY YEEEEEH");
+                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
+                                    Navigator.pop(context);
+                                    if (user.userData?.pin == pin){
+                                      showProcessDialog(context);
+                                    }
+                                    else{
+                                      showStatusDialog(context, "Incorrect pin, try again.");
+                                    }
+                                    context.read<SetpinButtonsCubit>().clearPin();
+                                  }
+                            }
+                          )
+                        ], 
+                        child: SizedBox()
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    hint: Text(
-                      network == ""
-                          ? "Choose Network"
-                          : networks[network].toString(),
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                    items: [
-                      for (var network in networks.keys)
-                        (DropdownMenuItem(
-                          value: network,
-                          child: Text("${networks[network]}"),
-                        )),
+                      BlocBuilder<NetworkProvidersCubit, NetworkProvidersState>(
+                        builder: (context, networkProviders) {
+                          return DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: theme.primaryColor),
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: Text(
+                              network == ""
+                                  ? "Choose Network"
+                                  : networks[network].toString(),
+                              style: TextStyle(color: theme.primaryColor),
+                            ),
+                            items: [
+                              for (var network in networkProviders.networkProviders!)
+                                (DropdownMenuItem(
+                                  value: network,
+                                  child: Text(network),
+                                )),
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return 'All field required';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              context.read<AirtimeCubit>().onProviderSelected(value!);
+                            },
+                          );
+                        }
+                      ),
+                      SizedBox(height: 10),
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        hint: Text(
+                          airtimetypes[airtimetype].toString(),
+                          style: TextStyle(color: theme.primaryColor),
+                        ),
+                        items: [
+                          DropdownMenuItem(value: "vtu", child: Text("VTU")),
+                          DropdownMenuItem(
+                            value: "sns",
+                            child: Text("SHARE N SELL"),
+                          ),
+                        ],
+                        validator: (value) {
+                          if (value == null) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          
+                          final airtimeType = (airtimetypes[value.toString()])!;
+                          context.read<AirtimeCubit>().onTypeSelected(airtimeType);
+                          
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: number,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly, // Allows only digits
+                        ],
+                        maxLength: 11,
+                        decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                        onChanged: (value){
+                          context.read<AirtimeCubit>().onNumberEntered(value);
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: amount,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly, // Allows only digits
+                        ],
+                        maxLength: 11,
+                        decoration: InputDecoration(
+                          labelText: 'Amount',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          context.read<AirtimeCubit>().onAmountChanged(value);
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(10),
+                          backgroundColor: theme.primaryColor,
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            //showPinButtons(context);
+                            PinButtonWidget(context: context,title: 'Enter pin', onEnteredPins: (pin){
+                              print("Entered PIN: $pin");
+                              if (user.userData?.pin == pin){
+                                showProcessDialog(context);
+                              }
+                              else{
+                                showStatusDialog(context, "Incorrect pin, try again.");
+                              }
+                            });
+                          }
+                        },
+                        child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
+                      ),
                     ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        network = value.toString();
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: number,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    hint: Text(
-                      airtimetypes[airtimetype].toString(),
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                    items: [
-                      DropdownMenuItem(value: "vtu", child: Text("VTU")),
-                      DropdownMenuItem(
-                        value: "sns",
-                        child: Text("SHARE N SELL"),
-                      ),
-                    ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        airtimetype = (airtimetypes[value.toString()])!;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: amount,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      labelText: 'Amount',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(10),
-                      backgroundColor: theme.primaryColor,
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        showPinButtons(context);
-                      }
-                    },
-                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
-                  ),
-                ],
+                  );
+                }
               ),
             ),
           ),

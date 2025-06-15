@@ -1,22 +1,23 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TransacService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<void> add(String path, String user, Map<String, dynamic> data) async {
+  Future<void> add(String id, Map<String, dynamic> data) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection(path).doc(user).get();
+        await db.collection("transactions").doc(id).get();
     Map<String, dynamic>? d = snapshot.data();
-    d?[path].add(data);
-    await update(path, user, d ?? {});
+    d?["transactions"].add(data);
+    await update(id, d ?? {});
   }
 
   Future<void> update(
-    String path,
-    String user,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    await db.collection(path).doc(user).update(data);
+    await db.collection("transactions").doc(id).update(data);
   }
 
   Future<void> delete(
@@ -28,12 +29,12 @@ class TransacService {
     db.collection(path).doc(user).delete();
   }
 
-  Future<List<Map<String, dynamic>>> load(String path, String username) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
+  Future<List<dynamic>> load(String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection(path).doc(user).get();
-    Map<String, dynamic>? data = snapshot.data();
+        await db.collection("transactions").doc(id).get();
+    final data = snapshot.data();
     print(data);
-    return [];
+    final _data = data?['transaction'];
+    return _data;
   }
 }

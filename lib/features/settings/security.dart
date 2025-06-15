@@ -27,7 +27,7 @@ class _SecurityState extends State<Security> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.popAndPushNamed(context, "/settings");
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),

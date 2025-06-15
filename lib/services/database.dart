@@ -10,8 +10,8 @@ class DatabaseService {
     Map<String, dynamic> data,
   ) async {
     await db.collection(path).doc(id).set(data);
-    await db.collection("transactions").doc(id).set({"transaction": []});
-    await db.collection("notification").doc(id).set({"notifications": []});
+    await db.collection("transactions").doc(id).set({"transactions": []});
+    await db.collection("notifications").doc(id).set({"notifications": []});
   }
 
   Future<UserData> updateData(
@@ -31,7 +31,7 @@ class DatabaseService {
   ) async {
     db.collection(path).doc(id).delete();
     db.collection("transactions").doc(id).delete();
-    db.collection("notifications").doc(id).delete();
+    db.collection("notification").doc(id).delete();
   }
 
   Future<UserData> loadData(String path, String id) async {

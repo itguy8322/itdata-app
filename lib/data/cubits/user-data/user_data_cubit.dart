@@ -13,7 +13,7 @@ class UserDataCubit extends Cubit<UserState> {
     emit(state.copyWith(userData: user, userDataSuccess: true));
   }
 
-  void load_user_data(String? username) async {
+  void load_user_data(String? id) async {
     try {
       emit(
         state.copyWith(
@@ -22,7 +22,7 @@ class UserDataCubit extends Cubit<UserState> {
           userDataSuccess: false,
         ),
       );
-      final data = await DatabaseService().loadData("users", username!);
+      final data = await DatabaseService().loadData("users", id!);
 
       emit(
         state.copyWith(

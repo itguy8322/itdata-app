@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionStates {
 
- List<Transaction>? get transactions; bool get loadingInProgress; bool get loadingSuccess; bool get loadingFailure;
+ String get userId; List<Transaction>? get transactions; bool get loadingInProgress; bool get loadingSuccess; bool get loadingFailure;
 /// Create a copy of TransactionStates
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $TransactionStatesCopyWith<TransactionStates> get copyWith => _$TransactionState
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionStates&&const DeepCollectionEquality().equals(other.transactions, transactions)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionStates&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other.transactions, transactions)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(transactions),loadingInProgress,loadingSuccess,loadingFailure);
+int get hashCode => Object.hash(runtimeType,userId,const DeepCollectionEquality().hash(transactions),loadingInProgress,loadingSuccess,loadingFailure);
 
 @override
 String toString() {
-  return 'TransactionStates(transactions: $transactions, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
+  return 'TransactionStates(userId: $userId, transactions: $transactions, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $TransactionStatesCopyWith<$Res>  {
   factory $TransactionStatesCopyWith(TransactionStates value, $Res Function(TransactionStates) _then) = _$TransactionStatesCopyWithImpl;
 @useResult
 $Res call({
- List<Transaction>? transactions, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
+ String userId, List<Transaction>? transactions, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
 });
 
 
@@ -63,9 +63,10 @@ class _$TransactionStatesCopyWithImpl<$Res>
 
 /// Create a copy of TransactionStates
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? transactions = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? transactions = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
   return _then(_self.copyWith(
-transactions: freezed == transactions ? _self.transactions : transactions // ignore: cast_nullable_to_non_nullable
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,transactions: freezed == transactions ? _self.transactions : transactions // ignore: cast_nullable_to_non_nullable
 as List<Transaction>?,loadingInProgress: null == loadingInProgress ? _self.loadingInProgress : loadingInProgress // ignore: cast_nullable_to_non_nullable
 as bool,loadingSuccess: null == loadingSuccess ? _self.loadingSuccess : loadingSuccess // ignore: cast_nullable_to_non_nullable
 as bool,loadingFailure: null == loadingFailure ? _self.loadingFailure : loadingFailure // ignore: cast_nullable_to_non_nullable
@@ -80,9 +81,10 @@ as bool,
 
 
 class _TransactionStates implements TransactionStates {
-  const _TransactionStates({required final  List<Transaction>? transactions, required this.loadingInProgress, required this.loadingSuccess, required this.loadingFailure}): _transactions = transactions;
+  const _TransactionStates({required this.userId, required final  List<Transaction>? transactions, required this.loadingInProgress, required this.loadingSuccess, required this.loadingFailure}): _transactions = transactions;
   
 
+@override final  String userId;
  final  List<Transaction>? _transactions;
 @override List<Transaction>? get transactions {
   final value = _transactions;
@@ -106,16 +108,16 @@ _$TransactionStatesCopyWith<_TransactionStates> get copyWith => __$TransactionSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionStates&&const DeepCollectionEquality().equals(other._transactions, _transactions)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionStates&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other._transactions, _transactions)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_transactions),loadingInProgress,loadingSuccess,loadingFailure);
+int get hashCode => Object.hash(runtimeType,userId,const DeepCollectionEquality().hash(_transactions),loadingInProgress,loadingSuccess,loadingFailure);
 
 @override
 String toString() {
-  return 'TransactionStates(transactions: $transactions, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
+  return 'TransactionStates(userId: $userId, transactions: $transactions, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
 }
 
 
@@ -126,7 +128,7 @@ abstract mixin class _$TransactionStatesCopyWith<$Res> implements $TransactionSt
   factory _$TransactionStatesCopyWith(_TransactionStates value, $Res Function(_TransactionStates) _then) = __$TransactionStatesCopyWithImpl;
 @override @useResult
 $Res call({
- List<Transaction>? transactions, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
+ String userId, List<Transaction>? transactions, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
 });
 
 
@@ -143,9 +145,10 @@ class __$TransactionStatesCopyWithImpl<$Res>
 
 /// Create a copy of TransactionStates
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? transactions = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? transactions = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
   return _then(_TransactionStates(
-transactions: freezed == transactions ? _self._transactions : transactions // ignore: cast_nullable_to_non_nullable
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,transactions: freezed == transactions ? _self._transactions : transactions // ignore: cast_nullable_to_non_nullable
 as List<Transaction>?,loadingInProgress: null == loadingInProgress ? _self.loadingInProgress : loadingInProgress // ignore: cast_nullable_to_non_nullable
 as bool,loadingSuccess: null == loadingSuccess ? _self.loadingSuccess : loadingSuccess // ignore: cast_nullable_to_non_nullable
 as bool,loadingFailure: null == loadingFailure ? _self.loadingFailure : loadingFailure // ignore: cast_nullable_to_non_nullable

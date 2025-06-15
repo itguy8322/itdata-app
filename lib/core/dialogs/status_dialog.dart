@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void showStatusDialog(BuildContext context, String status) {
-  Navigator.popAndPushNamed(context, "/dashboard");
+  // Navigator.popAndPushNamed(context, "/dashboard");
   showDialog(
     context: context,
     builder: (context) {

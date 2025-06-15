@@ -9,6 +9,7 @@ class UserData {
   double? wallet_bal;
   String? bvn;
   String? nin;
+  String? pin;
   List<Map<String, dynamic>>? permanentAccounts;
   UserData({
     this.id,
@@ -19,6 +20,7 @@ class UserData {
     this.wallet_bal,
     this.bvn,
     this.nin,
+    this.pin,
     this.permanentAccounts,
   });
 
@@ -32,6 +34,7 @@ class UserData {
       wallet_bal: double.tryParse(json['wallet_bal']),
       bvn: json['bvn'],
       nin: json['nin'],
+      pin: json['pin'],
       permanentAccounts: json['permanentAccounts'],
     );
   }
@@ -46,6 +49,7 @@ class UserData {
       "wallet_bal": user.wallet_bal,
       "bvn": user.bvn,
       "nin": user.nin,
+      "pin": user.pin,
       "permanentAccounts": user.permanentAccounts,
     };
   }

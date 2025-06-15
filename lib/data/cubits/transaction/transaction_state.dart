@@ -7,6 +7,7 @@ part 'transaction_state.freezed.dart';
 @freezed
 abstract class TransactionStates with _$TransactionStates {
   const factory TransactionStates({
+    required String userId,
     required List<Transaction>? transactions,
     required bool loadingInProgress,
     required bool loadingSuccess,
@@ -15,6 +16,7 @@ abstract class TransactionStates with _$TransactionStates {
 
   factory TransactionStates.initial() {
     return TransactionStates(
+      userId: '',
       transactions: [],
       loadingInProgress: false,
       loadingSuccess: false,

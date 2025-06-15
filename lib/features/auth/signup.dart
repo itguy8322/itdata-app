@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last
+// ignore_for_file: sort_child_properties_last, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +13,19 @@ import 'package:itdata/data/cubits/input-validations/input-validatiions/password
 import 'package:itdata/data/cubits/input-validations/input-validatiions/text_input.dart';
 import 'package:itdata/data/cubits/input-validations/input_validation_cubit.dart';
 import 'package:itdata/data/cubits/input-validations/input_validation_state.dart';
+import 'package:itdata/data/cubits/network-providers/network_providers_cubit.dart';
+import 'package:itdata/data/cubits/notification/notification_list_cubit.dart';
+import 'package:itdata/data/cubits/services/airtime/airtime_cubit.dart';
+import 'package:itdata/data/cubits/services/cable/cable_cubit.dart';
+import 'package:itdata/data/cubits/services/data/data_cubit.dart';
+import 'package:itdata/data/cubits/services/edu/edu_cubit.dart';
+import 'package:itdata/data/cubits/services/electricity/electricity_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
+import 'package:itdata/services/network_providers_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -48,15 +58,25 @@ class _SignupPageState extends State<SignupPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     BlocListener<AuthCubit, AuthState>(
-                      listener: (context, state) {
+                      listener: (context, state) async {
                         if (state is SignupLoading) {
                         } else if (state is SignupSuccess) {
+                          final id = state.userInfo?.id;
                           print("AM LOGGED IN");
                           context.read<UserDataCubit>().setUser(
                             state.userInfo!,
                           );
-                          Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, "/dashboard");
+                          context.read<NotificationListCubit>().setUserId(id!);
+                          context.read<TransactionCubit>().setUserId(id);
+                          final networkProviders = await NetworkProvidersService().loadNetworkProviders();
+                          context.read<NetworkProvidersCubit>().setNetworkProviders(networkProviders);
+                          context.read<AirtimeCubit>().loadAirtimeTypes();
+                          context.read<DataCubit>().loadDataPlans();
+                          context.read<CableCubit>().loadCablePlans();
+                          context.read<EduCubit>().loadExamTypes();
+                          context.read<ElectricityCubit>().loadDiscos();
+                          print("<============ PASSED ===============>");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                         } else if (state is SignupFailure) {
                           Navigator.pop(context);
                           showAlertDialog(context, "Alert", state.message!);
@@ -370,7 +390,7 @@ class _SignupPageState extends State<SignupPage> {
                                             "id": email.text.split("@")[0],
                                             "name": fullname.text,
                                             "email": email.text,
-                                            "tel": number.text,
+                                            "phone": number.text,
                                             "address": address.text,
                                             "pin": "0000",
                                             "bvn": "",

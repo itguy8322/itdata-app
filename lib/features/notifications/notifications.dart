@@ -6,6 +6,7 @@ import 'package:itdata/data/cubits/notification/notification_list_cubit.dart';
 import 'package:itdata/data/cubits/notification/notification_list_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -22,8 +23,11 @@ class _NotificationsState extends State<Notifications> {
           (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
-
-  final notifications = [];
+  @override
+  void initState(){
+    super.initState();
+    context.read<NotificationListCubit>().loadNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class _NotificationsState extends State<Notifications> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.popAndPushNamed(context, "/dashboard");
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
@@ -45,7 +49,11 @@ class _NotificationsState extends State<Notifications> {
             child: BlocBuilder<NotificationListCubit, NotificationsListState>(
               builder: (context, state) {
                 final notifications = state.notifications!;
-                return notifications.isEmpty
+                if (state.loadingInProgress){
+                  return Center(child: CircularProgressIndicator(),);
+                }
+                else if (state.loadingSuccess){
+                  return notifications.isEmpty
                     ? Center(child: Text("No Notifications yet!", style: TextStyle(color: theme.textColor),))
                     : RefreshIndicator(
                       color: theme.primaryColor,
@@ -70,53 +78,14 @@ class _NotificationsState extends State<Notifications> {
                         },
                       ),
                       onRefresh: () async {
-                        // final url = Uri.parse(
-                        //   "$_url/user/refresh/notifications",
-                        // );
-                        // final headers = {
-                        //   "Content-Type": "application/x-www-form-urlencoded",
-                        // };
-                        // final body = {"username": user_data["username"]};
-                        // try {
-                        //   final response = await http.post(
-                        //     url,
-                        //     headers: headers,
-                        //     body: body,
-                        //   );
-                        //   if (response.statusCode == 200) {
-                        //     print("It's Working...");
-                        //     var data = jsonDecode(response.body);
-                        //     print(data);
-                        //     if (data["status"] == "ok") {
-                        //       var _data = data["data"];
-    
-                        //       if (_data["notifications"].isNotEmpty) {
-                        //         notifications = _data["notifications"];
-                        //         setState(() {});
-                        //       }
-    
-                        //       //Navigator.pop(context);
-                        //       //Navigator.popAndPushNamed(context, "/dashboard");
-                        //     } else {
-                        //       //Navigator.pop(context);
-                        //       status("Alert", data["status"]);
-                        //     }
-                        //   } else {
-                        //     //Navigator.pop(context);
-                        //     status(
-                        //       "Connection Error",
-                        //       "check your internet connection and try again!",
-                        //     );
-                        //   }
-                        // } catch (e) {
-                        //   //Navigator.pop(context);
-                        //   status(
-                        //     "Unexpected Error",
-                        //     "Could ne not connect, check your internet connection and try again! ${e.toString()}",
-                        //   );
-                        // }
+                        context.read<NotificationListCubit>().loadNotifications();
                       },
                     );
+                }
+                else{
+                  return Center(child: Text("Error laoding notifications!", style: TextStyle(color: theme.textColor),));
+                }
+                
               },
             ),
           ),

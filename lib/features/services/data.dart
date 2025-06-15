@@ -2,10 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:itdata/core/dialogs/process_dialog.dart';
+import 'package:itdata/core/dialogs/status_dialog.dart';
+import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
+import 'package:itdata/data/cubits/services/data/data_cubit.dart';
+import 'package:itdata/data/cubits/services/data/data_state.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:local_auth/local_auth.dart';
 
 class Data extends StatefulWidget {
@@ -77,7 +85,6 @@ class _DataState extends State<Data> {
       );
       if (_isAuthenticated) {
         showProcessDialog(context);
-        make_transaction();
       } else {
         Navigator.pop(context);
         showDialog(
@@ -105,351 +112,6 @@ class _DataState extends State<Data> {
     }
   }
 
-  void make_transaction() async {
-    // final url = Uri.parse("$_url/user/make-purchase");
-    // final headers = {"Content-Type": "application/x-www-form-urlencoded"};
-    // final body = {
-    //   "service": "data",
-    //   "username": user_data["username"].toString(),
-    //   "data_id": dataplan['id'].toString(),
-    //   "number": number.text.toString(),
-    // };
-    // try {
-    //   final response = await http.post(url, headers: headers, body: body);
-    //   if (response.statusCode == 200) {
-    //     print("It's Working...");
-    //     var data = jsonDecode(response.body);
-    //     //print(data);
-    //     if (data["status"] == "success") {
-    //       user_data["wallet_bal"] = data["wallet_bal"];
-    //       transactions = data["transactions"];
-
-    //       setState(() {});
-    //       //Navigator.pop(context);
-    //       //Navigator.popAndPushNamed(context, "/dashboard");
-    //       status(data["status"]);
-    //     } else {
-    //       print("It's Working...2");
-    //       data["wallet_bal"] ?? "0.0";
-    //       if (data["transactions"] != null) {
-    //         transactions = data["transactions"];
-    //       } else {
-    //         transactions = transactions;
-    //       }
-    //       setState(() {});
-    //       status(data["status"]);
-    //     }
-    //   } else {
-    //     Navigator.pop(context);
-    //     status("Check your internet connection and try again!");
-    //   }
-    // } catch (e) {
-    //   Navigator.pop(context);
-    //   status(
-    //     "Could not connect, check your internet connection and try again! ${e.toString()}",
-    //   );
-    // }
-  }
-
-  void enterPin(var pin) {
-    if (pin1.text.isEmpty) {
-      pin1.text = pin.toString();
-    } else if (pin2.text.isEmpty) {
-      pin2.text = pin.toString();
-    } else if (pin3.text.isEmpty) {
-      pin3.text = pin.toString();
-    } else {
-      pin4.text = pin.toString();
-      var pin0 = "${pin1.text}${pin2.text}${pin3.text}${pin4.text}";
-      pin1.text = "";
-      pin2.text = "";
-      pin3.text = "";
-      pin4.text = "";
-      if (pin0 == "t_pin") {
-        showProcessDialog(context);
-        make_transaction();
-      } else {
-        Vibrate.vibrate();
-        Navigator.pop(context);
-        showDialog(
-          context: context,
-          builder:
-              (context) =>
-                  AlertDialog(content: Text("Incorrect pin, try again.")),
-        );
-      }
-    }
-  }
-
-  void deletePin() {
-    if (pin4.text.isNotEmpty) {
-      pin4.text = "";
-    } else if (pin3.text.isNotEmpty) {
-      pin3.text = "";
-    } else if (pin2.text.isNotEmpty) {
-      pin2.text = "";
-    } else {
-      pin1.text = "";
-    }
-  }
-
-  void showBottomDrawer(BuildContext context, ThemeState theme) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("Enter confrimation pin"),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin1,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin2,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin3,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  SizedBox(
-                    width: 50,
-                    child: TextFormField(
-                      readOnly: true,
-                      obscureText: true,
-                      obscuringCharacter: "⓿",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      controller: pin4,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.primaryColor),
-                        ),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      enterPin(1);
-                    },
-                    child: Text(
-                      "1",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(2);
-                    },
-                    child: Text(
-                      "2",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(3);
-                    },
-                    child: Text(
-                      "3",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      enterPin(4);
-                    },
-                    child: Text(
-                      "4",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(5);
-                    },
-                    child: Text(
-                      "5",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(6);
-                    },
-                    child: Text(
-                      "6",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      enterPin(7);
-                    },
-                    child: Text(
-                      "7",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(8);
-                    },
-                    child: Text(
-                      "8",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(9);
-                    },
-                    child: Text(
-                      "9",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      if (true == true) {
-                        biametric_authentication();
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Warning"),
-                              content: Text(
-                                "Enable biometric in the app settings to use biometric for authentication.",
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                    icon: Icon(
-                      Icons.fingerprint,
-                      size: 28,
-                      color: theme.primaryColor,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      enterPin(0);
-                    },
-                    child: Text(
-                      "0",
-                      style: TextStyle(fontSize: 40, color: theme.primaryColor),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      deletePin();
-                    },
-                    icon: Icon(Icons.backspace, color: theme.primaryColor),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   List data_plans = [];
   final networks = {};
   final dataplans = {};
@@ -462,7 +124,8 @@ class _DataState extends State<Data> {
             leading: IconButton(
               onPressed: () {
                 // data_plans = [];
-                Navigator.popAndPushNamed(context, "/dashboard");
+                context.read<DataCubit>().reInitialize();
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
@@ -473,192 +136,207 @@ class _DataState extends State<Data> {
             padding: EdgeInsets.all(10),
             child: Form(
               key: _formKey,
-              child: ListView(
-                children: [
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
+              child: BlocBuilder<UserDataCubit, UserState>(
+                builder: (context, user) {
+                  return ListView(
+                    children: [
+                      MultiBlocListener(
+                        listeners: [
+                          BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
+                            listener: (context,state){
+                              print(" ====== object ===== ");
+                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
+                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
+                                    print("===== NOT EMPTY YEEEEEH");
+                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
+                                    Navigator.pop(context);
+                                    if (user.userData?.pin == pin){
+                                      showProcessDialog(context);
+                                    }
+                                    else{
+                                      showStatusDialog(context, "Incorrect pin, try again.");
+                                    }
+                                    context.read<SetpinButtonsCubit>().clearPin();
+                                  }
+                            }
+                          )
+                        ], 
+                        child: SizedBox()
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    hint: Text(
-                      network == ""
-                          ? "Choose Network"
-                          : networks[network].toString(),
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                    items: [
-                      for (var network in networks.keys)
-                        (DropdownMenuItem(
-                          value: network,
-                          child: Text("${networks[network]}"),
-                        )),
-                    ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        data_plans = [];
-                        network = value.toString();
-                        if (datatype != "") {
-                          print(network);
-                          print(datatype);
-                          if (dataplans[network].containsKey(
-                            value.toString(),
-                          )) {
-                            setState(() {
-                              datatype = value.toString();
-                              data_plans = dataplans[network][datatype];
-                            });
-                          } else {
-                            setState(() {
-                              data_plans = [];
-                            });
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => AlertDialog(
-                                    content: Text(
-                                      "No Data type: $datatype on this network!",
-                                    ),
-                                  ),
-                            );
-                          }
+                      BlocBuilder<DataCubit, DataState>(
+                        builder: (context, data) {
+                          return DropdownButtonFormField(
+                            value: data.provider.isNotEmpty ? data.provider : null,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: theme.primaryColor),
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: Text(
+                              network == ""
+                                  ? "Choose Network"
+                                  : networks[network].toString(),
+                              style: TextStyle(color: theme.primaryColor),
+                            ),
+                            items: [
+                              for (var network in data.dataplans.keys)
+                                (DropdownMenuItem(
+                                  value: network,
+                                  child: Text(network),
+                                )),
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return 'All field required';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              context.read<DataCubit>().onProviderSelected(value!);
+                              context.read<DataCubit>().onTypeSelected('');
+                              context.read<DataCubit>().onPlanIdSelected('');
+                            },
+                          );
                         }
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: number,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 11,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  network != ""
-                      ? DropdownButtonFormField(
+                      SizedBox(height: 10),
+                      BlocBuilder<DataCubit, DataState>(
+                        builder: (context, data) {
+                          if (data.provider.isNotEmpty){
+                            print(data.dataplans[data.provider]);
+                            final planTypes = data.dataplans[data.provider][0]['plans'];
+                            return DropdownButtonFormField(
+                              value: data.type.isNotEmpty ? data.type : null,
+                                decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: theme.primaryColor),
+                                  ),
+                                  border: OutlineInputBorder(),
+                                ),
+                                hint: Text(
+                                  "Choose Data Type",
+                                  style: TextStyle(color: theme.primaryColor),
+                                ),
+                                items: [
+                                  for (String _datatype in planTypes.keys)
+                                    (DropdownMenuItem(
+                                      value: _datatype,
+                                      child: Text(_datatype),
+                                    )),
+                                ],
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'All field required';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  context.read<DataCubit>().onTypeSelected(value!);
+                                  context.read<DataCubit>().onPlanIdSelected('');
+                                  
+                                },
+                              );
+                          }else{
+                            return SizedBox();
+                          }
+                          
+                        }
+                      )
+                          ,
+                      SizedBox(height: 10),
+                      BlocBuilder<DataCubit, DataState>(
+                        builder: (context, data) {
+                          
+                          if (data.type.isNotEmpty){
+                            final plans = data.dataplans[data.provider][0]['plans'][data.type];
+                            return DropdownButtonFormField(
+                              value: data.planId.isNotEmpty ? data.planId : null,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: theme.primaryColor),
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: Text(
+                              "Choose Plan",
+                              style: TextStyle(color: theme.primaryColor),
+                            ),
+                            items:
+                              [for (var plan in plans)(
+                                DropdownMenuItem(
+                                  value: plan['plan_id'].toString(),
+                                  child: Text(
+                                    "${plan['validate']} ${plan['price']}",
+                                  )
+                              ))
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return 'All field required';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              context.read<DataCubit>().onPlanIdSelected(value!);
+                            },
+                          );
+                          }else{
+                            return SizedBox();
+                          }
+                          
+                        }
+                      ),
+                      
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: number,
+                        keyboardType: TextInputType.phone,
+                        maxLength: 11,
                         decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          labelStyle: TextStyle(color: Colors.grey),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: theme.primaryColor),
                           ),
                           border: OutlineInputBorder(),
                         ),
-                        hint: Text(
-                          "Choose Data Type",
-                          style: TextStyle(color: theme.primaryColor),
-                        ),
-                        items: [
-                          for (var _datatype in [])
-                            (DropdownMenuItem(
-                              value: _datatype,
-                              child: Text(_datatype),
-                            )),
-                        ],
                         validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return 'All field required';
                           }
                           return null;
                         },
                         onChanged: (value) {
-                          if (dataplans[network].containsKey(value)) {
-                            setState(() {
-                              datatype = value.toString();
-                              data_plans = dataplans[network][datatype];
+                          context.read<DataCubit>().onNumberEntered(value);
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(10),
+                          backgroundColor: theme.primaryColor,
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            //showPinButtons(context);
+                            PinButtonWidget(context: context, title: 'Enter pin', onEnteredPins: (pin){
+                              print("Entered PIN: $pin");
+                              if (user.userData?.pin == pin){
+                                showProcessDialog(context);
+                              }
+                              else{
+                                showStatusDialog(context, "Incorrect pin, try again.");
+                              }
                             });
-                          } else {
-                            setState(() {
-                              data_plans = [];
-                              network = "";
-                            });
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => AlertDialog(
-                                    content: Text(
-                                      "No Data type: $value on this network!",
-                                    ),
-                                  ),
-                            );
                           }
                         },
-                      )
-                      : SizedBox(),
-                  SizedBox(height: 10),
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
+                        child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    hint: Text(
-                      dataplan.isEmpty
-                          ? "Choose Plan"
-                          : "${dataplan['plan']} ${dataplan['validate']} ${dataplan['sale_price']}",
-                      style: TextStyle(color: theme.primaryColor),
-                    ),
-                    items: [
-                      for (int i in List.generate(
-                        data_plans.length,
-                        (index) => index,
-                        growable: false,
-                      ))
-                        (DropdownMenuItem(
-                          value: i,
-                          child: Text(
-                            "${data_plans[i]['plan']} ${data_plans[i]['validate']} ${data_plans[i]['sale_price']}",
-                          ),
-                        )),
                     ],
-                    validator: (value) {
-                      if (value == null) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      var i = int.tryParse(value.toString());
-                      setState(() {
-                        dataplan = data_plans[i!];
-                      });
-                      print(dataplan);
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(10),
-                      backgroundColor: theme.primaryColor,
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        showBottomDrawer(context, theme);
-                      }
-                    },
-                    child: Text("Pay", style: TextStyle(fontSize: 20, color: theme.secondaryColor)),
-                  ),
-                ],
+                  );
+                }
               ),
             ),
           ),

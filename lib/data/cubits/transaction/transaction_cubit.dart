@@ -6,21 +6,24 @@ import 'package:itdata/data/cubits/transaction/transaction_state.dart';
 class TransactionCubit extends Cubit<TransactionStates> {
   TransactionCubit() : super(TransactionStates.initial());
 
+  void setUserId(String id){
+    emit(state.copyWith(userId: id));
+  }
+
   void addTransaction(
-    String username,
-    String path,
+    String id,
     Map<String, dynamic> data,
   ) async {
     try {
       emit(state);
-      await TransacService().add(path, username, data);
+      await TransacService().add(id, data);
       emit(state);
     } catch (e) {
       emit(state);
     }
   }
 
-  void loadTransactions(String? username, String path) async {
+  void loadTransactions() async {
     try {
       emit(
         state.copyWith(
@@ -29,7 +32,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
           loadingSuccess: false,
         ),
       );
-      final data = await TransacService().load(path, username!);
+      final data = await TransacService().load(state.userId);
       List<Transaction> transactions = [];
       for (var transaction in data) {
         transactions.add(Transaction.fromJson(transaction));
@@ -43,6 +46,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
         ),
       );
     } catch (e) {
+      print(" =============== ERROR ==============");
+      print(e.toString());
       emit(
         state.copyWith(
           loadingInProgress: false,

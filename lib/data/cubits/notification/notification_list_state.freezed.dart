@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NotificationsListState {
 
- List<Notification>? get notifications; bool get loadingInProgress; bool get loadingSuccess; bool get loadingFailure;
+ String get userId; List<Notification>? get notifications; bool get loadingInProgress; bool get loadingSuccess; bool get loadingFailure;
 /// Create a copy of NotificationsListState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $NotificationsListStateCopyWith<NotificationsListState> get copyWith => _$Notifi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationsListState&&const DeepCollectionEquality().equals(other.notifications, notifications)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationsListState&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other.notifications, notifications)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(notifications),loadingInProgress,loadingSuccess,loadingFailure);
+int get hashCode => Object.hash(runtimeType,userId,const DeepCollectionEquality().hash(notifications),loadingInProgress,loadingSuccess,loadingFailure);
 
 @override
 String toString() {
-  return 'NotificationsListState(notifications: $notifications, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
+  return 'NotificationsListState(userId: $userId, notifications: $notifications, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $NotificationsListStateCopyWith<$Res>  {
   factory $NotificationsListStateCopyWith(NotificationsListState value, $Res Function(NotificationsListState) _then) = _$NotificationsListStateCopyWithImpl;
 @useResult
 $Res call({
- List<Notification>? notifications, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
+ String userId, List<Notification>? notifications, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
 });
 
 
@@ -63,9 +63,10 @@ class _$NotificationsListStateCopyWithImpl<$Res>
 
 /// Create a copy of NotificationsListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? notifications = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? notifications = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
   return _then(_self.copyWith(
-notifications: freezed == notifications ? _self.notifications : notifications // ignore: cast_nullable_to_non_nullable
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,notifications: freezed == notifications ? _self.notifications : notifications // ignore: cast_nullable_to_non_nullable
 as List<Notification>?,loadingInProgress: null == loadingInProgress ? _self.loadingInProgress : loadingInProgress // ignore: cast_nullable_to_non_nullable
 as bool,loadingSuccess: null == loadingSuccess ? _self.loadingSuccess : loadingSuccess // ignore: cast_nullable_to_non_nullable
 as bool,loadingFailure: null == loadingFailure ? _self.loadingFailure : loadingFailure // ignore: cast_nullable_to_non_nullable
@@ -80,9 +81,10 @@ as bool,
 
 
 class _NotificationsListState implements NotificationsListState {
-  const _NotificationsListState({required final  List<Notification>? notifications, required this.loadingInProgress, required this.loadingSuccess, required this.loadingFailure}): _notifications = notifications;
+  const _NotificationsListState({required this.userId, required final  List<Notification>? notifications, required this.loadingInProgress, required this.loadingSuccess, required this.loadingFailure}): _notifications = notifications;
   
 
+@override final  String userId;
  final  List<Notification>? _notifications;
 @override List<Notification>? get notifications {
   final value = _notifications;
@@ -106,16 +108,16 @@ _$NotificationsListStateCopyWith<_NotificationsListState> get copyWith => __$Not
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationsListState&&const DeepCollectionEquality().equals(other._notifications, _notifications)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationsListState&&(identical(other.userId, userId) || other.userId == userId)&&const DeepCollectionEquality().equals(other._notifications, _notifications)&&(identical(other.loadingInProgress, loadingInProgress) || other.loadingInProgress == loadingInProgress)&&(identical(other.loadingSuccess, loadingSuccess) || other.loadingSuccess == loadingSuccess)&&(identical(other.loadingFailure, loadingFailure) || other.loadingFailure == loadingFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_notifications),loadingInProgress,loadingSuccess,loadingFailure);
+int get hashCode => Object.hash(runtimeType,userId,const DeepCollectionEquality().hash(_notifications),loadingInProgress,loadingSuccess,loadingFailure);
 
 @override
 String toString() {
-  return 'NotificationsListState(notifications: $notifications, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
+  return 'NotificationsListState(userId: $userId, notifications: $notifications, loadingInProgress: $loadingInProgress, loadingSuccess: $loadingSuccess, loadingFailure: $loadingFailure)';
 }
 
 
@@ -126,7 +128,7 @@ abstract mixin class _$NotificationsListStateCopyWith<$Res> implements $Notifica
   factory _$NotificationsListStateCopyWith(_NotificationsListState value, $Res Function(_NotificationsListState) _then) = __$NotificationsListStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<Notification>? notifications, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
+ String userId, List<Notification>? notifications, bool loadingInProgress, bool loadingSuccess, bool loadingFailure
 });
 
 
@@ -143,9 +145,10 @@ class __$NotificationsListStateCopyWithImpl<$Res>
 
 /// Create a copy of NotificationsListState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? notifications = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? notifications = freezed,Object? loadingInProgress = null,Object? loadingSuccess = null,Object? loadingFailure = null,}) {
   return _then(_NotificationsListState(
-notifications: freezed == notifications ? _self._notifications : notifications // ignore: cast_nullable_to_non_nullable
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as String,notifications: freezed == notifications ? _self._notifications : notifications // ignore: cast_nullable_to_non_nullable
 as List<Notification>?,loadingInProgress: null == loadingInProgress ? _self.loadingInProgress : loadingInProgress // ignore: cast_nullable_to_non_nullable
 as bool,loadingSuccess: null == loadingSuccess ? _self.loadingSuccess : loadingSuccess // ignore: cast_nullable_to_non_nullable
 as bool,loadingFailure: null == loadingFailure ? _self.loadingFailure : loadingFailure // ignore: cast_nullable_to_non_nullable

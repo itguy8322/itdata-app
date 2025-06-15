@@ -4,7 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/input-validations/input_validation_cubit.dart';
+import 'package:itdata/data/cubits/network-providers/network_providers_cubit.dart';
 import 'package:itdata/data/cubits/notification/notification_list_cubit.dart';
+import 'package:itdata/data/cubits/services/airtime/airtime_cubit.dart';
+import 'package:itdata/data/cubits/services/cable/cable_cubit.dart';
+import 'package:itdata/data/cubits/services/data/data_cubit.dart';
+import 'package:itdata/data/cubits/services/edu/edu_cubit.dart';
+import 'package:itdata/data/cubits/services/electricity/electricity_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
@@ -54,6 +61,14 @@ void main() async {
         BlocProvider(create: (_) => TransactionCubit()),
         BlocProvider(create: (_) => InputValidationCubit()),
         BlocProvider(create: (_) => NotificationListCubit()),
+        BlocProvider(create: (_) => NetworkProvidersCubit()),
+        BlocProvider(create: (_) => SetpinButtonsCubit()),
+        BlocProvider(create: (_) => AirtimeCubit()),
+        BlocProvider(create: (_) => DataCubit()),
+        BlocProvider(create: (_) => CableCubit()),
+        BlocProvider(create: (_) => EduCubit()),
+        BlocProvider(create: (_) => ElectricityCubit()),
+        
       ],
       child: const MyApp(),
     ),

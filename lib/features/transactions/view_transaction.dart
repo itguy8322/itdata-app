@@ -315,7 +315,7 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
-            title: Text("Transation"),
+            title: Text("Transation", style: TextStyle(color: theme.secondaryColor),),
             backgroundColor: theme.primaryColor,
           ),
           body: Padding(
@@ -393,8 +393,8 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
                           onPressed: () {
                             share_receipt();
                           },
-                          icon: Icon(Icons.share),
-                          label: Text("Share Receipt"),
+                          icon: Icon(Icons.share, color: theme.secondaryColor,),
+                          label: Text("Share Receipt", style: TextStyle(color: theme.secondaryColor)),
                         ),
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
@@ -403,8 +403,8 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
                           onPressed: () {
                             downloadReceipt();
                           },
-                          icon: Icon(Icons.download),
-                          label: Text("Download Receipt"),
+                          icon: Icon(Icons.download, color: theme.secondaryColor,),
+                          label: Text("Download Receipt", style: TextStyle(color: theme.secondaryColor)),
                         ),
                       ],
                     ),
