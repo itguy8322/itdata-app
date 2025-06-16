@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/alert_dialog.dart';
 import 'package:itdata/data/cubits/services/data/data_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
@@ -33,10 +34,10 @@ class _ServicesWidgetsState extends State<ServicesWidgets> {
         } else if (title == "Bill Payments") {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Electricity()));
         } else {
-          // status(
-          //   "More",
-          //   "There valued customer, more services will be added soon.",
-          // );
+          showAlertDialog(context,
+            "More Services",
+            "There valued customer, more services will be added soon.",
+          );
         }
       },
       child: BlocBuilder<ThemeCubit, ThemeState>(

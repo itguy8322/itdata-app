@@ -14,14 +14,14 @@ class DatabaseService {
     await db.collection("notifications").doc(id).set({"notifications": []});
   }
 
-  Future<UserData> updateData(
+  Future<void> updateData(
     String path,
     String id,
     Map<String, dynamic> data,
   ) async {
     await db.collection(path).doc(id).update(data);
-    final data0 = await loadData(path, id);
-    return data0;
+    // final data0 = await loadData(path, id);
+    // return data0;
   }
 
   Future<void> removeData(
@@ -34,7 +34,7 @@ class DatabaseService {
     db.collection("notification").doc(id).delete();
   }
 
-  Future<UserData> loadData(String path, String id) async {
+  Future<UserData> loadUserData(String path, String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection(path).doc(id).get();
     Map<String, dynamic>? data = snapshot.data();

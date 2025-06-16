@@ -25,7 +25,7 @@ class _NotificationState extends State<NotificationSetting> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Settings()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),

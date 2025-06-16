@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
@@ -77,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
               key: _formKey,
               child: BlocBuilder<UserDataCubit, UserState>(
                 builder: (context, state) {
-                  if (state.userDataSuccess) {
+                  if (state.userData != null) {
                     print("SUCCESSSSSSS");
                     print(state.userData);
                     fullname.text = state.userData!.name!;

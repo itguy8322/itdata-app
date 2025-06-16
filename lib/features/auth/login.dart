@@ -82,8 +82,9 @@ class _LoginPageState extends State<LoginPage> {
                           context.read<CableCubit>().loadCablePlans();
                           context.read<EduCubit>().loadExamTypes();
                           context.read<ElectricityCubit>().loadDiscos();
+                          context.read<TransactionCubit>().loadTransactions();
                           print("<============ PASSED ===============>");
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                         } else if (state is LoginFailure) {
                           print("AM NOT LOGGED IN");
                           Navigator.pop(context);
@@ -320,7 +321,7 @@ class _LoginPageState extends State<LoginPage> {
                                   context
                                       .read<InputValidationCubit>()
                                       .reInitialize();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupPage()));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignupPage()));
                                 },
                                 child: Text(
                                   'Create Account',
@@ -335,7 +336,7 @@ class _LoginPageState extends State<LoginPage> {
                           TextButton(
                             onPressed: () {
                               // Navigate to login page
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>LandingPage()));
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingPage()));
                             },
                             child: Text(
                               'Go to main page',

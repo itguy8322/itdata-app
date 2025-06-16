@@ -26,7 +26,7 @@ class _CardFundingState extends State<CardFunding> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>FundWallet()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FundWallet()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),

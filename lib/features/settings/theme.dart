@@ -20,7 +20,7 @@ class _ThemePageState extends State<ThemePage> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Settings()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
@@ -38,6 +38,7 @@ class _ThemePageState extends State<ThemePage> {
                     //   theme = "default";
                     //   theme.primaryColor = Color.fromRGBO(82, 101, 140, 1);
                     // });
+                    context.read<ThemeCubit>().setToDefaultTheme();
                   },
                   title: Text("Default", style: TextStyle(fontSize: 25)),
                   leading: Icon(
@@ -46,7 +47,7 @@ class _ThemePageState extends State<ThemePage> {
                     color: Color.fromRGBO(82, 101, 140, 1),
                   ),
                   trailing:
-                      theme == "default"
+                      theme == ThemeState.defaut()
                           ? Icon(
                             Icons.check_circle,
                             color: theme.primaryColor,
@@ -61,6 +62,7 @@ class _ThemePageState extends State<ThemePage> {
                     //   theme = "orange";
                     //   theme.primaryColor = Colors.orange[800];
                     // });
+                    context.read<ThemeCubit>().setToOrangeTheme();
                   },
                   title: Text("Orange", style: TextStyle(fontSize: 25)),
                   leading: Icon(
@@ -69,7 +71,7 @@ class _ThemePageState extends State<ThemePage> {
                     color: Colors.orange[800],
                   ),
                   trailing:
-                      theme == "orange"
+                      theme == ThemeState.orange()
                           ? Icon(
                             Icons.check_circle,
                             color: theme.primaryColor,
@@ -84,6 +86,7 @@ class _ThemePageState extends State<ThemePage> {
                     //   theme = "blue";
                     //   theme.primaryColor = Colors.blue[800];
                     // });
+                    context.read<ThemeCubit>().setToBlueTheme();
                   },
                   title: Text("Blue", style: TextStyle(fontSize: 25)),
                   leading: Icon(
@@ -92,7 +95,7 @@ class _ThemePageState extends State<ThemePage> {
                     color: Colors.blue[800],
                   ),
                   trailing:
-                      theme == "blue"
+                      theme == ThemeState.blue()
                           ? Icon(
                             Icons.check_circle,
                             color: theme.primaryColor,
@@ -107,6 +110,7 @@ class _ThemePageState extends State<ThemePage> {
                     //   theme = "brown";
                     //   theme.primaryColor = Color.fromARGB(255, 98, 12, 0);
                     // });
+                    context.read<ThemeCubit>().setToBrownTheme();
                   },
                   title: Text("Brown", style: TextStyle(fontSize: 25)),
                   leading: Icon(
@@ -115,7 +119,7 @@ class _ThemePageState extends State<ThemePage> {
                     color: Color.fromARGB(255, 98, 12, 0),
                   ),
                   trailing:
-                      theme == "brown"
+                      theme == ThemeState.brown()
                           ? Icon(
                             Icons.check_circle,
                             color: theme.primaryColor,

@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:itdata/debug/data.dart';
-import 'package:itdata/debug/electric.dart';
-import 'package:itdata/debug/plans.dart';
+// import 'package:itdata/debug/electric.dart';
+// import 'package:itdata/debug/plans.dart';
 void uploadToFirebase() async {
   print("<=============== UPLOADING DATA TO FIREBASE =================>");
   final FirebaseFirestore db = FirebaseFirestore.instance;

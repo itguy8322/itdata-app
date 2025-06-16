@@ -125,7 +125,7 @@ class _DataState extends State<Data> {
               onPressed: () {
                 // data_plans = [];
                 context.read<DataCubit>().reInitialize();
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),

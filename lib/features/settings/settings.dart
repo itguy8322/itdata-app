@@ -18,7 +18,7 @@ class Settings extends StatelessWidget {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
@@ -31,7 +31,7 @@ class Settings extends StatelessWidget {
               children: [
                 ListTile(
                   onTap:
-                      (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>Security()))),
+                      (() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Security()))),
                   title: Text(
                     "Account Security",
                     style: TextStyle(fontSize: 25,),
@@ -42,13 +42,13 @@ class Settings extends StatelessWidget {
                 ListTile(
                   onTap:
                       (() =>
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationSetting()))),
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NotificationSetting()))),
                   title: Text("Notification", style: TextStyle(fontSize: 25)),
                   leading: Icon(Icons.notifications, size: 25),
                 ),
                 Divider(thickness: 1),
                 ListTile(
-                  onTap: (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>ThemePage()))),
+                  onTap: (() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ThemePage()))),
                   title: Text("Theme", style: TextStyle(fontSize: 25)),
                   leading: Icon(Icons.format_paint, size: 25),
                 ),

@@ -27,7 +27,7 @@ class _SecurityState extends State<Security> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Settings()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
@@ -40,7 +40,7 @@ class _SecurityState extends State<Security> {
               children: [
                 ListTile(
                   onTap:
-                      (() => Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword()))),
+                      (() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChangePassword()))),
                   title: Text(
                     "Change Password",
                     style: TextStyle(fontSize: 25),
@@ -51,7 +51,7 @@ class _SecurityState extends State<Security> {
                 ListTile(
                   onTap:
                       (() =>
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePin()))),
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChangePin()))),
                   title: Text(
                     "Change Transaction Pin",
                     style: TextStyle(fontSize: 25),

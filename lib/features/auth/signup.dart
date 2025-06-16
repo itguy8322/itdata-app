@@ -24,7 +24,7 @@ import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
-import 'package:itdata/features/dashboard/dashboard.dart';
+import 'package:itdata/features/settings/change_pin.dart';
 import 'package:itdata/services/network_providers_service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -60,11 +60,13 @@ class _SignupPageState extends State<SignupPage> {
                     BlocListener<AuthCubit, AuthState>(
                       listener: (context, state) async {
                         if (state is SignupLoading) {
+                          showProcessDialog(context);
                         } else if (state is SignupSuccess) {
                           final id = state.userInfo?.id;
                           print("AM LOGGED IN");
                           context.read<UserDataCubit>().setUser(
                             state.userInfo!,
+                            isNewUser: true
                           );
                           context.read<NotificationListCubit>().setUserId(id!);
                           context.read<TransactionCubit>().setUserId(id);
@@ -76,7 +78,8 @@ class _SignupPageState extends State<SignupPage> {
                           context.read<EduCubit>().loadExamTypes();
                           context.read<ElectricityCubit>().loadDiscos();
                           print("<============ PASSED ===============>");
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChangePin()));
                         } else if (state is SignupFailure) {
                           Navigator.pop(context);
                           showAlertDialog(context, "Alert", state.message!);
@@ -383,7 +386,7 @@ class _SignupPageState extends State<SignupPage> {
                                         state.textInput.isValid! &&
                                         state.numberInput.isValid! &&
                                         state.passwordInput.isValid!) {
-                                      showProcessDialog(context);
+                                      
                                       context
                                           .read<AuthCubit>()
                                           .signup(email.text, password.text, {
@@ -392,7 +395,7 @@ class _SignupPageState extends State<SignupPage> {
                                             "email": email.text,
                                             "phone": number.text,
                                             "address": address.text,
-                                            "pin": "0000",
+                                            "pin": "",
                                             "bvn": "",
                                             "password": password.text,
                                             "wallet_bal": "1550.00",

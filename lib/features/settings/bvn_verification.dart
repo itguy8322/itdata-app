@@ -98,7 +98,7 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Security()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Security()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),

@@ -22,7 +22,7 @@ class _FundWalletState extends State<FundWallet> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),
@@ -36,7 +36,7 @@ class _FundWalletState extends State<FundWallet> {
                 ListTile(
                   onTap:
                       (() =>
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>TransferFunding()))),
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TransferFunding()))),
                   title: Text(
                     "Fund with Bank Transfer",
                     style: TextStyle(fontSize: 25),
@@ -47,7 +47,7 @@ class _FundWalletState extends State<FundWallet> {
                 ListTile(
                   onTap:
                       (() =>
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CardFunding()))),
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CardFunding()))),
                   title: Text(
                     "Fund with ATM Card",
                     style: TextStyle(fontSize: 25),

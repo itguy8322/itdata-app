@@ -24,7 +24,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Security()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Security()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),

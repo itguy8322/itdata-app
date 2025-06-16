@@ -34,7 +34,7 @@ class TransacService {
         await db.collection("transactions").doc(id).get();
     final data = snapshot.data();
     print(data);
-    final _data = data?['transaction'];
+    final _data = data?['transactions'];
     return _data;
   }
 }

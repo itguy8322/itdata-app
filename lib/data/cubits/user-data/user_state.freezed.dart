@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserState {
 
- UserData? get userData; bool get userDataSuccess; bool get uesrDataInProgress; bool get userDataFailure;
+ UserData? get userData; bool get isNewUser; bool get userDataSuccess; bool get uesrDataInProgress; bool get userDataFailure;
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $UserStateCopyWith<UserState> get copyWith => _$UserStateCopyWithImpl<UserState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserState&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.userDataSuccess, userDataSuccess) || other.userDataSuccess == userDataSuccess)&&(identical(other.uesrDataInProgress, uesrDataInProgress) || other.uesrDataInProgress == uesrDataInProgress)&&(identical(other.userDataFailure, userDataFailure) || other.userDataFailure == userDataFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserState&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.isNewUser, isNewUser) || other.isNewUser == isNewUser)&&(identical(other.userDataSuccess, userDataSuccess) || other.userDataSuccess == userDataSuccess)&&(identical(other.uesrDataInProgress, uesrDataInProgress) || other.uesrDataInProgress == uesrDataInProgress)&&(identical(other.userDataFailure, userDataFailure) || other.userDataFailure == userDataFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userData,userDataSuccess,uesrDataInProgress,userDataFailure);
+int get hashCode => Object.hash(runtimeType,userData,isNewUser,userDataSuccess,uesrDataInProgress,userDataFailure);
 
 @override
 String toString() {
-  return 'UserState(userData: $userData, userDataSuccess: $userDataSuccess, uesrDataInProgress: $uesrDataInProgress, userDataFailure: $userDataFailure)';
+  return 'UserState(userData: $userData, isNewUser: $isNewUser, userDataSuccess: $userDataSuccess, uesrDataInProgress: $uesrDataInProgress, userDataFailure: $userDataFailure)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $UserStateCopyWith<$Res>  {
   factory $UserStateCopyWith(UserState value, $Res Function(UserState) _then) = _$UserStateCopyWithImpl;
 @useResult
 $Res call({
- UserData? userData, bool userDataSuccess, bool uesrDataInProgress, bool userDataFailure
+ UserData? userData, bool isNewUser, bool userDataSuccess, bool uesrDataInProgress, bool userDataFailure
 });
 
 
@@ -63,10 +63,11 @@ class _$UserStateCopyWithImpl<$Res>
 
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userData = freezed,Object? userDataSuccess = null,Object? uesrDataInProgress = null,Object? userDataFailure = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userData = freezed,Object? isNewUser = null,Object? userDataSuccess = null,Object? uesrDataInProgress = null,Object? userDataFailure = null,}) {
   return _then(_self.copyWith(
 userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
-as UserData?,userDataSuccess: null == userDataSuccess ? _self.userDataSuccess : userDataSuccess // ignore: cast_nullable_to_non_nullable
+as UserData?,isNewUser: null == isNewUser ? _self.isNewUser : isNewUser // ignore: cast_nullable_to_non_nullable
+as bool,userDataSuccess: null == userDataSuccess ? _self.userDataSuccess : userDataSuccess // ignore: cast_nullable_to_non_nullable
 as bool,uesrDataInProgress: null == uesrDataInProgress ? _self.uesrDataInProgress : uesrDataInProgress // ignore: cast_nullable_to_non_nullable
 as bool,userDataFailure: null == userDataFailure ? _self.userDataFailure : userDataFailure // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -80,10 +81,11 @@ as bool,
 
 
 class _UserState implements UserState {
-  const _UserState({required this.userData, required this.userDataSuccess, required this.uesrDataInProgress, required this.userDataFailure});
+  const _UserState({required this.userData, required this.isNewUser, required this.userDataSuccess, required this.uesrDataInProgress, required this.userDataFailure});
   
 
 @override final  UserData? userData;
+@override final  bool isNewUser;
 @override final  bool userDataSuccess;
 @override final  bool uesrDataInProgress;
 @override final  bool userDataFailure;
@@ -98,16 +100,16 @@ _$UserStateCopyWith<_UserState> get copyWith => __$UserStateCopyWithImpl<_UserSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserState&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.userDataSuccess, userDataSuccess) || other.userDataSuccess == userDataSuccess)&&(identical(other.uesrDataInProgress, uesrDataInProgress) || other.uesrDataInProgress == uesrDataInProgress)&&(identical(other.userDataFailure, userDataFailure) || other.userDataFailure == userDataFailure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserState&&(identical(other.userData, userData) || other.userData == userData)&&(identical(other.isNewUser, isNewUser) || other.isNewUser == isNewUser)&&(identical(other.userDataSuccess, userDataSuccess) || other.userDataSuccess == userDataSuccess)&&(identical(other.uesrDataInProgress, uesrDataInProgress) || other.uesrDataInProgress == uesrDataInProgress)&&(identical(other.userDataFailure, userDataFailure) || other.userDataFailure == userDataFailure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userData,userDataSuccess,uesrDataInProgress,userDataFailure);
+int get hashCode => Object.hash(runtimeType,userData,isNewUser,userDataSuccess,uesrDataInProgress,userDataFailure);
 
 @override
 String toString() {
-  return 'UserState(userData: $userData, userDataSuccess: $userDataSuccess, uesrDataInProgress: $uesrDataInProgress, userDataFailure: $userDataFailure)';
+  return 'UserState(userData: $userData, isNewUser: $isNewUser, userDataSuccess: $userDataSuccess, uesrDataInProgress: $uesrDataInProgress, userDataFailure: $userDataFailure)';
 }
 
 
@@ -118,7 +120,7 @@ abstract mixin class _$UserStateCopyWith<$Res> implements $UserStateCopyWith<$Re
   factory _$UserStateCopyWith(_UserState value, $Res Function(_UserState) _then) = __$UserStateCopyWithImpl;
 @override @useResult
 $Res call({
- UserData? userData, bool userDataSuccess, bool uesrDataInProgress, bool userDataFailure
+ UserData? userData, bool isNewUser, bool userDataSuccess, bool uesrDataInProgress, bool userDataFailure
 });
 
 
@@ -135,10 +137,11 @@ class __$UserStateCopyWithImpl<$Res>
 
 /// Create a copy of UserState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userData = freezed,Object? userDataSuccess = null,Object? uesrDataInProgress = null,Object? userDataFailure = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userData = freezed,Object? isNewUser = null,Object? userDataSuccess = null,Object? uesrDataInProgress = null,Object? userDataFailure = null,}) {
   return _then(_UserState(
 userData: freezed == userData ? _self.userData : userData // ignore: cast_nullable_to_non_nullable
-as UserData?,userDataSuccess: null == userDataSuccess ? _self.userDataSuccess : userDataSuccess // ignore: cast_nullable_to_non_nullable
+as UserData?,isNewUser: null == isNewUser ? _self.isNewUser : isNewUser // ignore: cast_nullable_to_non_nullable
+as bool,userDataSuccess: null == userDataSuccess ? _self.userDataSuccess : userDataSuccess // ignore: cast_nullable_to_non_nullable
 as bool,uesrDataInProgress: null == uesrDataInProgress ? _self.uesrDataInProgress : uesrDataInProgress // ignore: cast_nullable_to_non_nullable
 as bool,userDataFailure: null == userDataFailure ? _self.userDataFailure : userDataFailure // ignore: cast_nullable_to_non_nullable
 as bool,

@@ -8,6 +8,7 @@ import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_state.dart';
 import 'package:itdata/features/about/about.dart';
 import 'package:itdata/features/about/termspolicies.dart';
+import 'package:itdata/features/auth/login.dart';
 import 'package:itdata/features/notifications/notifications.dart';
 import 'package:itdata/features/settings/profile.dart';
 import 'package:itdata/features/settings/settings.dart';
@@ -43,7 +44,7 @@ class AppDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${state.userDataSuccess ? state.userData!.name : ''}".toUpperCase(),
+                                      "${state.userData != null ? state.userData!.name : ''}".toUpperCase(),
                                       style: TextStyle(
                                         color: theme.secondaryColor,
                                         fontSize: 18,
@@ -51,7 +52,7 @@ class AppDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${state.userDataSuccess ? state.userData!.email : ''}",
+                                      "${state.userData != null ? state.userData!.email : ''}",
                                       style: TextStyle(color: theme.secondaryColor),
                                     ),
                                   ],
@@ -76,7 +77,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Dashboard
                           Navigator.pop(context);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>FundWallet()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FundWallet()));
                           // Close drawer
                         },
                       ),
@@ -91,7 +92,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Pay Bills
                           Navigator.pop(context); // Close drawer
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -105,7 +106,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Pay Bills
                           Navigator.pop(context); // Close drawer
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Notifications()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Notifications()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -116,7 +117,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Usage History
                           Navigator.pop(context);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage())); // Close drawer
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ProfilePage())); // Close drawer
                         },
                       ),
                       Divider(thickness: 1),
@@ -128,7 +129,7 @@ class AppDrawer extends StatelessWidget {
                           // Navigate to Account Settings
                           Navigator.pop(context); // Close drawer
                           if (2 == 2) {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Settings()));
                           } else {
                             showDialog(
                               context: context,
@@ -152,7 +153,7 @@ class AppDrawer extends StatelessWidget {
                           // Navigate to View Bills
                           Navigator.pop(context);
 
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndPolicyPage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TermsAndPolicyPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -163,7 +164,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Usage History
                           Navigator.pop(context); // Close drawer
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AboutUsPage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AboutUsPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -185,10 +186,7 @@ class AppDrawer extends StatelessWidget {
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        Navigator.popAndPushNamed(
-                                          context,
-                                          "/login",
-                                        );
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:

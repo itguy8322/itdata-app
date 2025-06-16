@@ -15,7 +15,7 @@ import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
-import 'package:itdata/debug/upload_to_firebase.dart';
+// import 'package:itdata/debug/upload_to_firebase.dart';
 import 'package:itdata/features/dashboard/recent-transaction.dart';
 import 'package:itdata/features/dashboard/services-widgets.dart';
 import 'package:itdata/features/dashboard/appdrawer.dart';
@@ -35,6 +35,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   void noti_actions() async {
     try {
       AwesomeNotifications().setListeners(
@@ -69,11 +71,18 @@ class _DashboardState extends State<Dashboard> {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, theme) {
         return Scaffold(
+          key: _scaffoldKey,
           drawer: AppDrawer(),
           appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+              icon: Icon(Icons.menu, color: theme.secondaryColor),
+            ),
             title: BlocBuilder<UserDataCubit, UserState>(
               builder: (context, state) {
-                if (state.userDataSuccess) {
+                if (state.userData!.id != null) {
                   return Text("IT Data (${state.userData!.id})", style: TextStyle(color: theme.secondaryColor),);
                 } else {
                   return Text("IT Data ()", style: TextStyle(color: theme.secondaryColor),);
@@ -84,7 +93,7 @@ class _DashboardState extends State<Dashboard> {
             actions: [
               IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Notifications()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Notifications()));
                 },
                 icon: Icon(Icons.notifications,color: theme.secondaryColor,),
               ),
@@ -198,7 +207,7 @@ class _DashboardState extends State<Dashboard> {
                                       backgroundColor: theme.primaryColor,
                                     ),
                                     onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>FundWallet()));
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FundWallet()));
                                     },
                                     icon: Icon(Icons.add, color: theme.secondaryColor,),
                                     label: Text("Fund Wallet", style: TextStyle(color: theme.secondaryColor),),
@@ -214,7 +223,7 @@ class _DashboardState extends State<Dashboard> {
                                       backgroundColor: theme.primaryColor,
                                     ),
                                     onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
                                     },
                                     icon: Icon(Icons.history, color: theme.secondaryColor,),
                                     label: Text("Transactions", style: TextStyle(color: theme.secondaryColor),),

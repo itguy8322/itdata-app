@@ -39,7 +39,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),
@@ -51,7 +51,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             child: BlocBuilder<TransactionCubit, TransactionStates>(
               builder: (context, state) {
                 if (state.loadingInProgress) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(color: theme.primaryColor,));
                 } else if (state.loadingSuccess) {
                   final transactions = state.transactions!;
                   return transactions.isEmpty
@@ -70,7 +70,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     child: ListTile(
                                       onTap: () {
                                         Navigator.pop(context);
-                                        Navigator.push(
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute<void>(
                                             builder:

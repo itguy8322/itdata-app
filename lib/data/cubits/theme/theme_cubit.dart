@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 
@@ -7,7 +7,7 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   ThemeCubit() : super(ThemeState.defaut());
 
-  void setToDefaultTheme(Color color) {
+  void setToDefaultTheme() {
     emit(ThemeState.defaut());
   }
 

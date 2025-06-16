@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 
-void showProcessDialog(BuildContext context) {
+void showProcessDialog(BuildContext context, {String label=""}) {
   showDialog(
     barrierDismissible: false,
     context: context,
@@ -21,7 +21,7 @@ void showProcessDialog(BuildContext context) {
                     strokeWidth: 8.4,
                     padding: EdgeInsets.all(20),
                   ),
-                  Text("Processing, please wait..."),
+                  Text(label.isNotEmpty? label:"Processing, please wait..."),
                 ],
               ),
             );

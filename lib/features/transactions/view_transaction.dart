@@ -311,7 +311,7 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
             ),

@@ -8,6 +8,7 @@ part 'user_state.freezed.dart';
 abstract class UserState with _$UserState {
   const factory UserState({
     required UserData? userData,
+    required bool isNewUser,
     required bool userDataSuccess,
     required bool uesrDataInProgress,
     required bool userDataFailure,
@@ -16,6 +17,7 @@ abstract class UserState with _$UserState {
   factory UserState.initial() {
     return UserState(
       userData: null,
+      isNewUser: false,
       userDataSuccess: false,
       uesrDataInProgress: false,
       userDataFailure: false,

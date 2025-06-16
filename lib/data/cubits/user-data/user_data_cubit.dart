@@ -7,10 +7,10 @@ import 'package:itdata/data/cubits/user-data/user_state.dart';
 class UserDataCubit extends Cubit<UserState> {
   UserDataCubit() : super(UserState.initial());
 
-  void setUser(UserData user) {
-    print("[SETTING USER DATA]");
+  void setUser(UserData user, {bool isNewUser = false}) {
+    print("[SETTING USER DATA] [IS NEW USER]: $isNewUser");
     print(user.name);
-    emit(state.copyWith(userData: user, userDataSuccess: true));
+    emit(state.copyWith(userData: user, isNewUser: isNewUser));
   }
 
   void load_user_data(String? id) async {
@@ -22,7 +22,7 @@ class UserDataCubit extends Cubit<UserState> {
           userDataSuccess: false,
         ),
       );
-      final data = await DatabaseService().loadData("users", id!);
+      final data = await DatabaseService().loadUserData("users", id!);
 
       emit(
         state.copyWith(
@@ -45,7 +45,7 @@ class UserDataCubit extends Cubit<UserState> {
     }
   }
 
-  void update_data(String path, String username, UserData data) async {
+  void update_data(String path, String id, UserData data) async {
     try {
       emit(
         state.copyWith(
@@ -56,12 +56,13 @@ class UserDataCubit extends Cubit<UserState> {
       );
       await DatabaseService().updateData(
         path,
-        username,
+        id,
         UserData.fromUserData(data),
       );
       emit(
         state.copyWith(
           userData: data,
+          isNewUser: false,
           uesrDataInProgress: false,
           userDataFailure: false,
           userDataSuccess: true,

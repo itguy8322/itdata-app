@@ -95,7 +95,7 @@ class _TransferFundingState extends State<TransferFunding> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>FundWallet()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FundWallet()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
             ),

@@ -31,7 +31,7 @@ class NotificationService {
 
   Future<List<dynamic>> load(String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection("notification").doc(id).get();
+        await db.collection("notifications").doc(id).get();
     final data = snapshot.data();
     print("============ NOTIFICATION DATA RECEIVED ============");
     print(data);
