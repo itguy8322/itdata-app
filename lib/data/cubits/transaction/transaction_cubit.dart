@@ -1,34 +1,60 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/models/transaction/transaction.dart';
 import 'package:itdata/services/transac_service.dart';
-import 'package:itdata/states/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transaction_state.dart';
 
-class TransactionCubit extends Cubit<TransacStates> {
-  TransactionCubit() : super(TransacInitial());
+class TransactionCubit extends Cubit<TransactionStates> {
+  TransactionCubit() : super(TransactionStates.initial());
 
-  void add_transaction(
-    String username,
-    String path,
+  void setUserId(String id){
+    emit(state.copyWith(userId: id));
+  }
+
+  void addTransaction(
+    String id,
     Map<String, dynamic> data,
   ) async {
     try {
-      emit(TransacLoading());
-      await TransacService().addTransaction(path, username, data);
-      emit(TransacLoaded([]));
+      emit(state);
+      await TransacService().add(id, data);
+      emit(state);
     } catch (e) {
-      emit(TransacError("error"));
+      emit(state);
     }
   }
 
-  void load_transactions(String? username, String path) async {
+  void loadTransactions() async {
     try {
-      emit(TransacLoading());
-      final transactions = await TransacService().loadtransactions(
-        path,
-        username!,
+      emit(
+        state.copyWith(
+          loadingInProgress: true,
+          loadingFailure: false,
+          loadingSuccess: false,
+        ),
       );
-      emit(TransacLoaded(transactions["transactions"]));
+      final data = await TransacService().load(state.userId);
+      List<Transaction> transactions = [];
+      for (var transaction in data) {
+        transactions.add(Transaction.fromJson(transaction));
+      }
+      emit(
+        state.copyWith(
+          transactions: transactions,
+          loadingInProgress: false,
+          loadingFailure: false,
+          loadingSuccess: true,
+        ),
+      );
     } catch (e) {
-      emit(TransacError("error"));
+      print(" =============== ERROR ==============");
+      print(e.toString());
+      emit(
+        state.copyWith(
+          loadingInProgress: false,
+          loadingFailure: true,
+          loadingSuccess: false,
+        ),
+      );
     }
   }
 }

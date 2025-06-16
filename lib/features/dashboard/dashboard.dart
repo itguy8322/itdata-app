@@ -1,16 +1,31 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names
+// ignore_for_file: no_leading_underscores_for_local_identifiers, non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/alert_dialog.dart';
+import 'package:itdata/data/cubits/network-providers/network_providers_cubit.dart';
+import 'package:itdata/data/cubits/services/airtime/airtime_cubit.dart';
+import 'package:itdata/data/cubits/services/cable/cable_cubit.dart';
+import 'package:itdata/data/cubits/services/data/data_cubit.dart';
+import 'package:itdata/data/cubits/services/edu/edu_cubit.dart';
+import 'package:itdata/data/cubits/services/electricity/electricity_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
-import 'package:itdata/main.dart';
+// import 'package:itdata/debug/upload_to_firebase.dart';
+import 'package:itdata/features/dashboard/recent-transaction.dart';
+import 'package:itdata/features/dashboard/services-widgets.dart';
 import 'package:itdata/features/dashboard/appdrawer.dart';
+import 'package:itdata/features/notifications/notifications.dart';
+import 'package:itdata/features/transactions/transactions.dart';
+import 'package:itdata/features/wallet-funding/fund_wallet.dart';
 import 'package:itdata/services/auth.dart';
-import 'package:itdata/states/transac_states.dart';
-import 'package:itdata/states/user_states.dart';
+import 'package:itdata/data/cubits/transaction/transaction_state.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
+import 'package:itdata/services/network_providers_service.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -20,6 +35,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   void noti_actions() async {
     try {
       AwesomeNotifications().setListeners(
@@ -29,401 +46,243 @@ class _DashboardState extends State<Dashboard> {
         },
       );
     } catch (e) {
-      status("Error", e.toString());
+      showAlertDialog(context, "Error", e.toString());
     }
   }
 
   User? user = Auth().currentUser;
+  bool show_balance = false;
+
   @override
   void initState() {
     super.initState();
     // Implement some initialization operations here.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final user_d = BlocProvider.of<UserDataCubit>(context);
-      final transac = BlocProvider.of<TransactionCubit>(context);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   //final user_d = BlocProvider.of<UserDataCubit>(context);
+    //   //final transac = BlocProvider.of<TransactionCubit>(context);
 
-      user_d.load_user_data(user?.email);
-      transac.load_transactions(user?.email, "transactions");
-    });
-  }
-
-  void status(var _title, var status) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
-    );
-  }
-
-  List<Widget> recent_tranc(List transactions) {
-    List<Widget> wdgt = [];
-    for (var item in transactions) {
-      wdgt.add(
-        Card(
-          child: ListTile(
-            leading: Icon(
-              item["status"] == "success"
-                  ? Icons.check_circle
-                  : item["status"] == "pending"
-                  ? Icons.pending
-                  : Icons.warning,
-              color:
-                  item["status"] == "success"
-                      ? Colors.green
-                      : item["status"] == "pending"
-                      ? Colors.orange
-                      : Colors.red,
-            ),
-            trailing: Text(
-              "${item['status']}",
-              style: TextStyle(
-                color:
-                    item["status"] == "success"
-                        ? Colors.green
-                        : item["status"] == "pending"
-                        ? Colors.orange
-                        : Colors.red,
-              ),
-            ),
-            title: Text("${item['service']}".toUpperCase()),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 5),
-                Text("${item['date']}"),
-                SizedBox(height: 5),
-                Text("To: ${item['tel']}"),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    return wdgt;
+    //   //user_d.load_user_data(user?.email);
+    //   //transac.load_transactions(user?.email, "transactions");
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    final user_data_cubit = BlocProvider.of<UserDataCubit>(context);
-    int _calculateCrossAxisCount(BuildContext context) {
-      double screenWidth = MediaQuery.of(context).size.width;
-      if (screenWidth > 1200) {
-        return 4; // Large screens
-      } else if (screenWidth > 500) {
-        return 3; // Medium screens
-      } else {
-        return 2; // Small screens
-      }
-    }
-
-    Widget _buildFeature(IconData icon, String title, String description) {
-      return GestureDetector(
-        onTap: () {
-          print(title);
-          if (title == "Data Purchase") {
-            Navigator.popAndPushNamed(context, "/data");
-          } else if (title == "Airtime") {
-            Navigator.popAndPushNamed(context, "/airtime");
-          } else if (title == "TV Subscriptions") {
-            Navigator.popAndPushNamed(context, "/cable");
-          } else if (title == "Education") {
-            Navigator.popAndPushNamed(context, "/edupin");
-          } else if (title == "Bill Payments") {
-            Navigator.popAndPushNamed(context, "/electricity");
-          } else {
-            status(
-              "More",
-              "There valued customer, more services will be added soon.",
-            );
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade200,
-                blurRadius: 5,
-                spreadRadius: 1,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 40, color: mainColor),
-              SizedBox(height: 10),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                description,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return PopScope(
-      child: Scaffold(
-        drawer: AppDrawer(),
-        appBar: AppBar(
-          title: BlocBuilder<UserDataCubit, UserStates>(
-            builder: (context, state) {
-              if (state is UserLoaded) {
-                return Text("IT Data (${state.user['username']})");
-              } else {
-                return Text("IT Data ()");
-              }
-            },
-          ),
-          backgroundColor: mainColor,
-          actions: [
-            IconButton(
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          key: _scaffoldKey,
+          drawer: AppDrawer(),
+          appBar: AppBar(
+            leading: IconButton(
               onPressed: () {
-                Navigator.popAndPushNamed(context, "/notification");
+                _scaffoldKey.currentState!.openDrawer();
               },
-              icon: Icon(Icons.notifications),
+              icon: Icon(Icons.menu, color: theme.secondaryColor),
             ),
-          ],
-          elevation: 0.0,
-        ),
-        body: RefreshIndicator(
-          color: mainColor,
-          child: ListView(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: mainColor,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                            ),
-                          ),
-                          height: 120,
-                          child: Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Wallet balance",
-                                      style: TextStyle(color: subColor),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    BlocBuilder<UserDataCubit, UserStates>(
-                                      builder: (context, state) {
-                                        return Text(
-                                          show_balance == true
-                                              ? state is UserLoaded
-                                                  ? "₦${state.user['wallet_bal']}"
-                                                  : "0.00"
-                                              : "****",
-                                          style: TextStyle(
-                                            color: subColor,
-                                            fontSize: 26,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        show_balance =
-                                            show_balance == false
-                                                ? true
-                                                : false;
-                                        setState(() {});
-                                      },
-                                      icon: Icon(
-                                        Icons.remove_red_eye,
-                                        color: subColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 90,
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  padding: EdgeInsets.all(10),
-                                  side: BorderSide(
-                                    color: Colors.white,
-                                    width: 3,
-                                  ),
-                                  backgroundColor: mainColor,
-                                ),
-                                onPressed: () {
-                                  Navigator.popAndPushNamed(
-                                    context,
-                                    "/fundWallet",
-                                  );
-                                },
-                                icon: Icon(Icons.add),
-                                label: Text("Fund Wallet  "),
-                              ),
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  padding: EdgeInsets.all(10),
-                                  side: BorderSide(
-                                    color: Colors.white,
-                                    width: 3,
-                                  ),
-                                  backgroundColor: mainColor,
-                                ),
-                                onPressed: () {
-                                  Navigator.popAndPushNamed(
-                                    context,
-                                    "/transactions",
-                                  );
-                                },
-                                icon: Icon(Icons.history),
-                                label: Text("Transactions"),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Services", style: TextStyle(fontSize: 18)),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 10),
-                        GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: _calculateCrossAxisCount(
-                                  context,
-                                ),
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20,
-                              ),
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: 6,
-                          itemBuilder: (context, index) {
-                            final features = [
-                              [
-                                Icons.wifi,
-                                'Data Purchase',
-                                'Affordable plans for all networks',
-                              ],
-                              [
-                                Icons.phone_android,
-                                'Airtime',
-                                'Instant recharge anytime',
-                              ],
-                              [
-                                Icons.tv,
-                                'TV Subscriptions',
-                                'Support for major TV providers',
-                              ],
-                              [
-                                Icons.receipt,
-                                'Bill Payments',
-                                'Pay utility bills effortlessly',
-                              ],
-                              [
-                                Icons.school,
-                                'Education',
-                                'Buy result PIN checker',
-                              ],
-                              [
-                                Icons.more_horiz,
-                                'More',
-                                'Explore more services',
-                              ],
-                            ];
-                            return _buildFeature(
-                              features[index][0] as IconData,
-                              features[index][1] as String,
-                              features[index][2] as String,
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Recent Transactions",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: BlocBuilder<TransactionCubit, TransacStates>(
-                      builder: (context, state) {
-                        return state is TransacLoaded
-                            ? state.transactions.isEmpty
-                                ? Column(
-                                  children: recent_tranc(state.transactions),
-                                )
-                                : Center(child: Text("No recent transactions"))
-                            : Center(child: Text("No recent transactions"));
-                      },
-                    ),
-                  ),
-                ],
+            title: BlocBuilder<UserDataCubit, UserState>(
+              builder: (context, state) {
+                if (state.userData!.id != null) {
+                  return Text("IT Data (${state.userData!.id})", style: TextStyle(color: theme.secondaryColor),);
+                } else {
+                  return Text("IT Data ()", style: TextStyle(color: theme.secondaryColor),);
+                }
+              },
+            ),
+            backgroundColor: theme.backgroundColor,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Notifications()));
+                },
+                icon: Icon(Icons.notifications,color: theme.secondaryColor,),
               ),
             ],
+            elevation: 0.0,
           ),
-          onRefresh: () async {
-            user_data_cubit.load_user_data(user?.email);
-            final transac = BlocProvider.of<TransactionCubit>(context);
-            transac.load_transactions(user?.email, "transactions");
-          },
-        ),
-      ),
-
-      onPopInvokedWithResult: (b, t) async {},
+          body: BlocBuilder<UserDataCubit, UserState>(
+            builder: (context, user) {
+              return RefreshIndicator(
+                color: theme.primaryColor,
+                child: ListView(
+                  children: [
+                    // MultiBlocListener(listeners: [
+                    //   BlocListener<UserDataCubit, UserState>(
+                    //   listener: (context, state) {
+                    //     print("LOADING DATA");
+                    //     context.read<UserDataCubit>().load_user_data(
+                    //       state.userData!.id,
+                    //     );
+                    //   },
+                    // )
+                    // ], child: SizedBox()),
+                    Column(
+                      children: [
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: theme.primaryColor,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              height: 120,
+                              child: Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Wallet balance",
+                                          style: TextStyle(
+                                            color: theme.secondaryColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        BlocBuilder<UserDataCubit, UserState>(
+                                          builder: (context, state) {
+                                            String wallet_bal = "";
+                                            if (state.userData != null){
+                                              if (state.userData!.wallet_bal != null){
+                                                wallet_bal = state.userData!.wallet_bal!.toString();
+                                              }
+                                            }
+                                            
+                                            return Text(
+                                              show_balance == true
+                                                  ? state.userDataSuccess
+                                                      ? "₦$wallet_bal"
+                                                      : "0.00"
+                                                  : "****",
+                                              style: TextStyle(
+                                                color: theme.secondaryColor,
+                                                fontSize: 26,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            show_balance =
+                                                show_balance == false
+                                                    ? true
+                                                    : false;
+                                            setState(() {});
+                                          },
+                                          icon: Icon(
+                                            Icons.remove_red_eye,
+                                            color: theme.secondaryColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 90,
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      padding: EdgeInsets.all(17),
+                                      side: BorderSide(
+                                        color: theme.secondaryColor,
+                                        width: 3,
+                                      ),
+                                      backgroundColor: theme.primaryColor,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FundWallet()));
+                                    },
+                                    icon: Icon(Icons.add, color: theme.secondaryColor,),
+                                    label: Text("Fund Wallet", style: TextStyle(color: theme.secondaryColor),),
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      padding: EdgeInsets.all(17),
+                                      side: BorderSide(
+                                        color: theme.secondaryColor,
+                                        width: 3,
+                                      ),
+                                      backgroundColor: theme.primaryColor,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
+                                    },
+                                    icon: Icon(Icons.history, color: theme.secondaryColor,),
+                                    label: Text("Transactions", style: TextStyle(color: theme.secondaryColor),),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Services", style: TextStyle(fontSize: 18)),
+                          ],
+                        ),
+                        ServicesWidgets(),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Recent Transactions",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: BlocBuilder<TransactionCubit, TransactionStates>(
+                            builder: (context, state) {
+                              final transactions = state.transactions!;
+                              return transactions.isEmpty
+                                  ? RecentTransactions(transactions: [])
+                                  : Center(child: Text("No recent transactions"));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                onRefresh: () async {
+                  // uploadToFirebase();
+                  context.read<TransactionCubit>().loadTransactions();
+                  final networkProviders = await NetworkProvidersService().loadNetworkProviders();
+                  context.read<NetworkProvidersCubit>().setNetworkProviders(networkProviders);
+                  context.read<AirtimeCubit>().loadAirtimeTypes();
+                  context.read<DataCubit>().loadDataPlans();
+                  context.read<CableCubit>().loadCablePlans();
+                  context.read<EduCubit>().loadExamTypes();
+                  context.read<ElectricityCubit>().loadDiscos();
+                  context.read<UserDataCubit>().load_user_data(user.userData?.id);
+                },
+              );
+            }
+          ),
+        );
+      },
     );
   }
 }

@@ -1,44 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:itdata/data/models/user/user.dart';
 
-class Database {
+class DatabaseService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<void> addData(
+  Future<void> addUser(
     String path,
-    String username,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
-    await db.collection(path).doc(user).set(data);
-    await db.collection("transactions").doc(user).set({"transaction": []});
-    await db.collection("notification").doc(user).set({"notifications": []});
+    await db.collection(path).doc(id).set(data);
+    await db.collection("transactions").doc(id).set({"transactions": []});
+    await db.collection("notifications").doc(id).set({"notifications": []});
   }
 
   Future<void> updateData(
     String path,
-    String username,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
-    await db.collection(path).doc(user).update(data);
+    await db.collection(path).doc(id).update(data);
+    // final data0 = await loadData(path, id);
+    // return data0;
   }
 
   Future<void> removeData(
     String path,
-    String username,
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
-    db.collection(path).doc(user).delete();
-    db.collection("transactions").doc(user).delete();
-    db.collection("notifications").doc(user).delete();
+    db.collection(path).doc(id).delete();
+    db.collection("transactions").doc(id).delete();
+    db.collection("notification").doc(id).delete();
   }
 
-  Future<Map<String, dynamic>> loadData(String path, String username) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
+  Future<UserData> loadUserData(String path, String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection(path).doc(user).get();
+        await db.collection(path).doc(id).get();
     Map<String, dynamic>? data = snapshot.data();
-    return data ?? {};
+    return UserData.fromJson(data!);
   }
+
+  //<=================== add, update, delete data ====================>
 }

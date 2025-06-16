@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
+import 'package:itdata/data/cubits/auth/auth_state.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
+import 'package:itdata/features/auth/login.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,11 +23,11 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void status(var _title, var status) {
+  void status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 
@@ -52,18 +55,18 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (state["remember_me"] == true) {
                   loginCubit.login(state["username"], state["password"]);
                 } else {
-                  Navigator.popAndPushNamed(context, "/login");
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                 }
               },
             ),
-            BlocListener<AuthCubit, Map<String, dynamic>>(
+            BlocListener<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state["status"] == "ok") {
+                if (state is LoginSucess) {
                   //print("LOGIN SUCCESS: ${state}");
-                  Navigator.popAndPushNamed(context, "/dashboard");
-                } else {
-                  Navigator.popAndPushNamed(context, "/login");
-                  status("Alert", state["status"]);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                } else if (state is LoginFailure) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                  status("Alert", state.message);
                 }
               },
             ),

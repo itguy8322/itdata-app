@@ -1,17 +1,21 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 
-class ThemeCubit extends Cubit<Map<String, dynamic>> {
-  final storage = FlutterSecureStorage();
+class ThemeCubit extends Cubit<ThemeState> {
+  //final storage = FlutterSecureStorage();
 
-  ThemeCubit()
-    : super({
-        "mainColor": Color.fromRGBO(82, 101, 140, 1),
-        "subcolor": Colors.white,
-      });
+  ThemeCubit() : super(ThemeState.defaut());
 
-  void setColor(Color color) {}
-  void mainColor() {}
-  void subColor() {}
+  void setToDefaultTheme() {
+    emit(ThemeState.defaut());
+  }
+
+  void setToBlueTheme() {
+    emit(ThemeState.blue());
+  }
+
+  void setToOrangeTheme() => emit(ThemeState.orange());
+
+  void setToBrownTheme() => emit(ThemeState.brown());
 }

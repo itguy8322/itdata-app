@@ -1,50 +1,40 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TransacService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<void> addTransaction(
-    String path,
-    String username,
-    Map<String, dynamic> data,
-  ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
+  Future<void> add(String id, Map<String, dynamic> data) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection(path).doc(user).get();
+        await db.collection("transactions").doc(id).get();
     Map<String, dynamic>? d = snapshot.data();
-    d?["transaction"].add(data);
-    await updateTransaction(path, username, d ?? {});
+    d?["transactions"].add(data);
+    await update(id, d ?? {});
   }
 
-  Future<void> updateTransaction(
-    String path,
-    String username,
+  Future<void> update(
+    String id,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
-
-    await db.collection(path).doc(user).update(data);
+    await db.collection("transactions").doc(id).update(data);
   }
 
-  Future<void> deleteTransaction(
+  Future<void> delete(
     String path,
-    String username,
+    String user,
     Map<String, dynamic> data,
   ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
     db.collection(path).doc(user).delete();
-    db.collection("transactions").doc(user).delete();
+    db.collection(path).doc(user).delete();
   }
 
-  Future<Map<String, dynamic>> loadtransactions(
-    String path,
-    String username,
-  ) async {
-    String user = username.split("@")[0].replaceAll(".", "-");
+  Future<List<dynamic>> load(String id) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await db.collection(path).doc(user).get();
-    Map<String, dynamic>? data = snapshot.data();
+        await db.collection("transactions").doc(id).get();
+    final data = snapshot.data();
     print(data);
-    return data ?? {};
+    final _data = data?['transactions'];
+    return _data;
   }
 }

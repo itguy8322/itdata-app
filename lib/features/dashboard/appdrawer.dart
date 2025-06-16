@@ -3,25 +3,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
-import 'package:itdata/states/user_states.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
+import 'package:itdata/features/about/about.dart';
+import 'package:itdata/features/about/termspolicies.dart';
+import 'package:itdata/features/auth/login.dart';
+import 'package:itdata/features/notifications/notifications.dart';
+import 'package:itdata/features/settings/profile.dart';
+import 'package:itdata/features/settings/settings.dart';
+import 'package:itdata/features/transactions/transactions.dart';
+import 'package:itdata/features/wallet-funding/fund_wallet.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, Map<String, dynamic>>(
+    return BlocBuilder<ThemeCubit, ThemeState>(
       builder:
           (context, theme) => Drawer(
             child: Column(
               children: <Widget>[
                 DrawerHeader(
-                  decoration: BoxDecoration(color: theme["mainColor"]),
+                  decoration: BoxDecoration(color: theme.backgroundColor),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          BlocBuilder<UserDataCubit, UserStates>(
+                          BlocBuilder<UserDataCubit, UserState>(
                             builder:
                                 (context, state) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,18 +44,16 @@ class AppDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "${state is UserLoaded ? state.user['fullname'] : ''}",
+                                      "${state.userData != null ? state.userData!.name : ''}".toUpperCase(),
                                       style: TextStyle(
-                                        color: theme["subColor"],
+                                        color: theme.secondaryColor,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
-                                      "${state is UserLoaded ? state.user['email'] : ''}",
-                                      style: TextStyle(
-                                        color: theme["subColor"],
-                                      ),
+                                      "${state.userData != null ? state.userData!.email : ''}",
+                                      style: TextStyle(color: theme.secondaryColor),
                                     ),
                                   ],
                                 ),
@@ -68,7 +77,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Dashboard
                           Navigator.pop(context);
-                          Navigator.popAndPushNamed(context, "/fundWallet");
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FundWallet()));
                           // Close drawer
                         },
                       ),
@@ -83,7 +92,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Pay Bills
                           Navigator.pop(context); // Close drawer
-                          Navigator.popAndPushNamed(context, "/transactions");
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TransactionsPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -97,7 +106,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Pay Bills
                           Navigator.pop(context); // Close drawer
-                          Navigator.popAndPushNamed(context, "/notification");
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Notifications()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -108,10 +117,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Usage History
                           Navigator.pop(context);
-                          Navigator.popAndPushNamed(
-                            context,
-                            "/profile",
-                          ); // Close drawer
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ProfilePage())); // Close drawer
                         },
                       ),
                       Divider(thickness: 1),
@@ -123,7 +129,7 @@ class AppDrawer extends StatelessWidget {
                           // Navigate to Account Settings
                           Navigator.pop(context); // Close drawer
                           if (2 == 2) {
-                            Navigator.popAndPushNamed(context, "/settings");
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Settings()));
                           } else {
                             showDialog(
                               context: context,
@@ -147,7 +153,7 @@ class AppDrawer extends StatelessWidget {
                           // Navigate to View Bills
                           Navigator.pop(context);
 
-                          Navigator.popAndPushNamed(context, "/termspolicy");
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>TermsAndPolicyPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -158,7 +164,7 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           // Navigate to Usage History
                           Navigator.pop(context); // Close drawer
-                          Navigator.popAndPushNamed(context, "/about_us");
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AboutUsPage()));
                         },
                       ),
                       Divider(thickness: 1),
@@ -180,13 +186,11 @@ class AppDrawer extends StatelessWidget {
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        Navigator.popAndPushNamed(
-                                          context,
-                                          "/login",
-                                        );
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: theme["mainColor"],
+                                        backgroundColor:
+                                            theme.elevatedBackgroundColor,
                                       ),
                                       child: Text("Yes"),
                                     ),
@@ -195,7 +199,7 @@ class AppDrawer extends StatelessWidget {
                                         Navigator.pop(context);
                                       },
                                       style: TextButton.styleFrom(
-                                        backgroundColor: theme["mainColor"],
+                                        backgroundColor: theme.primaryColor,
                                       ),
                                       child: Text("No"),
                                     ),

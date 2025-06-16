@@ -1,10 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/theme/theme_cubit.dart';
+import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
+import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:itdata/features/transactions/view_transaction.dart';
-import 'package:itdata/services/auth.dart';
-import 'package:itdata/states/transac_states.dart';
+import 'package:itdata/data/cubits/transaction/transaction_state.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key});
@@ -17,126 +20,127 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void initState() {
     super.initState();
+    context.read<TransactionCubit>().loadTransactions();
   }
 
-  void status(var _title, var status) {
+  void status(var title, var status) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
+          (context) => AlertDialog(title: Text(title), content: Text(status)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, "/dashboard");
-            },
-            icon: Icon(Icons.arrow_back),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, theme) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+              },
+              icon: Icon(Icons.arrow_back, color: theme.secondaryColor),
+            ),
+            title: Text("Transactions", style: TextStyle(color: theme.secondaryColor),),
+            backgroundColor: theme.primaryColor,
           ),
-          title: Text("Transactions"),
-          backgroundColor: Color.fromRGBO(82, 101, 140, 1),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<TransactionCubit, TransacStates>(
-            builder: (context, state) {
-              return state is TransacLoaded
-                  ? state.transactions.isEmpty
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: BlocBuilder<TransactionCubit, TransactionStates>(
+              builder: (context, state) {
+                if (state.loadingInProgress) {
+                  return Center(child: CircularProgressIndicator(color: theme.primaryColor,));
+                } else if (state.loadingSuccess) {
+                  final transactions = state.transactions!;
+                  return transactions.isEmpty
                       ? Center(child: Text("No Transactions history yet!"))
-                      : RefreshIndicator(
-                        color: Color.fromRGBO(82, 101, 140, 1),
-                        child: ListView.builder(
-                          itemCount: state.transactions.length,
-                          itemBuilder: (context, index) {
-                            final transaction = state.transactions[index];
-                            try {
-                              return Card(
-                                elevation: 3,
-                                child: ListTile(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute<void>(
-                                        builder:
-                                            (BuildContext context) =>
-                                                ViewTransactionPage(index: 0),
+                      : BlocBuilder<UserDataCubit, UserState>(
+                        builder: (context, user) {
+                          return RefreshIndicator(
+                            color: Color.fromRGBO(82, 101, 140, 1),
+                            child: ListView.builder(
+                              itemCount: transactions.length,
+                              itemBuilder: (context, index) {
+                                final transaction = transactions[index];
+                                try {
+                                  return Card(
+                                    elevation: 3,
+                                    child: ListTile(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                            builder:
+                                                (BuildContext context) =>
+                                                    ViewTransactionPage(
+                                                      transaction: transaction,
+                                                    ),
+                                          ),
+                                        );
+                                      },
+                                      leading: Icon(
+                                        transaction.status == 'success'
+                                            ? Icons.check_circle
+                                            : transaction.status == 'pending'
+                                            ? Icons.pending
+                                            : Icons.warning,
+                                        color:
+                                            transaction.status == 'success'
+                                                ? Colors.green
+                                                : transaction.status == 'pending'
+                                                ? Colors.orange
+                                                : Colors.red,
                                       ),
-                                    );
-                                  },
-                                  leading: Icon(
-                                    transaction['status'] == 'success'
-                                        ? Icons.check_circle
-                                        : transaction['status'] == 'pending'
-                                        ? Icons.pending
-                                        : Icons.warning,
-                                    color:
-                                        transaction['status'] == 'success'
-                                            ? Colors.green
-                                            : transaction['status'] == 'pending'
-                                            ? Colors.orange
-                                            : Colors.red,
-                                  ),
-                                  title: Text(
-                                    transaction['service']
-                                        .toString()
-                                        .toUpperCase(),
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 5),
-                                      Text(
-                                        "₦${transaction['amount'].toString()}",
+                                      title: Text(
+                                        transaction.service.toString().toUpperCase(),
                                       ),
-                                      SizedBox(height: 5),
-                                      Text(transaction['date'].toString()),
-                                    ],
-                                  ),
-                                  trailing: Text(
-                                    transaction['status'].toString(),
-                                    style: TextStyle(
-                                      color:
-                                          transaction['status'] == 'success'
-                                              ? Colors.green
-                                              : transaction['status'] ==
-                                                  'pending'
-                                              ? Colors.orange
-                                              : Colors.red,
+                                      subtitle: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 5),
+                                          Text("₦${transaction.amount.toString()}"),
+                                          SizedBox(height: 5),
+                                          Text(transaction.date.toString()),
+                                        ],
+                                      ),
+                                      trailing: Text(
+                                        transaction.status.toString(),
+                                        style: TextStyle(
+                                          color:
+                                              transaction.status == 'success'
+                                                  ? Colors.green
+                                                  : transaction.status == 'pending'
+                                                  ? Colors.orange
+                                                  : Colors.red,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            } catch (e) {
-                              return Text(e.toString());
-                            }
-                          },
-                        ),
-                        onRefresh: () async {
-                          User? user = Auth().currentUser;
-                          final transac = BlocProvider.of<TransactionCubit>(
-                            context,
+                                  );
+                                } catch (e) {
+                                  return Text(e.toString());
+                                }
+                              },
+                            ),
+                            onRefresh: () async {
+                              context.read<TransactionCubit>().loadTransactions();
+                            },
                           );
-                          transac.load_transactions(
-                            user?.email,
-                            "transactions",
-                          );
-                        },
-                      )
-                  : Center(child: Text("No Transactions history yet!"));
-            },
+                        }
+                      );
+                } else if (state.loadingFailure){
+                  return Center(child: Text("Could not load transactions history"));
+                } 
+                else {
+                  return Center(child: Text("No Transactions history yet!"));
+                }
+              },
+            ),
           ),
-        ),
-      ),
-      onPopInvokedWithResult: (b, t) async {
-        Navigator.popAndPushNamed(context, "/dashboard");
-      },
+        );
+      }
     );
   }
 }
