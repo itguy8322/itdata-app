@@ -3,11 +3,11 @@ import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_state.dart';
 
 class SetpinButtonsCubit extends Cubit<SetpinButtonsState>{
   SetpinButtonsCubit(): super(SetpinButtonsState.initial());
-  clearPin(){
+  reset(){
     emit(SetpinButtonsState.initial());
   }
   setPin1(String pin){
-    print(pin);
+    //print(pin);
     emit(state.copyWith(pin1: pin));
   }
 

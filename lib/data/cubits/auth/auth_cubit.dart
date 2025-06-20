@@ -16,12 +16,12 @@ class AuthCubit extends Cubit<AuthState> {
   void login(String email, String password) async {
     emit(LoginLoading());
     try {
-      print("It's Working...");
+      //print("It's Working...");
       await Auth().authenticate(email, password);
       String id = email.split("@")[0];
       UserData user = await DatabaseService().loadUserData("users", id);
-      print("======= USER DATA ======");
-      print(user.name);
+      //print("======= USER DATA ======");
+      //print(user.name);
       emit(LoginSucess(userInfo: user));
     } on FirebaseAuthException catch (e) {
       emit(LoginFailure(message: "Error: ${e.message}"));
@@ -32,7 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(SignupLoading());
     String id = data["id"];
     try {
-      print("It's Working...");
+      //print("It's Working...");
       await _auth.create(email, password);
       await _databaseService.addUser("users", id, data);
       
@@ -44,5 +44,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void logout() {}
+  void logout() {
+    try {
+      Auth().logout();
+    } on FirebaseAuthException catch (e) {
+      //print("Error logging out: ${e.message}");
+    }
+  }
 }

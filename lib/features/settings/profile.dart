@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_state.dart';
-import 'package:itdata/data/models/user/user.dart';
 import 'package:itdata/features/dashboard/dashboard.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -27,34 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
   }
-
-  void status(var _title, var status) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(title: Text(_title), content: Text(status)),
-    );
-  }
-
-  void process() {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: SizedBox(
-              height: 60,
-              child: Image.asset("assets/images/loading.gif", scale: 1.0),
-            ),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Processing, please wait...")],
-            ),
-          ),
-    );
-  }
-
-  void updateProfile() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +52,85 @@ class _ProfilePageState extends State<ProfilePage> {
               child: BlocBuilder<UserDataCubit, UserState>(
                 builder: (context, state) {
                   if (state.userData != null) {
-                    print("SUCCESSSSSSS");
-                    print(state.userData);
+                    //print("SUCCESSSSSSS");
+                    //print(state.userData);
                     fullname.text = state.userData!.name!;
                     username.text = state.userData!.id!;
                     phone.text = state.userData!.phone!;
                     address.text = state.userData!.address!;
-                    password.text = "password";
+                    // password.text = "password";
                     return Column(
                       children: [
-                        SizedBox(height: 30), // Space between title and fields
+                        
+                        Container(
+                          width: 110,
+                          height: 110,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                child: Image.asset(
+                                  "assets/images/profile.png",
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: CircleAvatar(
+                                  backgroundColor: theme.primaryColor,
+                                  child: IconButton(
+                                    icon: Icon(Icons.camera_alt_rounded, color: theme.secondaryColor, size: 25,),
+                                    onPressed: () {
+                                      // Handle profile picture change
+                                      showTopSnackBar(
+                                        Overlay.of(context),
+                                        snackBarPosition: SnackBarPosition.bottom,
+                                        CustomSnackBar.info(
+                                          message: "Profile picture change feature coming soon!",
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                                    
+                        MultiBlocListener(listeners: [
+                          BlocListener<UserDataCubit, UserState>(
+                            listener: (context, state) {
+                              if (state.uesrDataInProgress) {
+                                showProcessDialog(context, label: "Updating profile...");
+                              }
+                              else if (state.userDataSuccess) {
+                                Navigator.pop(context);
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  snackBarPosition: SnackBarPosition.bottom,
+                                  CustomSnackBar.success(
+                                    message: "Profile updated successfully",
+                                  ),
+                                );
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                              } else if (state.userDataFailure) {
+                                Navigator.pop(context);
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  snackBarPosition: SnackBarPosition.bottom,
+                                  CustomSnackBar.error(
+                                    message: "Failed to update profile",
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ], child: SizedBox(height: 30))
+                        , // Space between title and fields
                         TextFormField(
                           controller: fullname,
                           //initialValue: state.user['fullname'].toString(),
@@ -205,16 +248,26 @@ class _ProfilePageState extends State<ProfilePage> {
                               // Handle sign-up logic (e.g., validation, API call)
         
                               if (_formKey.currentState!.validate()) {
-                                UserData user = UserData();
-                                user.name = fullname.text;
-                                user.phone = phone.text;
-                                user.address = address.text;
-                                process();
-                                context.read<UserDataCubit>().update_data(
+                                final user = state.userData;
+                                user?.name = fullname.text;
+                                user?.phone = phone.text;
+                                user?.address = address.text;
+                                if (user?.password == password.text) {
+                                  context.read<UserDataCubit>().update_data(
                                   "users",
-                                  username.text,
+                                  user!.id!,
                                   user,
                                 );
+                                } else {
+                                 showTopSnackBar(
+                                  Overlay.of(context),
+                                  snackBarPosition: SnackBarPosition.bottom,
+                                  CustomSnackBar.error(
+                                    message: "Password does not match",
+                                  ),
+                                );
+                                }
+                                
                               }
                             },
                             child: Text('Update Profile', style: TextStyle(color: theme.secondaryColor),),

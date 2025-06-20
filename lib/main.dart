@@ -2,6 +2,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/app-settings/app_settings_cubit.dart';
 import 'package:itdata/data/cubits/auth/auth_cubit.dart';
 import 'package:itdata/data/cubits/input-validations/input_validation_cubit.dart';
 import 'package:itdata/data/cubits/network-providers/network_providers_cubit.dart';
@@ -23,15 +24,31 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:itdata/services/purchase_service.dart';
+import 'package:flutter/foundation.dart';
+
 
 void main() async {
-  print("Hello world");
+  //print("Hello world");
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.debug,
-  );
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyDLwLSK5Om6kFk9liQ0usDaRCCOgl6sSLE",
+      authDomain: "it-project-83335.firebaseapp.com",
+      projectId: "it-project-83335",
+      storageBucket: "it-project-83335.firebasestorage.app",
+      messagingSenderId: "915136007559",
+      appId: "1:915136007559:web:0db8878f0506b72b5b9722"
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
+  } 
+  // await FirebaseAppCheck.instance.activate(
+  //   androidProvider: AndroidProvider.debug,
+  //   appleProvider: AppleProvider.debug,
+  // );
 
   AwesomeNotifications().initialize(null, [
     NotificationChannel(
@@ -56,18 +73,19 @@ void main() async {
       providers: [
         BlocProvider(create: (_) => StorageCubit()),
         BlocProvider(create: (_) => AuthCubit(Auth(), DatabaseService())),
-        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
         BlocProvider(create: (_) => UserDataCubit()),
         BlocProvider(create: (_) => TransactionCubit()),
         BlocProvider(create: (_) => InputValidationCubit()),
         BlocProvider(create: (_) => NotificationListCubit()),
         BlocProvider(create: (_) => NetworkProvidersCubit()),
         BlocProvider(create: (_) => SetpinButtonsCubit()),
-        BlocProvider(create: (_) => AirtimeCubit()),
+        BlocProvider(create: (_) => AirtimeCubit(PurchaseService())),
         BlocProvider(create: (_) => DataCubit()),
         BlocProvider(create: (_) => CableCubit()),
         BlocProvider(create: (_) => EduCubit()),
         BlocProvider(create: (_) => ElectricityCubit()),
+        BlocProvider(create: (_) => AppSettingsCubit()),
         
       ],
       child: const MyApp(),

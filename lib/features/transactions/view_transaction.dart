@@ -54,7 +54,7 @@ class _ViewTransactionPageState extends State<ViewTransactionPage> {
         },
       );
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {

@@ -9,7 +9,7 @@ void showStatusDialog(BuildContext context, String status) {
         return AlertDialog(
           title: SizedBox(
             height: 80,
-            child: Image.asset("assets/images/success.gif", scale: 1.0),
+            child: Icon(Icons.check_circle, color: Colors.green, size: 80,),
           ),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -27,7 +27,7 @@ void showStatusDialog(BuildContext context, String status) {
         );
       } else if (status == "pending") {
         return AlertDialog(
-          title: Icon(Icons.pending, color: Colors.orange, size: 50),
+          title: Icon(Icons.pending, color: Colors.orange, size: 80),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -44,7 +44,7 @@ void showStatusDialog(BuildContext context, String status) {
         );
       } else if (status == "fail") {
         return AlertDialog(
-          title: Icon(Icons.warning_rounded, color: Colors.red, size: 50),
+          title: Icon(Icons.warning_rounded, color: Colors.red, size: 80),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -61,7 +61,7 @@ void showStatusDialog(BuildContext context, String status) {
         );
       } else if (status == "Insufficient balance") {
         return AlertDialog(
-          title: Icon(Icons.close, color: Colors.red, size: 50),
+          title: Icon(Icons.close, color: Colors.red, size: 80),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

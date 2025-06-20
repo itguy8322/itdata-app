@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void loadDiscosToFirebase(FirebaseFirestore db) {
-  print("<=============== UPLOADING DISCO DATA TO FIREBASE =================>");
+  //print("<=============== UPLOADING DISCO DATA TO FIREBASE =================>");
   Map<String, dynamic> _discos = {
     "names": [
       "Ikeja Electric",
@@ -21,5 +21,5 @@ void loadDiscosToFirebase(FirebaseFirestore db) {
   
   db.collection("electricity").doc("discos").set(_discos);
   
-  print("<=============== UPLOADING DISCO DATA TO FIREBASE =================>");
+  //print("<=============== UPLOADING DISCO DATA TO FIREBASE =================>");
 }

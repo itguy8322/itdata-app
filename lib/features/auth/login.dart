@@ -17,6 +17,7 @@ import 'package:itdata/data/cubits/services/cable/cable_cubit.dart';
 import 'package:itdata/data/cubits/services/data/data_cubit.dart';
 import 'package:itdata/data/cubits/services/edu/edu_cubit.dart';
 import 'package:itdata/data/cubits/services/electricity/electricity_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
 import 'package:itdata/data/cubits/storage/storage_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
@@ -25,7 +26,6 @@ import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
 import 'package:itdata/features/auth/signup.dart';
 import 'package:itdata/features/dashboard/dashboard.dart';
 import 'package:itdata/init-screens/landing_page.dart';
-import 'package:itdata/services/network_providers_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -64,29 +64,40 @@ class _LoginPageState extends State<LoginPage> {
                         }
                         if (state is LoginSucess) {
                           final id = state.userInfo?.id;
-                          print("AM LOGGED IN");
+                          //print("AM LOGGED IN");
                           Navigator.pop(context);
-                          print("<============ USER DATA ===============>");
-                          print(state.userInfo);
-                          print("<============ USER DATA ===============>");
-                          print(state.userInfo!.email);
+                          //print("<============ USER DATA ===============>");
+                          //print(state.userInfo);
+                          //print("<============ USER DATA ===============>");
+                          //print(state.userInfo!.email);
+                          
+                          context.read<UserDataCubit>().reset();
+                          context.read<ThemeCubit>().reset();
+                          context.read<TransactionCubit>().reset();
+                          context.read<NotificationListCubit>().reset();
+                          context.read<SetpinButtonsCubit>().reset();
+                          context.read<DataCubit>().reset();
+                          context.read<AirtimeCubit>().reset();
+                          context.read<EduCubit>().reset();
+                          context.read<CableCubit>().reset();
+                          context.read<ElectricityCubit>().reset();
+                          context.read<NetworkProvidersCubit>().reset();
                           context.read<UserDataCubit>().setUser(
                             state.userInfo!,
                           );
                           context.read<NotificationListCubit>().setUserId(id!);
                           context.read<TransactionCubit>().setUserId(id);
-                          final networkProviders = await NetworkProvidersService().loadNetworkProviders();
-                          context.read<NetworkProvidersCubit>().setNetworkProviders(networkProviders);
+                          context.read<NetworkProvidersCubit>().loadNetworkProviders();
                           context.read<AirtimeCubit>().loadAirtimeTypes();
                           context.read<DataCubit>().loadDataPlans();
                           context.read<CableCubit>().loadCablePlans();
                           context.read<EduCubit>().loadExamTypes();
                           context.read<ElectricityCubit>().loadDiscos();
                           context.read<TransactionCubit>().loadTransactions();
-                          print("<============ PASSED ===============>");
+                          //print("<============ PASSED ===============>");
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                         } else if (state is LoginFailure) {
-                          print("AM NOT LOGGED IN");
+                          //print("AM NOT LOGGED IN");
                           Navigator.pop(context);
                           showAlertDialog(context, "Alert", state.message!);
                         }
@@ -234,39 +245,43 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: theme.primaryColor),
                                 ),
                               ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(
-                                    width: 10,
-                                    child: Checkbox(
-                                      checkColor: Colors.white,
-                                      activeColor: theme.primaryColor,
-                                      value: true,
-                                      onChanged: (value) {
-                                        storage.set_remember_me(
-                                          email.text,
-                                          password.text,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      // Navigate to login page
-                                      storage.set_remember_me(
-                                        email.text,
-                                        password.text,
-                                      );
-                                    },
-                                    child: Text(
-                                      'Remember me',
-                                      style: TextStyle(
-                                        color: theme.primaryColor,
+                              BlocBuilder<StorageCubit, Map<String, dynamic>>(
+                                builder: (context, state) {
+                                  return Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                        child: Checkbox(
+                                          checkColor: Colors.white,
+                                          activeColor: theme.primaryColor,
+                                          value: state['remember_me'],
+                                          onChanged: (value) {
+                                            storage.set_remember_me(
+                                              email.text,
+                                              password.text,
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
+                                      TextButton(
+                                        onPressed: () {
+                                          // Navigate to login page
+                                          storage.set_remember_me(
+                                            email.text,
+                                            password.text,
+                                          );
+                                        },
+                                        child: Text(
+                                          'Remember me',
+                                          style: TextStyle(
+                                            color: theme.primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
                               ),
                             ],
                           ),

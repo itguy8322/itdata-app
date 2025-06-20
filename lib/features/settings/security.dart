@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:itdata/data/cubits/app-settings/app_settings_cubit.dart';
+import 'package:itdata/data/cubits/app-settings/app_settings_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/features/settings/bvn_verification.dart';
 import 'package:itdata/features/settings/change_password.dart';
 import 'package:itdata/features/settings/change_pin.dart';
 import 'package:itdata/features/settings/settings.dart';
@@ -59,30 +62,32 @@ class _SecurityState extends State<Security> {
                   leading: Icon(Icons.lock, size: 25),
                 ),
                 Divider(thickness: 1),
-                ListTile(
-                  title: Text("Biometric", style: TextStyle(fontSize: 25)),
-                  leading: Icon(Icons.fingerprint, size: 25),
-                  trailing: Switch(
-                    value: true,
-                    activeColor: theme.primaryColor,
-                    onChanged: (value) async {
-                      // setState(() {
-                      //   biometric = value;
-                      // });
-                      // await storage.write(
-                      //   key: 'biometric',
-                      //   value: "${biometric.toString()}",
-                      // );
-                    },
-                  ),
+                BlocBuilder<AppSettingsCubit, AppSettingsState>(
+                  builder: (context, settings) {
+                    return ListTile(
+                      title: Text("Biometric", style: TextStyle(fontSize: 25)),
+                      leading: Icon(Icons.fingerprint, size: 25),
+                      trailing: Switch(
+                        value: settings.isBiometricAuthEnabled,
+                        activeColor: theme.primaryColor,
+                        onChanged: (value) async {
+                          context.read<AppSettingsCubit>().setBiometricAuthEnabled(value);
+                          // setState(() {
+                          //   biometric = value;
+                          // });
+                          // await storage.write(
+                          //   key: 'biometric',
+                          //   value: "${biometric.toString()}",
+                          // );
+                        },
+                      ),
+                    );
+                  }
                 ),
                 Divider(thickness: 1),
                 ListTile(
                   onTap:
-                      (() => Navigator.popAndPushNamed(
-                        context,
-                        "/bvn_verification",
-                      )),
+                      (() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BVNVerifiaction()))),
                   title: Text(
                     "BVN Verification",
                     style: TextStyle(fontSize: 25),

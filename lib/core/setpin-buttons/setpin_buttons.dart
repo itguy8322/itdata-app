@@ -42,7 +42,7 @@ class PinButtonWidget{
             );
           },
         );
-        print("Error 1");
+        //print("Error 1");
         return;
       }
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -56,7 +56,7 @@ class PinButtonWidget{
             );
           },
         );
-        print("Error 2");
+        //print("Error 2");
         return;
       }
 
@@ -85,7 +85,7 @@ class PinButtonWidget{
       }
       // setState(() {});
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {

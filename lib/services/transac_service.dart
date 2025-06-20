@@ -33,7 +33,7 @@ class TransacService {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection("transactions").doc(id).get();
     final data = snapshot.data();
-    print(data);
+    //print(data);
     final _data = data?['transactions'];
     return _data;
   }

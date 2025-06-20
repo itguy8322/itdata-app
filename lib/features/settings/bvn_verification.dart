@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
+import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/data/cubits/user-data/user_state.dart';
 import 'package:itdata/features/settings/security.dart';
 
 class BVNVerifiaction extends StatefulWidget {
@@ -18,11 +20,7 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
   @override
   void initState() {
     super.initState();
-    // Implement some initialization operations here.
-    if ("bvn" != "") {
-      bvn.text = "bvn";
-      setState(() {});
-    }
+    
   }
 
   void status(var title, var status) {
@@ -63,9 +61,9 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
     // try {
     //   final response = await http.post(url, headers: headers, body: body);
     //   if (response.statusCode == 200) {
-    //     print("It's Working...");
+    //     //print("It's Working...");
     //     var data = jsonDecode(response.body);
-    //     //print(data);
+    //     ////print(data);
     //     if (data["status"] == "ok") {
     //       user_data["bvn"] = data["bvn"];
     //       virtual_accounts = data["virtual-accounts"];
@@ -94,6 +92,7 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, theme) {
+        
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -105,68 +104,77 @@ class _BVNVerifiactionState extends State<BVNVerifiaction> {
             title: Text("BVN Verification", style: TextStyle(color: theme.secondaryColor)),
             backgroundColor: theme.primaryColor,
           ),
-          body: Padding(
-            padding: EdgeInsets.all(10),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 30), // Space between title and fields
-                  TextFormField(
-                    controller: bvn,
-                    readOnly: "bvn" == "" ? false : true,
-                    decoration: InputDecoration(
-                      labelText: 'Enter BVN number',
-                      labelStyle: TextStyle(color: Colors.grey),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: theme.primaryColor),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'All field required';
-                      }
-                      return null;
-                    },
-                  ),
-    
-                  SizedBox(height: 20.0), // Spacing between fields
-    
-                  SizedBox(height: 20.0), // Spacing between fields
-                  // Sign Up Button
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Show error message for mismatched passwords
-                        if (_formKey.currentState!.validate()) {
-                          if ("bvn" == "") {
-                            process();
-                            verifyBVN();
-                          }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.primaryColor,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 50,
-                          vertical: 15,
+          body: BlocBuilder<UserDataCubit, UserState>(
+            builder: (context, userData) {
+              final user = userData.userData;
+              bvn.text = (user?.bvn != ""? user?.bvn: "")!;
+              return Padding(
+                padding: EdgeInsets.all(10),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 30), // Space between title and fields
+                      TextFormField(
+                        controller: bvn,
+                        readOnly: user?.bvn == "" ? false : true,
+                        decoration: InputDecoration(
+                          labelText: 'Enter BVN number',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor),
+                          ),
+                          border: OutlineInputBorder(),
                         ),
-                        textStyle: TextStyle(fontSize: 18, color: theme.secondaryColor),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'All field required';
+                          }
+                          return null;
+                        },
                       ),
-                      child: Text(
-                        "bvn" == "" ? 'Verify' : "BVN already Verified",
+                  
+                      SizedBox(height: 20.0), // Spacing between fields
+                  
+                      SizedBox(height: 20.0), // Spacing between fields
+                      // Sign Up Button
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Show error message for mismatched passwords
+                            if (_formKey.currentState!.validate()) {
+                              if ("bvn" == "") {
+                                process();
+                                verifyBVN();
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primaryColor,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
+                            textStyle: TextStyle(fontSize: 18, color: theme.secondaryColor),
+                          ),
+                          child: Text(
+                            "bvn" == "" ? 'Verify' : "BVN already Verified",
+                            style: TextStyle(
+                              color: theme.secondaryColor,
+                              fontSize: 18,)
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 10),
+                      Text(
+                        textAlign: TextAlign.center,
+                        "Note: Your BVN name must be the same as your account name!",
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    textAlign: TextAlign.center,
-                    "Note: Your BVN name must be the same as your account name!",
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            }
           ),
         );
       },

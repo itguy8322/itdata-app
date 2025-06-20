@@ -82,28 +82,28 @@ void main() async {
   try {
     _remember_me = (await storage.read(key: 'remember_me'))!;
   } catch (e) {
-    print("Could not read remeber me: $e");
+    //print("Could not read remeber me: $e");
   }
   try {
     theme = (await storage.read(key: 'theme'))!;
   } catch (e) {
-    print("Could not read theme: $e");
+    //print("Could not read theme: $e");
   }
   try {
     _biometric = (await storage.read(key: 'biometric'))!;
-    print(_biometric);
+    //print(_biometric);
   } catch (e) {
-    print("Could not read Biometric: $e");
+    //print("Could not read Biometric: $e");
   }
   try {
     _pushnotify = (await storage.read(key: 'pushnotify'))!;
   } catch (e) {
-    print("Could not read Push Noti: $e");
+    //print("Could not read Push Noti: $e");
   }
   try {
     _emailnotify = (await storage.read(key: 'emailnotify'))!;
   } catch (e) {
-    print("Could not read Email Noti: $e");
+    //print("Could not read Email Noti: $e");
   }
   if (_biometric == "true") {
     biometric = true;
@@ -187,7 +187,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await Permission.storage.request();
       permission_status = "pass";
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       permission_status = "pass";
     }
   }
@@ -205,12 +205,12 @@ class _SplashScreenState extends State<SplashScreen> {
     final headers = {"Content-Type": "application/x-www-form-urlencoded"};
     final body = {"username": username, "password": password};
     try {
-      print("It's Working...");
+      //print("It's Working...");
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           var _data = data["data"];
           user_data = _data["user_data"];
@@ -221,7 +221,7 @@ class _SplashScreenState extends State<SplashScreen> {
           electricity = _data["electricity"];
           cable_plans = _data["cableplans"];
           cable_types = _data["cable_types"];
-          print(networks);
+          //print(networks);
 
           if (_data["transactions"].isNotEmpty) {
             transactions = _data["transactions"];
@@ -252,7 +252,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void rememberMe() async {
     if (remember_me == true) {
-      print("hereeeeee");
+      //print("hereeeeee");
       String username = (await storage.read(key: 'username'))!;
       String password = (await storage.read(key: 'password'))!;
       login(username, password);
@@ -684,9 +684,9 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           var _data = data["data"];
           user_data = _data["user_data"];
@@ -697,7 +697,7 @@ class _LoginPageState extends State<LoginPage> {
           electricity = _data["electricity"];
           cable_plans = _data["cableplans"];
           cable_types = _data["cable_types"];
-          //print(datatypes);
+          ////print(datatypes);
           if (_data["transactions"].isNotEmpty) {
             transactions = _data["transactions"];
           }
@@ -829,7 +829,7 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   remember_me = value!;
                                 });
-                                print(remember_me);
+                                //print(remember_me);
                               },
                             ),
                           ),
@@ -841,7 +841,7 @@ class _LoginPageState extends State<LoginPage> {
                               } else {
                                 remember_me = true;
                               }
-                              print(remember_me);
+                              //print(remember_me);
                               setState(() {});
                             },
                             child: Text(
@@ -870,7 +870,7 @@ class _LoginPageState extends State<LoginPage> {
                             key: 'password',
                             value: password.text,
                           );
-                          print("setting remember");
+                          //print("setting remember");
                         }
                         process();
                         login();
@@ -920,7 +920,7 @@ class _LoginPageState extends State<LoginPage> {
                         value: dev,
                         activeColor: mainColor,
                         onChanged: (value) async {
-                          print("hello");
+                          //print("hello");
                           setState(() {
                             dev = value;
                             if (dev == true) {
@@ -928,7 +928,7 @@ class _LoginPageState extends State<LoginPage> {
                             } else {
                               _url = main_url;
                             }
-                            print(_url);
+                            //print(_url);
                           });
                         },
                       ),
@@ -1003,9 +1003,9 @@ class _SignupPageState extends State<SignupPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        print(data);
+        //print(data);
         if (data["status"] == "ok") {
           var _data = data["data"];
           user_data = _data["user_data"];
@@ -1318,9 +1318,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           var _data = data["data"];
           user_data = _data["user_data"];
@@ -1360,9 +1360,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           setState(() {
             code_sent = false;
@@ -1548,9 +1548,9 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           Navigator.pop(context);
           Navigator.popAndPushNamed(context, "/login");
@@ -1699,14 +1699,14 @@ class DataApp extends StatefulWidget {
 class _DataAppState extends State<DataApp> {
   _connect() {
     socket.onConnect((data) {
-      print("Connection Established");
+      //print("Connection Established");
       socket.emit('join', {"username": user_data['username']});
       connection = true;
       socket.on('message', (data) {
-        print(data);
+        //print(data);
       });
       socket.on('fundWallet', (data) {
-        print(data);
+        //print(data);
         user_data["wallet_bal"] = data["wallet_bal"];
         transactions = data["transactions"];
         notifications = data["notifications"];
@@ -1723,14 +1723,14 @@ class _DataAppState extends State<DataApp> {
         }
       });
     });
-    socket.onConnectError((data) => print("Connect Error: $data"));
-    socket.onDisconnect((data) => print("Connect Closed"));
+    // socket.onConnectError((data) => //print("Connect Error: $data"));
+    // socket.onDisconnect((data) => //print("Connect Closed"));
   }
 
   recv_noti() {
     socket.on('notification', (data) {
       if (pushnotify == true) {
-        print("here");
+        //print("here");
 
         int id = random.nextInt(100);
         AwesomeNotifications().createNotification(
@@ -1853,7 +1853,7 @@ class _DataAppState extends State<DataApp> {
     Widget _buildFeature(IconData icon, String title, String description) {
       return GestureDetector(
         onTap: () {
-          print(title);
+          //print(title);
           if (title == "Data Purchase") {
             Navigator.popAndPushNamed(context, "/data");
           } else if (title == "Airtime") {
@@ -2141,9 +2141,9 @@ class _DataAppState extends State<DataApp> {
                 body: body,
               );
               if (response.statusCode == 200) {
-                print("It's Working...");
+                //print("It's Working...");
                 var data = jsonDecode(response.body);
-                print(data);
+                //print(data);
                 if (data["status"] == "ok") {
                   var _data = data["data"];
                   user_data = _data["user_data"];
@@ -2533,9 +2533,9 @@ class _TransferFundingState extends State<TransferFunding> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           virtual_accounts = data["virtual-accounts"];
           transfer_amount = (int.tryParse(amount.text.toString()))!;
@@ -2712,9 +2712,9 @@ class _TransferFundingState extends State<TransferFunding> {
                 body: body,
               );
               if (response.statusCode == 200) {
-                print("It's Working...");
+                //print("It's Working...");
                 var data = jsonDecode(response.body);
-                print(data);
+                //print(data);
                 if (data["status"] == "ok") {
                   var _data = data["data"];
                   user_data = _data["user_data"];
@@ -2976,7 +2976,7 @@ class _BuyDataPageState extends State<BuyDataPage> {
             );
           },
         );
-        print("Error 1");
+        //print("Error 1");
         return;
       }
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -2990,7 +2990,7 @@ class _BuyDataPageState extends State<BuyDataPage> {
             );
           },
         );
-        print("Error 2");
+        //print("Error 2");
         return;
       }
 
@@ -3019,7 +3019,7 @@ class _BuyDataPageState extends State<BuyDataPage> {
       }
       setState(() {});
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {
@@ -3146,9 +3146,9 @@ class _BuyDataPageState extends State<BuyDataPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "success") {
           user_data["wallet_bal"] = data["wallet_bal"];
           transactions = data["transactions"];
@@ -3158,7 +3158,7 @@ class _BuyDataPageState extends State<BuyDataPage> {
           //Navigator.popAndPushNamed(context, "/dashboard");
           status(data["status"]);
         } else {
-          print("It's Working...2");
+          //print("It's Working...2");
           data["wallet_bal"] ?? "0.0";
           if (data["transactions"] != null) {
             transactions = data["transactions"];
@@ -3479,7 +3479,7 @@ class _BuyDataPageState extends State<BuyDataPage> {
   Widget build(BuildContext context) {
     if (reg_data_listener == false) {
       socket.on('data', (data) {
-        print(data);
+        //print(data);
         Navigator.pop(context);
         status(data["status"]);
       });
@@ -3535,8 +3535,8 @@ class _BuyDataPageState extends State<BuyDataPage> {
                       data_plans = [];
                       network = value.toString();
                       if (datatype != "") {
-                        print(network);
-                        print(datatype);
+                        //print(network);
+                        //print(datatype);
                         if (dataplans[network].containsKey(value.toString())) {
                           setState(() {
                             datatype = value.toString();
@@ -3668,7 +3668,7 @@ class _BuyDataPageState extends State<BuyDataPage> {
                     setState(() {
                       dataplan = data_plans[i!];
                     });
-                    print(dataplan);
+                    //print(dataplan);
                   },
                 ),
                 SizedBox(height: 10),
@@ -3745,7 +3745,7 @@ class _BuyAirtimePageState extends State<BuyAirtimePage> {
             );
           },
         );
-        print("Error 1");
+        //print("Error 1");
         return;
       }
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -3759,7 +3759,7 @@ class _BuyAirtimePageState extends State<BuyAirtimePage> {
             );
           },
         );
-        print("Error 2");
+        //print("Error 2");
         return;
       }
 
@@ -3788,7 +3788,7 @@ class _BuyAirtimePageState extends State<BuyAirtimePage> {
       }
       setState(() {});
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {
@@ -3898,9 +3898,9 @@ class _BuyAirtimePageState extends State<BuyAirtimePage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "success") {
           user_data["wallet_bal"] = data["wallet_bal"];
           transactions = data["transactions"];
@@ -3935,7 +3935,7 @@ class _BuyAirtimePageState extends State<BuyAirtimePage> {
   }
 
   void process() {
-    print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
+    //print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -4252,7 +4252,7 @@ class _BuyAirtimePageState extends State<BuyAirtimePage> {
   Widget build(BuildContext context) {
     if (reg_airtime_listener == false) {
       socket.on('airtime', (data) {
-        print(data);
+        //print(data);
         Navigator.pop(context);
         status(data["status"]);
       });
@@ -4452,7 +4452,7 @@ class _BuyEduPinPageState extends State<BuyEduPinPage> {
             );
           },
         );
-        print("Error 1");
+        //print("Error 1");
         return;
       }
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -4466,7 +4466,7 @@ class _BuyEduPinPageState extends State<BuyEduPinPage> {
             );
           },
         );
-        print("Error 2");
+        //print("Error 2");
         return;
       }
 
@@ -4494,7 +4494,7 @@ class _BuyEduPinPageState extends State<BuyEduPinPage> {
       }
       setState(() {});
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {
@@ -4572,7 +4572,7 @@ class _BuyEduPinPageState extends State<BuyEduPinPage> {
   }
 
   void process() {
-    print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
+    //print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -4894,12 +4894,12 @@ class _BuyEduPinPageState extends State<BuyEduPinPage> {
   Widget build(BuildContext context) {
     if (reg_edu_listener == false) {
       socket.on('edupin', (data) {
-        print(data);
+        //print(data);
         try {
           Navigator.pop(context);
           status(data["status"]);
         } catch (e) {
-          print("Error");
+          //print("Error");
         }
       });
       reg_edu_listener = true;
@@ -5121,32 +5121,32 @@ class _BuyElectricityPageState extends State<BuyElectricityPage> {
   }
 
   void validateMeterNumber() async {
-    print("am here");
+    //print("am here");
     int m = (int.tryParse(meter.text))!;
     final url = Uri.parse(
       "https://postranet.com/api/validatemeter?meternumber=$m&disconame=$disco_name&mtype=$metertype",
     );
     final headers = {"Content-Type": "application/json"};
     try {
-      print("am here1");
+      //print("am here1");
       final response = await http.get(url, headers: headers);
-      print("am here2");
+      //print("am here2");
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
 
-        print("am here3");
+        //print("am here3");
         check_meter = false;
         meter_data = data["name"].toString();
         setState(() {});
       } else {
-        print("am here5");
+        //print("am here5");
         check_meter = false;
         meter_data = "Could not fetch data, try again.";
         setState(() {});
       }
     } catch (e) {
-      print("am here6");
+      //print("am here6");
       check_meter = false;
       meter_data = "Could not fetch data, try again.";
       setState(() {});
@@ -5168,7 +5168,7 @@ class _BuyElectricityPageState extends State<BuyElectricityPage> {
             );
           },
         );
-        print("Error 1");
+        //print("Error 1");
         return;
       }
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -5182,7 +5182,7 @@ class _BuyElectricityPageState extends State<BuyElectricityPage> {
             );
           },
         );
-        print("Error 2");
+        //print("Error 2");
         return;
       }
 
@@ -5210,7 +5210,7 @@ class _BuyElectricityPageState extends State<BuyElectricityPage> {
       }
       setState(() {});
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {
@@ -5288,7 +5288,7 @@ class _BuyElectricityPageState extends State<BuyElectricityPage> {
   }
 
   void process() {
-    print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
+    //print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -5604,12 +5604,12 @@ class _BuyElectricityPageState extends State<BuyElectricityPage> {
   Widget build(BuildContext context) {
     if (reg_elec_listener == false) {
       socket.on('electricity', (data) {
-        print(data);
+        //print(data);
         try {
           Navigator.pop(context);
           status(data["status"]);
         } catch (e) {
-          print("Error");
+          //print("Error");
         }
       });
       reg_elec_listener = true;
@@ -5866,32 +5866,32 @@ class _BuyCablePageState extends State<BuyCablePage> {
   var iuc_data = "";
 
   void validateMeterNumber() async {
-    print("am here");
+    //print("am here");
     int iuc = (int.tryParse(iuc_number.text))!;
     final url = Uri.parse(
       "https://postranet.com/api/validateiuc?smart_card_number=$iuc&cablename=${cable.toUpperCase()}",
     );
     final headers = {"Content-Type": "application/json"};
     try {
-      print("am here1");
+      //print("am here1");
       final response = await http.get(url, headers: headers);
-      print("am here2");
+      //print("am here2");
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
 
-        print("am here3");
+        //print("am here3");
         check_iuc = false;
         iuc_data = data["name"].toString();
         setState(() {});
       } else {
-        print("am here5");
+        //print("am here5");
         check_iuc = false;
         iuc_data = "Could not fetch data, try again.";
         setState(() {});
       }
     } catch (e) {
-      print("am here6");
+      //print("am here6");
       check_iuc = false;
       iuc_data = "Could not fetch data, try again.";
       setState(() {});
@@ -5913,7 +5913,7 @@ class _BuyCablePageState extends State<BuyCablePage> {
             );
           },
         );
-        print("Error 1");
+        //print("Error 1");
         return;
       }
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -5927,7 +5927,7 @@ class _BuyCablePageState extends State<BuyCablePage> {
             );
           },
         );
-        print("Error 2");
+        //print("Error 2");
         return;
       }
 
@@ -5955,7 +5955,7 @@ class _BuyCablePageState extends State<BuyCablePage> {
       }
       setState(() {});
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {
@@ -6033,7 +6033,7 @@ class _BuyCablePageState extends State<BuyCablePage> {
   }
 
   void process() {
-    print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
+    //print("${pin1.text} ${pin2.text} ${pin3.text} ${pin4.text}");
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -6349,12 +6349,12 @@ class _BuyCablePageState extends State<BuyCablePage> {
   Widget build(BuildContext context) {
     if (reg_cable_listener == false) {
       socket.on('cable', (data) {
-        print(data);
+        //print(data);
         try {
           Navigator.pop(context);
           status(data["status"]);
         } catch (e) {
-          print("Error");
+          //print("Error");
         }
       });
       reg_cable_listener = true;
@@ -6666,9 +6666,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           body: body,
                         );
                         if (response.statusCode == 200) {
-                          print("It's Working...");
+                          //print("It's Working...");
                           var data = jsonDecode(response.body);
-                          print(data);
+                          //print(data);
                           if (data["status"] == "ok") {
                             var _data = data["data"];
 
@@ -6747,7 +6747,7 @@ class _TransactionPageState extends State<TransactionPage> {
         },
       );
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       showDialog(
         context: context,
         builder: (context) {
@@ -7227,9 +7227,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           body: body,
                         );
                         if (response.statusCode == 200) {
-                          print("It's Working...");
+                          //print("It's Working...");
                           var data = jsonDecode(response.body);
-                          print(data);
+                          //print(data);
                           if (data["status"] == "ok") {
                             var _data = data["data"];
 
@@ -7526,7 +7526,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   value: pushnotify,
                   activeColor: mainColor,
                   onChanged: (value) async {
-                    print("hello");
+                    //print("hello");
                     setState(() {
                       pushnotify = value;
                     });
@@ -7836,9 +7836,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        print(data);
+        //print(data);
         if (data["status"] == "ok") {
           user_data["t_pin"] = new_pin;
           setState(() {
@@ -7865,7 +7865,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
   }
 
   void process() {
-    print("${pin1.text}${pin2.text}${pin3.text}${pin4.text}");
+    //print("${pin1.text}${pin2.text}${pin3.text}${pin4.text}");
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -8319,9 +8319,9 @@ class _BVNVerificationPageState extends State<BVNVerificationPage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        //print(data);
+        ////print(data);
         if (data["status"] == "ok") {
           user_data["bvn"] = data["bvn"];
           virtual_accounts = data["virtual-accounts"];
@@ -8494,9 +8494,9 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        print("It's Working...");
+        //print("It's Working...");
         var data = jsonDecode(response.body);
-        print(data);
+        //print(data);
         if (data["status"] == "ok") {
           user_data = data["user_data"];
           setState(() {});

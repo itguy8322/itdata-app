@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:itdata/debug/plans.dart';
 
 void loadDataPlansToFirebase(FirebaseFirestore db){
-  print("<=============== UPLOADING DATA TO FIREBASE =================>");
+  //print("<=============== UPLOADING DATA TO FIREBASE =================>");
   
   for (String network in dataplans.keys){
     List<Map<String, dynamic>> plans = dataplans[network];
@@ -33,5 +33,5 @@ void loadDataPlansToFirebase(FirebaseFirestore db){
       }  
     db.collection("networks").doc(network.toUpperCase()).set(mainPlan);
   }
-  print("<=============== UPLOADING DATA TO FIREBASE =================>");
+  //print("<=============== UPLOADING DATA TO FIREBASE =================>");
 }

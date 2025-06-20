@@ -64,7 +64,7 @@ class _EduPinState extends State<EduPin> {
     //         );
     //       },
     //     );
-    //     print("Error 1");
+    //     //print("Error 1");
     //     return;
     //   }
     //   bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
@@ -78,7 +78,7 @@ class _EduPinState extends State<EduPin> {
     //         );
     //       },
     //     );
-    //     print("Error 2");
+    //     //print("Error 2");
     //     return;
     //   }
 
@@ -106,7 +106,7 @@ class _EduPinState extends State<EduPin> {
     //   }
     //   setState(() {});
     // } catch (e) {
-    //   print(e.toString());
+    //   //print(e.toString());
     //   showDialog(
     //     context: context,
     //     builder: (context) {
@@ -147,20 +147,7 @@ class _EduPinState extends State<EduPin> {
                         listeners: [
                           BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
                             listener: (context,state){
-                              print(" ====== object ===== ");
-                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
-                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
-                                    print("===== NOT EMPTY YEEEEEH");
-                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
-                                    Navigator.pop(context);
-                                    if (user.userData?.pin == pin){
-                                      showProcessDialog(context);
-                                    }
-                                    else{
-                                      showStatusDialog(context, "Incorrect pin, try again.");
-                                    }
-                                    context.read<SetpinButtonsCubit>().clearPin();
-                                  }
+                              
                             }
                           )
                         ], 
@@ -308,7 +295,7 @@ class _EduPinState extends State<EduPin> {
                           if (_formKey.currentState!.validate()) {
                             //showPinButtons(context);
                             PinButtonWidget(context: context, title: 'Enter pin', onEnteredPins: (pin){
-                              print("Entered PIN: $pin");
+                              //print("Entered PIN: $pin");
                               if (user.userData?.pin == pin){
                                 showProcessDialog(context);
                               }

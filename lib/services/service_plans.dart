@@ -7,18 +7,18 @@ class ServicePlans {
 
   Future<Map<String, dynamic>> loadDataPlans() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
-        await db.collection("networks").get();
+        await db.collection("dataplans").get();
     Map<String, dynamic> dataPlans = {};
     List<String> networkProviders = snapshot.docs.map((doc) => doc.id).toList();
     for (String provider in networkProviders){
       dataPlans[provider] = [];
       DocumentSnapshot<Map<String, dynamic>> _snapshot =
-        await db.collection("networks").doc(provider).get();
+        await db.collection("dataplans").doc(provider).get();
       dataPlans[provider].add(_snapshot.data());
     }
-    print("========== NETWORKS PLANS ==============");
-    print(dataPlans);
-    print("========== NETWORKS PLANS ==============");
+    //print("========== NETWORKS PLANS ==============");
+    //print(dataPlans);
+    //print("========== NETWORKS PLANS ==============");
     return dataPlans;
   }
 
@@ -27,9 +27,9 @@ class ServicePlans {
         await db.collection("airtimeTypes").get();
     List<String> airtimeTypes = snapshot.docs.map((doc) => doc.id).toList();
     
-    print("========== AIRTIME TYPES PLANS ==============");
-    print(airtimeTypes);
-    print("========== AIRTIME TYPES PLANS ==============");
+    //print("========== AIRTIME TYPES PLANS ==============");
+    //print(airtimeTypes);
+    //print("========== AIRTIME TYPES PLANS ==============");
     return airtimeTypes;
   }
 
@@ -44,9 +44,9 @@ class ServicePlans {
         await db.collection("cables").doc(cable).get();
       cablePlans[cable].add(_snapshot.data());
     }
-    print("========== CABLE PLANS ==============");
-    print(cablePlans);
-    print("========== CABLE PLANS ==============");
+    //print("========== CABLE PLANS ==============");
+    //print(cablePlans);
+    //print("========== CABLE PLANS ==============");
     return cablePlans;
   }
 
@@ -54,12 +54,12 @@ class ServicePlans {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection("electricity").doc("discos").get();
     Map<String, dynamic>? data = snapshot.data();
-    print(data);
-    print("DISCOS");
+    //print(data);
+    //print("DISCOS");
     final discos = data?['names'];
-    print("========== NETWORKS PLANS ==============");
-    print(discos);
-    print("========== NETWORKS PLANS ==============");
+    //print("========== NETWORKS PLANS ==============");
+    //print(discos);
+    //print("========== NETWORKS PLANS ==============");
     return discos;
   }
 
@@ -74,9 +74,9 @@ class ServicePlans {
         await db.collection("edupins").doc(examType).get();
       examTypes[examType] = _snapshot.data();
     }
-    print("========== EXAM PLANS ==============");
-    print(examTypes);
-    print("========== EXAM PLANS ==============");
+    //print("========== EXAM PLANS ==============");
+    //print(examTypes);
+    //print("========== EXAM PLANS ==============");
     return examTypes;
   }
 }

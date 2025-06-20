@@ -8,6 +8,9 @@ class NotificationListCubit extends Cubit<NotificationsListState> {
   void setUserId(String id){
     emit(state.copyWith(userId: id));
   }
+  void reset() {
+    emit(NotificationsListState.initial());
+  }
   void loadNotifications() async {
     emit(
       state.copyWith(
@@ -32,9 +35,9 @@ class NotificationListCubit extends Cubit<NotificationsListState> {
           ),
         );
     } catch (e) {
-      print("=========== ERROR ============");
-      print(e.toString());
-      print("=========== ERROR ============");
+      //print("=========== ERROR ============");
+      //print(e.toString());
+      //print("=========== ERROR ============");
       emit(
         state.copyWith(
           loadingFailure: true,

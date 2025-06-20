@@ -8,7 +8,7 @@ part 'airtime_state.freezed.dart';
 abstract class AirtimeState with _$AirtimeState {
   const factory AirtimeState({
     required List<String> airtimeTypes,
-    required String provider,
+    required int provider,
     required String type,
     required String number,
     required String amount,  
@@ -21,7 +21,7 @@ abstract class AirtimeState with _$AirtimeState {
   factory AirtimeState.initial(){
     return AirtimeState(
       airtimeTypes: [],
-      provider: '',
+      provider: 0,
       type: '',
       number: '',
       amount: '',

@@ -4,13 +4,16 @@ import 'package:itdata/services/service_plans.dart';
 
 class EduCubit extends Cubit<EduState>{
   EduCubit(): super(EduState.initial());
+  void reset() {
+    emit(EduState.initial());
+  }
   loadExamTypes() async {
     final examsTypes = await ServicePlans().loadExamTypes();
     emit(state.copyWith(examsTypes: examsTypes));
   }
   onQuantitySelected(String quantity){
     emit(state.copyWith(quantity: quantity));
-    print(state.quantity);
+    //print(state.quantity);
   }
   onTypeSelected(String exam){
     emit(state.copyWith(exam: exam));

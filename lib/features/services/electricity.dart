@@ -31,18 +31,9 @@ class _ElectricityState extends State<Electricity> {
   TextEditingController number = TextEditingController();
   TextEditingController meter = TextEditingController();
   TextEditingController amount = TextEditingController();
-  TextEditingController pin1 = TextEditingController();
-  TextEditingController pin2 = TextEditingController();
-  TextEditingController pin3 = TextEditingController();
-  TextEditingController pin4 = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   // final LocalAuthentication _localAuth = LocalAuthentication();
-  // bool _isAuthenticated = false;
 
-  final FocusNode pin_1 = FocusNode();
-  final FocusNode pin_2 = FocusNode();
-  final FocusNode pin_3 = FocusNode();
-  final FocusNode pin_4 = FocusNode();
 
   
   var metertype = "";
@@ -56,7 +47,7 @@ class _ElectricityState extends State<Electricity> {
     "2": "postpaid",
   };
   void validateMeterNumber(String meterNumber, String disco_name) async {
-    print("am here");
+    //print("am here");
     int m = (int.tryParse(meterNumber))!;
     final url = Uri.parse(
       "https://postranet.com/api/validatemeter?meternumber=$m&disconame=$disco_name&mtype=$metertype",
@@ -69,7 +60,7 @@ class _ElectricityState extends State<Electricity> {
         check_meter = false;
         meter_data = data["name"].toString();
         invalid = data['invalid'];
-        print(data);
+        //print(data);
         setState(() {});
       } else {
         check_meter = false;
@@ -111,20 +102,7 @@ class _ElectricityState extends State<Electricity> {
                         listeners: [
                           BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
                             listener: (context,state){
-                              print(" ====== object ===== ");
-                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
-                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
-                                    print("===== NOT EMPTY YEEEEEH");
-                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
-                                    Navigator.pop(context);
-                                    if (user.userData?.pin == pin){
-                                      showProcessDialog(context);
-                                    }
-                                    else{
-                                      showStatusDialog(context, "Incorrect pin, try again.");
-                                    }
-                                    context.read<SetpinButtonsCubit>().clearPin();
-                                  }
+                              
                             }
                           ),
                           BlocListener<ElectricityCubit, ElectricityState>(
@@ -147,7 +125,7 @@ class _ElectricityState extends State<Electricity> {
                       ),
                       BlocBuilder<ElectricityCubit, ElectricityState>(
                         builder: (context, discos) {
-                          print(discos.elecPlans[0].toString());
+                          //print(discos.elecPlans[0].toString());
                           return DropdownButtonFormField(
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
@@ -337,7 +315,7 @@ class _ElectricityState extends State<Electricity> {
                           if (_formKey.currentState!.validate() &&
                               int.tryParse(amount.text.toString())! >= 500) {
                             PinButtonWidget(context: context, title: 'Enter pin', onEnteredPins: (pin){
-                              print("Entered PIN: $pin");
+                              //print("Entered PIN: $pin");
                               if (user.userData?.pin == pin){
                                 showProcessDialog(context);
                               }

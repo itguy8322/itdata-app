@@ -33,9 +33,9 @@ class NotificationService {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await db.collection("notifications").doc(id).get();
     final data = snapshot.data();
-    print("============ NOTIFICATION DATA RECEIVED ============");
-    print(data);
-    print("============ NOTIFICATION DATA RECEIVED ============");
+    //print("============ NOTIFICATION DATA RECEIVED ============");
+    //print(data);
+    //print("============ NOTIFICATION DATA RECEIVED ============");
     final _data = data?['notifications'];
     return _data;
   }

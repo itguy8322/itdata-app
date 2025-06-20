@@ -109,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
                     // MultiBlocListener(listeners: [
                     //   BlocListener<UserDataCubit, UserState>(
                     //   listener: (context, state) {
-                    //     print("LOADING DATA");
+                    //     //print("LOADING DATA");
                     //     context.read<UserDataCubit>().load_user_data(
                     //       state.userData!.id,
                     //     );
@@ -151,17 +151,16 @@ class _DashboardState extends State<Dashboard> {
                                         BlocBuilder<UserDataCubit, UserState>(
                                           builder: (context, state) {
                                             String wallet_bal = "";
-                                            if (state.userData != null){
-                                              if (state.userData!.wallet_bal != null){
-                                                wallet_bal = state.userData!.wallet_bal!.toString();
-                                              }
+                                            if (state.userData != null && state.userData!.wallet_bal != null){
+                                              wallet_bal = state.userData!.wallet_bal!.toString();
+                                            }
+                                            else{
+                                              wallet_bal = "0.00";
                                             }
                                             
                                             return Text(
                                               show_balance == true
-                                                  ? state.userDataSuccess
-                                                      ? "₦$wallet_bal"
-                                                      : "0.00"
+                                                  ?  "₦$wallet_bal"
                                                   : "****",
                                               style: TextStyle(
                                                 color: theme.secondaryColor,

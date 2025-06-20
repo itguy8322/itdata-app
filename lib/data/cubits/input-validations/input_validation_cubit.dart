@@ -23,7 +23,7 @@ class InputValidationCubit extends Cubit<InputValidationState> {
     final email = EmailInput(value: value);
     email.validate();
     emit(state.copyWith(emailInput: email));
-    print(state.emailInput.isValid);
+    //print(state.emailInput.isValid);
   }
 
   void onTextInputChanged(String value) {
@@ -42,6 +42,6 @@ class InputValidationCubit extends Cubit<InputValidationState> {
     final password = PasswordInput(value: value);
     password.validate();
     emit(state.copyWith(passwordInput: password));
-    print(state.passwordInput.isValid);
+    //print(state.passwordInput.isValid);
   }
 }

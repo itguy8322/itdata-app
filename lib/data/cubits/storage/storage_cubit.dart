@@ -13,25 +13,26 @@ class StorageCubit extends Cubit<Map<String, dynamic>> {
       await storage.write(key: "password", value: password);
       await storage.write(
         key: "remember_me",
-        value: state["remember_me"] ? "false" : "true",
+        value: !state["remember_me"] ? "true" : "false",
       );
       emit({
         "username": username,
         "password": password,
-        "remember_me": state["remember_me"] ? false : true,
+        "remember_me": !state["remember_me"],
       });
+      //print("REMEBER ME IS SET TO ${state["remember_me"]}");
     } else {
-      emit({"remember_me": state["remember_me"] ? false : true});
+      emit({"remember_me": state["remember_me"], "username": "", "password": ""});
+
     }
   }
 
   void load_storage() async {
-    Map<String, dynamic> newData = Map.from(state);
+    Map<String, dynamic> newData = Map<String, dynamic>.from(state);
     try {
       String? username = await storage.read(key: "username");
       String? password = await storage.read(key: "password");
       String? remember_me = await storage.read(key: "remember_me");
-      newData["remember_me"] = true;
       newData["username"] = username;
       newData["password"] = password;
       if (remember_me == "true") {
@@ -39,11 +40,7 @@ class StorageCubit extends Cubit<Map<String, dynamic>> {
       } else {
         newData["remember_me"] = false;
       }
-      emit({
-        "username": username,
-        "password": password,
-        "remember_me": remember_me == "true" ? true : false,
-      });
+      emit(newData);
     } catch (e) {
       emit({"remember_me": false});
     }

@@ -4,6 +4,9 @@ import 'package:itdata/services/service_plans.dart';
 
 class ElectricityCubit extends Cubit<ElectricityState>{
   ElectricityCubit(): super(ElectricityState.initial());
+  void reset() {
+    emit(ElectricityState.initial());
+  }
   loadDiscos() async {
     final discos = await ServicePlans().loadDiscos();
     emit(state.copyWith(elecPlans: discos));

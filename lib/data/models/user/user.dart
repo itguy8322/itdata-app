@@ -10,6 +10,7 @@ class UserData {
   String? bvn;
   String? nin;
   String? pin;
+  String? password;
   List<Map<String, dynamic>>? permanentAccounts;
   UserData({
     this.id,
@@ -21,20 +22,25 @@ class UserData {
     this.bvn,
     this.nin,
     this.pin,
-    this.permanentAccounts,
+    this.password
+,    this.permanentAccounts,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
+    //print("======== CONVERTING JSON TO USER DATA ========");
+    //print(json['wallet_bal']);
+    //print("======== CONVERTING JSON TO USER DATA ========");
     return UserData(
       id: json['id'],
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
       address: json['address'],
-      wallet_bal: double.tryParse("${json['wallet_bal']}"),
+      wallet_bal: double.tryParse(json['wallet_bal'].toString()),
       bvn: json['bvn'],
       nin: json['nin'],
       pin: json['pin'],
+      password: json['password'],
       permanentAccounts: json['permanentAccounts'],
     );
   }
@@ -50,6 +56,7 @@ class UserData {
       "bvn": user.bvn,
       "nin": user.nin,
       "pin": user.pin,
+      "password": user.password,
       "permanentAccounts": user.permanentAccounts,
     };
   }

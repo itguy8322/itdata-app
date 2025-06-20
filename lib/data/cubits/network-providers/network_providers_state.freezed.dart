@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NetworkProvidersState {
 
- List<String>? get networkProviders;
+ Map<String, dynamic>? get networkProviders;
 /// Create a copy of NetworkProvidersState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $NetworkProvidersStateCopyWith<$Res>  {
   factory $NetworkProvidersStateCopyWith(NetworkProvidersState value, $Res Function(NetworkProvidersState) _then) = _$NetworkProvidersStateCopyWithImpl;
 @useResult
 $Res call({
- List<String>? networkProviders
+ Map<String, dynamic>? networkProviders
 });
 
 
@@ -66,7 +66,7 @@ class _$NetworkProvidersStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? networkProviders = freezed,}) {
   return _then(_self.copyWith(
 networkProviders: freezed == networkProviders ? _self.networkProviders : networkProviders // ignore: cast_nullable_to_non_nullable
-as List<String>?,
+as Map<String, dynamic>?,
   ));
 }
 
@@ -77,16 +77,16 @@ as List<String>?,
 
 
 class _NetworkProvidersState implements NetworkProvidersState {
-  const _NetworkProvidersState({required final  List<String>? networkProviders}): _networkProviders = networkProviders;
+  const _NetworkProvidersState({required final  Map<String, dynamic>? networkProviders}): _networkProviders = networkProviders;
   
 
- final  List<String>? _networkProviders;
-@override List<String>? get networkProviders {
+ final  Map<String, dynamic>? _networkProviders;
+@override Map<String, dynamic>? get networkProviders {
   final value = _networkProviders;
   if (value == null) return null;
-  if (_networkProviders is EqualUnmodifiableListView) return _networkProviders;
+  if (_networkProviders is EqualUnmodifiableMapView) return _networkProviders;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(value);
+  return EqualUnmodifiableMapView(value);
 }
 
 
@@ -120,7 +120,7 @@ abstract mixin class _$NetworkProvidersStateCopyWith<$Res> implements $NetworkPr
   factory _$NetworkProvidersStateCopyWith(_NetworkProvidersState value, $Res Function(_NetworkProvidersState) _then) = __$NetworkProvidersStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<String>? networkProviders
+ Map<String, dynamic>? networkProviders
 });
 
 
@@ -140,7 +140,7 @@ class __$NetworkProvidersStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? networkProviders = freezed,}) {
   return _then(_NetworkProvidersState(
 networkProviders: freezed == networkProviders ? _self._networkProviders : networkProviders // ignore: cast_nullable_to_non_nullable
-as List<String>?,
+as Map<String, dynamic>?,
   ));
 }
 

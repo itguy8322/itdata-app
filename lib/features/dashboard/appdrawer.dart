@@ -65,7 +65,6 @@ class AppDrawer extends StatelessWidget {
                 ),
 
                 Expanded(
-                  flex: 2,
                   child: ListView(
                     children: [
                       ListTile(
@@ -186,22 +185,21 @@ class AppDrawer extends StatelessWidget {
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () async {
+                                        // context.read<AuthCubit>().logout();
                                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             theme.elevatedBackgroundColor,
                                       ),
-                                      child: Text("Yes"),
+                                      child: Text("Yes", style: TextStyle(color: theme.secondaryColor)),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: theme.primaryColor,
-                                      ),
-                                      child: Text("No"),
+                                      
+                                      child: Text("No", style: TextStyle(color: theme.primaryColor)),
                                     ),
                                   ],
                                 ),

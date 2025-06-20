@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AirtimeState {
 
- List<String> get airtimeTypes; String get provider; String get type; String get number; String get amount; bool get trnxInProcess; bool get trnxSuccess; bool get trnxFailure;
+ List<String> get airtimeTypes; int get provider; String get type; String get number; String get amount; bool get trnxInProcess; bool get trnxSuccess; bool get trnxFailure;
 /// Create a copy of AirtimeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $AirtimeStateCopyWith<$Res>  {
   factory $AirtimeStateCopyWith(AirtimeState value, $Res Function(AirtimeState) _then) = _$AirtimeStateCopyWithImpl;
 @useResult
 $Res call({
- List<String> airtimeTypes, String provider, String type, String number, String amount, bool trnxInProcess, bool trnxSuccess, bool trnxFailure
+ List<String> airtimeTypes, int provider, String type, String number, String amount, bool trnxInProcess, bool trnxSuccess, bool trnxFailure
 });
 
 
@@ -67,7 +67,7 @@ class _$AirtimeStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 airtimeTypes: null == airtimeTypes ? _self.airtimeTypes : airtimeTypes // ignore: cast_nullable_to_non_nullable
 as List<String>,provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as String,trnxInProcess: null == trnxInProcess ? _self.trnxInProcess : trnxInProcess // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ class _AirtimeState implements AirtimeState {
   return EqualUnmodifiableListView(_airtimeTypes);
 }
 
-@override final  String provider;
+@override final  int provider;
 @override final  String type;
 @override final  String number;
 @override final  String amount;
@@ -132,7 +132,7 @@ abstract mixin class _$AirtimeStateCopyWith<$Res> implements $AirtimeStateCopyWi
   factory _$AirtimeStateCopyWith(_AirtimeState value, $Res Function(_AirtimeState) _then) = __$AirtimeStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> airtimeTypes, String provider, String type, String number, String amount, bool trnxInProcess, bool trnxSuccess, bool trnxFailure
+ List<String> airtimeTypes, int provider, String type, String number, String amount, bool trnxInProcess, bool trnxSuccess, bool trnxFailure
 });
 
 
@@ -153,7 +153,7 @@ class __$AirtimeStateCopyWithImpl<$Res>
   return _then(_AirtimeState(
 airtimeTypes: null == airtimeTypes ? _self._airtimeTypes : airtimeTypes // ignore: cast_nullable_to_non_nullable
 as List<String>,provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as String,trnxInProcess: null == trnxInProcess ? _self.trnxInProcess : trnxInProcess // ignore: cast_nullable_to_non_nullable

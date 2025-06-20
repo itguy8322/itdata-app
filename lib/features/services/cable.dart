@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:itdata/core/dialogs/process_dialog.dart';
 import 'package:itdata/core/dialogs/status_dialog.dart';
 import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
@@ -30,38 +33,39 @@ class _CableState extends State<Cable> {
   bool check_iuc = false;
   var iuc_data = "";
 
-  void validateMeterNumber() async {
-    // print("am here");
-    // int iuc = (int.tryParse(iuc_number.text))!;
-    // final url = Uri.parse(
-    //   "https://postranet.com/api/validateiuc?smart_card_number=$iuc&cablename=${cable.toUpperCase()}",
-    // );
-    // final headers = {"Content-Type": "application/json"};
-    // try {
-    //   print("am here1");
-    //   final response = await http.get(url, headers: headers);
-    //   print("am here2");
-    //   if (response.statusCode == 200) {
-    //     print("It's Working...");
-    //     var data = jsonDecode(response.body);
+  void validateIUCNumber(String cable, String iucNumber) async {
+    //print("am here");
+    //print(iucNumber);
+    //print(cable);
+    int iuc = (int.tryParse(iucNumber))!;
+    final url = Uri.parse(
+      "https://postranet.com/api/validateiuc?smart_card_number=$iuc&cablename=${cable.toUpperCase()}",
+    );
+    final headers = {"Content-Type": "application/json"};
+    try {
+      //print("am here1");
+      final response = await http.get(url, headers: headers);
+      //print("am here2");
+      if (response.statusCode == 200) {
+        //print("It's Working...");
+        var data = jsonDecode(response.body);
 
-    //     print("am here3");
-    //     check_iuc = false;
-    //     iuc_data = data["name"].toString();
-    //     setState(() {});
-    //   } else {
-    //     print("am here5");
-    //     check_iuc = false;
-    //     iuc_data = "Could not fetch data, try again.";
-    //     setState(() {});
-    //   }
-    // } catch (e) {
-    //   print("am here6");
-    //   check_iuc = false;
-    //   iuc_data = "Could not fetch data, try again.";
-    //   setState(() {});
-    // }
-    context.read<CableCubit>().onNumberEntered("value");
+        //print("am here3");
+        check_iuc = false;
+        iuc_data = data["name"].toString();
+        setState(() {});
+      } else {
+        //print("am here5");
+        check_iuc = false;
+        iuc_data = "Could not fetch data, try again.";
+        setState(() {});
+      }
+    } catch (e) {
+      //print("am here6");
+      check_iuc = false;
+      iuc_data = "Could not fetch data, try again.";
+      setState(() {});
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -71,6 +75,7 @@ class _CableState extends State<Cable> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
+                context.read<CableCubit>().reInitialize();
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
               },
               icon: Icon(Icons.arrow_back, color: theme.secondaryColor,),
@@ -90,22 +95,25 @@ class _CableState extends State<Cable> {
                         listeners: [
                           BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
                             listener: (context,state){
-                              print(" ====== object ===== ");
-                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
-                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
-                                    print("===== NOT EMPTY YEEEEEH");
-                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
-                                    Navigator.pop(context);
-                                    if (user.userData?.pin == pin){
-                                      showProcessDialog(context);
-                                    }
-                                    else{
-                                      showStatusDialog(context, "Incorrect pin, try again.");
-                                    }
-                                    context.read<SetpinButtonsCubit>().clearPin();
-                                  }
+                              
                             }
-                          )
+                          ),
+                          BlocListener<CableCubit, CableState>(
+                            listener: (context, state){
+                              if (state.iucNumber.length == 10) {
+                                setState(() {
+                                  check_iuc = true;
+                                });
+                                //print("IUC NUMBER: ${state.iucNumber}");
+                                validateIUCNumber(state.cable, state.iucNumber);
+                                //context.read<CableCubit>().onIUCNumber('');
+                              } else {
+                                setState(() {
+                                  iuc_data = "";
+                                  check_iuc = false;
+                                });
+                              }
+                          })
                         ], 
                         child: SizedBox()
                       ),
@@ -135,7 +143,7 @@ class _CableState extends State<Cable> {
                             },
                             onChanged: (value) {
                               context.read<CableCubit>().onCableSelected(value!);
-                              context.read<CableCubit>().onCablePlanSelected('');
+                              iuc_number.text = "";
                             },
                           );
                         }
@@ -175,6 +183,8 @@ class _CableState extends State<Cable> {
                                 },
                                 onChanged: (value) {
                                   context.read<CableCubit>().onCablePlanSelected(value!);
+                                  
+
                                 },
                               );
                           }
@@ -211,21 +221,25 @@ class _CableState extends State<Cable> {
                       ),
                       SizedBox(height: 10),
                       check_iuc
-                          ? Row(
-                            children: [
-                              Image.asset(
-                                "assets/images/loading.gif",
-                                scale: 25.0,
+                          ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 6,color: theme.primaryColor,)),
+                                  SizedBox(width: 5,),
+                                  Text(
+                                    "Validating...",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Validating...",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
                           )
                           : iuc_data == "Could not fetch data, try again."
                           ? Text(
@@ -237,16 +251,23 @@ class _CableState extends State<Cable> {
                             ),
                           )
                           : iuc_data != ""
-                          ? Text(
-                            iuc_data.toUpperCase(),
-                            style: TextStyle(
-                              color:
-                                  iuc_data == "INVALID IUC NUMBER"
-                                      ? Colors.red
-                                      : Colors.green,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          ? Row(
+                            children: [
+                              iuc_data == "INVALID IUC NUMBER"?
+                              Icon(Icons.warning_rounded, color: Colors.red, size: 20,)
+                              : Icon(Icons.check_circle, color: Colors.green, size: 20,),
+                              Text(
+                                iuc_data.toUpperCase(),
+                                style: TextStyle(
+                                  color:
+                                      iuc_data == "INVALID IUC NUMBER"
+                                          ? Colors.red
+                                          : Colors.blueGrey,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
                           )
                           : SizedBox(height: 0.01),
                       TextFormField(
@@ -255,7 +276,7 @@ class _CableState extends State<Cable> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly, // Allows only digits
                         ],
-                        maxLength: 11,
+                        maxLength: 10,
                         readOnly: check_iuc,
                         decoration: InputDecoration(
                           labelText: 'IUC Number',
@@ -272,17 +293,7 @@ class _CableState extends State<Cable> {
                           return null;
                         },
                         onChanged: (value) {
-                          if (value.length == 11) {
-                            setState(() {
-                              check_iuc = true;
-                            });
-                            validateMeterNumber();
-
-                          } else {
-                            setState(() {
-                              iuc_data = "";
-                            });
-                          }
+                          context.read<CableCubit>().onIUCNumber(value);
                         },
                       ),
                       SizedBox(height: 10),
@@ -295,7 +306,7 @@ class _CableState extends State<Cable> {
                           if (_formKey.currentState!.validate()) {
                             //showPinButtons(context);
                             PinButtonWidget(context: context, title: 'Enter pin', onEnteredPins: (pin){
-                              print("Entered PIN: $pin");
+                              //print("Entered PIN: $pin");
                               if (user.userData?.pin == pin){
                                 showProcessDialog(context);
                               }

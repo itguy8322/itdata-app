@@ -59,9 +59,9 @@ class _TransferFundingState extends State<TransferFunding> {
     // try {
     //   final response = await http.post(url, headers: headers, body: body);
     //   if (response.statusCode == 200) {
-    //     print("It's Working...");
+    //     //print("It's Working...");
     //     var data = jsonDecode(response.body);
-    //     //print(data);
+    //     ////print(data);
     //     if (data["status"] == "ok") {
     //       virtual_accounts = data["virtual-accounts"];
     //       transfer_amount = (int.tryParse(amount.text.toString()))!;
@@ -144,7 +144,10 @@ class _TransferFundingState extends State<TransferFunding> {
                             SizedBox(height: 10),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
                                 backgroundColor: theme.primaryColor,
                               ),
                               onPressed: () {
@@ -155,7 +158,7 @@ class _TransferFundingState extends State<TransferFunding> {
                               },
                               child: Text(
                                 "Get Virtual Accounts",
-                                style: TextStyle(fontSize: 20, color: theme.secondaryColor),
+                                style: TextStyle(fontSize: 18, color: theme.secondaryColor),
                               ),
                             ),
                           ],
@@ -244,9 +247,9 @@ class _TransferFundingState extends State<TransferFunding> {
               //     body: body,
               //   );
               //   if (response.statusCode == 200) {
-              //     print("It's Working...");
+              //     //print("It's Working...");
               //     var data = jsonDecode(response.body);
-              //     print(data);
+              //     //print(data);
               //     if (data["status"] == "ok") {
               //       var _data = data["data"];
               //       user_data = _data["user_data"];

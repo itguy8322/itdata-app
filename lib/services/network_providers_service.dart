@@ -29,14 +29,14 @@ class NetworkProvidersService {
     db.collection(path).doc(user).delete();
   }
 
-  Future<List<String>> loadNetworkProviders() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await db.collection("networks").get();
-    List<String> networkProviders = snapshot.docs.map((doc) => doc.id).toList();
-    print("========== NETWORKS PROVIDERS ==============");
-    print("LENGTH: ${snapshot.docs.length}");
-    print(networkProviders);
-    print("========== NETWORKS PROVIDERS ==============");
+  Future<Map<String, dynamic>> loadNetworkProviders() async {
+    DocumentSnapshot<Map<String, dynamic>> _snapshot =
+        await db.collection("networks").doc("providers").get();
+    //print("========== NETWORKS PROVIDERS ==============");
+    Map<String, dynamic> networkProviders = _snapshot.data()!;
+    //print("LENGTH: ${_snapshot.data()}");
+    //print(networkProviders);
+    //print("========== NETWORKS PROVIDERS ==============");
     return networkProviders;
   }
 }

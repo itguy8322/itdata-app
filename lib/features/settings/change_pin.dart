@@ -33,9 +33,9 @@ class _ChangePinState extends State<ChangePin> {
     // try {
     //   final response = await http.post(url, headers: headers, body: body);
     //   if (response.statusCode == 200) {
-    //     print("It's Working...");
+    //     //print("It's Working...");
     //     var data = jsonDecode(response.body);
-    //     print(data);
+    //     //print(data);
     //     if (data["status"] == "ok") {
     //       user_data["t_pin"] = new_pin;
     //       setState(() {
@@ -65,13 +65,13 @@ class _ChangePinState extends State<ChangePin> {
     Future.delayed(Duration(seconds: 0),(){
       if (isNewUser){
         PinButtonWidget(context: context,title: 'Enter new pin', onEnteredPins: (pin1){
-          print("Entered Old PIN: $pin1");
+          //print("Entered Old PIN: $pin1");
           Navigator.pop(context);
           PinButtonWidget(context: context, title: 'Confirm pin', onEnteredPins: (pin2){
-            print("Entered New PIN: $pin2");
+            //print("Entered New PIN: $pin2");
             if (pin1 == pin2) {
               // setPin();
-              print("PINs match, setting new PIN...");
+              //print("PINs match, setting new PIN...");
               // Here you would typically call a function to update the PIN in your database
               // For example: setPin(pin1);
               final userData = context.read<UserDataCubit>().state.userData;
@@ -79,7 +79,7 @@ class _ChangePinState extends State<ChangePin> {
               Navigator.pop(context);
               context.read<UserDataCubit>().update_data("users", userData?.id ?? "", userData!);
             } else {
-              print("PINs do not match, please try again.");
+              //print("PINs do not match, please try again.");
               // You might want to show an error message here
               showTopSnackBar(
                 Overlay.of(context),
@@ -98,7 +98,7 @@ class _ChangePinState extends State<ChangePin> {
       }else{
         PinButtonWidget(context: context,title: 'Enter old pin', onEnteredPins: (pin0){
           if (kDebugMode) {
-            print("Entered Old PIN: $pin0");
+            //print("Entered Old PIN: $pin0");
           }
           if (pin0 != oldPin) {
             
@@ -108,7 +108,7 @@ class _ChangePinState extends State<ChangePin> {
                 message: "Password don not match, please try again!",
               ),
             );
-            print("Old PIN does not match, please try again.");
+            //print("Old PIN does not match, please try again.");
             // You might want to show an error message here
             Navigator.pop(context);
             changePin(isNewUser, oldPin);
@@ -116,13 +116,13 @@ class _ChangePinState extends State<ChangePin> {
           }
           Navigator.pop(context);
           PinButtonWidget(context: context, title: 'Enter new pin', onEnteredPins: (pin1){
-            print("Entered New PIN: $pin1");
+            //print("Entered New PIN: $pin1");
             Navigator.pop(context);
             PinButtonWidget(context: context, title: 'Confirm pin', onEnteredPins: (pin2){
-              print("Entered New PIN: $pin2");
+              //print("Entered New PIN: $pin2");
               if (pin1 == pin2) {
                 // setPin();
-                print("PINs match, setting new PIN...");
+                //print("PINs match, setting new PIN...");
                 // Here you would typically call a function to update the PIN in your database
                 // For example: setPin(pin1);
                 final userData = context.read<UserDataCubit>().state.userData;
@@ -130,7 +130,7 @@ class _ChangePinState extends State<ChangePin> {
                 Navigator.pop(context);
                 context.read<UserDataCubit>().update_data("users", userData?.id ?? "", userData!);
               } else {
-                print("PINs do not match, please try again.");
+                //print("PINs do not match, please try again.");
                 // You might want to show an error message here
                 showTopSnackBar(
                   Overlay.of(context),
@@ -186,7 +186,7 @@ class _ChangePinState extends State<ChangePin> {
                 BlocListener<UserDataCubit, UserState>(
                 listener: (context, _user) {
                   if (_user.userDataSuccess) {
-                    print("[PIN IS CHANGED SUCCESSFULLY]");
+                    //print("[PIN IS CHANGED SUCCESSFULLY]");
                     Navigator.pop(context);
                     showTopSnackBar(
                       Overlay.of(context),

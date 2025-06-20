@@ -5,7 +5,9 @@ import 'package:itdata/data/cubits/transaction/transaction_state.dart';
 
 class TransactionCubit extends Cubit<TransactionStates> {
   TransactionCubit() : super(TransactionStates.initial());
-
+  void reset() {
+    emit(TransactionStates.initial());
+  }
   void setUserId(String id){
     emit(state.copyWith(userId: id));
   }
@@ -46,8 +48,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
         ),
       );
     } catch (e) {
-      print(" =============== ERROR ==============");
-      print(e.toString());
+      //print(" =============== ERROR ==============");
+      //print(e.toString());
       emit(
         state.copyWith(
           loadingInProgress: false,

@@ -7,9 +7,12 @@ import 'package:itdata/data/cubits/user-data/user_state.dart';
 class UserDataCubit extends Cubit<UserState> {
   UserDataCubit() : super(UserState.initial());
 
+  void reset() {
+    emit(UserState.initial());
+  }
   void setUser(UserData user, {bool isNewUser = false}) {
-    print("[SETTING USER DATA] [IS NEW USER]: $isNewUser");
-    print(user.name);
+    //print("[SETTING USER DATA] [IS NEW USER]: $isNewUser");
+    //print(user.name);
     emit(state.copyWith(userData: user, isNewUser: isNewUser));
   }
 
@@ -33,7 +36,7 @@ class UserDataCubit extends Cubit<UserState> {
         ),
       );
     } catch (e) {
-      print("ERRORRRRR: ${e.toString()}");
+      //print("ERRORRRRR: ${e.toString()}");
       emit(
         state.copyWith(
           uesrDataInProgress: false,

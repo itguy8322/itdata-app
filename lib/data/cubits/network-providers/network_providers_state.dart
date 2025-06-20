@@ -6,12 +6,12 @@ part 'network_providers_state.freezed.dart';
 @freezed
 abstract class NetworkProvidersState with _$NetworkProvidersState {
   const factory NetworkProvidersState({
-    required List<String>? networkProviders,
+    required Map<String, dynamic>? networkProviders,
   }) = _NetworkProvidersState;
 
   factory NetworkProvidersState.initial() {
     return NetworkProvidersState(
-      networkProviders: []
+      networkProviders: {}
     );
   }
 }

@@ -13,13 +13,16 @@ class DataCubit extends Cubit<DataState>{
       type: ''
     ));
   }
+  void reset() {
+    emit(DataState.initial());
+  }
   loadDataPlans() async {
     final dataplans = await ServicePlans().loadDataPlans();
     emit(state.copyWith(dataplans: dataplans));
   }
   onProviderSelected(String provider){
     emit(state.copyWith(provider: provider));
-    print(state.provider);
+    //print(state.provider);
   }
   onTypeSelected(String type){
     emit(state.copyWith(type: type));

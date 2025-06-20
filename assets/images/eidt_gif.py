@@ -23,4 +23,4 @@ if padded_image.mode != "RGB":
 padded_image.save("output_padded.gif", save_all=True)
 
 
-print("Done!")
+//print("Done!")

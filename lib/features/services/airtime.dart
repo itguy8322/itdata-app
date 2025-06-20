@@ -10,6 +10,7 @@ import 'package:itdata/core/setpin-buttons/setpin_buttons.dart';
 import 'package:itdata/data/cubits/network-providers/network_providers_cubit.dart';
 import 'package:itdata/data/cubits/network-providers/network_providers_state.dart';
 import 'package:itdata/data/cubits/services/airtime/airtime_cubit.dart';
+import 'package:itdata/data/cubits/services/airtime/airtime_state.dart';
 import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
 import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_state.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
@@ -55,9 +56,9 @@ class _AirtimeState extends State<Airtime> {
     // try {
     //   final response = await http.post(url, headers: headers, body: body);
     //   if (response.statusCode == 200) {
-    //     print("It's Working...");
+    //     //print("It's Working...");
     //     var data = jsonDecode(response.body);
-    //     //print(data);
+    //     ////print(data);
     //     if (data["status"] == "success") {
     //       user_data["wallet_bal"] = data["wallet_bal"];
     //       transactions = data["transactions"];
@@ -117,29 +118,30 @@ class _AirtimeState extends State<Airtime> {
                     children: [
                       MultiBlocListener(
                         listeners: [
-                          BlocListener<SetpinButtonsCubit, SetpinButtonsState>(
+                          BlocListener<AirtimeCubit, AirtimeState>(
                             listener: (context,state){
-                              print(" ====== object ===== ");
-                              if (state.pin1.isNotEmpty && state.pin2.isNotEmpty &&
-                                  state.pin3.isNotEmpty && state.pin4.isNotEmpty){
-                                    print("===== NOT EMPTY YEEEEEH");
-                                    var pin = "${state.pin1}${state.pin2}${state.pin3}${state.pin4}";
-                                    Navigator.pop(context);
-                                    if (user.userData?.pin == pin){
-                                      showProcessDialog(context);
-                                    }
-                                    else{
-                                      showStatusDialog(context, "Incorrect pin, try again.");
-                                    }
-                                    context.read<SetpinButtonsCubit>().clearPin();
-                                  }
+                              if(state.trnxInProcess){
+                                Navigator.pop(context);
+                                showProcessDialog(context);
+                              }
+                              else if (state.trnxSuccess){
+                                Navigator.pop(context);
+                                showStatusDialog(context, 'success');
+                                context.read<AirtimeCubit>().reset();
+                              }
+                              else if (state.trnxFailure){
+                                Navigator.pop(context);
+                                showStatusDialog(context, 'fail');
+                                context.read<AirtimeCubit>().reset();
+                              }
                             }
                           )
                         ], 
                         child: SizedBox()
                       ),
                       BlocBuilder<NetworkProvidersCubit, NetworkProvidersState>(
-                        builder: (context, networkProviders) {
+                        builder: (context, networks) {
+                          final providers = networks.networkProviders;
                           return DropdownButtonFormField(
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
@@ -147,16 +149,13 @@ class _AirtimeState extends State<Airtime> {
                               ),
                               border: OutlineInputBorder(),
                             ),
-                            hint: Text(
-                              network == ""
-                                  ? "Choose Network"
-                                  : networks[network].toString(),
+                            hint: Text( "Choose Network",
                               style: TextStyle(color: theme.primaryColor),
                             ),
                             items: [
-                              for (var network in networkProviders.networkProviders!)
+                              for (var network in providers!.keys)
                                 (DropdownMenuItem(
-                                  value: network,
+                                  value: providers[network] as int,
                                   child: Text(network),
                                 )),
                             ],
@@ -267,9 +266,9 @@ class _AirtimeState extends State<Airtime> {
                           if (_formKey.currentState!.validate()) {
                             //showPinButtons(context);
                             PinButtonWidget(context: context,title: 'Enter pin', onEnteredPins: (pin){
-                              print("Entered PIN: $pin");
+                              //print("Entered PIN: $pin");
                               if (user.userData?.pin == pin){
-                                showProcessDialog(context);
+                                context.read<AirtimeCubit>().purchaseAirtime();
                               }
                               else{
                                 showStatusDialog(context, "Incorrect pin, try again.");

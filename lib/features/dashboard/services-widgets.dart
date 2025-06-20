@@ -21,7 +21,7 @@ class _ServicesWidgetsState extends State<ServicesWidgets> {
   Widget _buildFeature(IconData icon, String title, String description) {
     return GestureDetector(
       onTap: () {
-        print(title);
+        //print(title);
         if (title == "Data Purchase") {
           context.read<DataCubit>().reInitialize();
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Data()));

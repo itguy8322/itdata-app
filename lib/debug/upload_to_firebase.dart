@@ -5,9 +5,9 @@ import 'package:itdata/debug/data.dart';
 // import 'package:itdata/debug/electric.dart';
 // import 'package:itdata/debug/plans.dart';
 void uploadToFirebase() async {
-  print("<=============== UPLOADING DATA TO FIREBASE =================>");
+  //print("<=============== UPLOADING DATA TO FIREBASE =================>");
   final FirebaseFirestore db = FirebaseFirestore.instance;
   loadDataPlansToFirebase(db);
   // loadDiscosToFirebase(db);
-  print("<=============== UPLOADING DATA TO FIREBASE =================>");
+  //print("<=============== UPLOADING DATA TO FIREBASE =================>");
 }

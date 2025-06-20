@@ -20,12 +20,13 @@ import 'package:itdata/data/cubits/services/cable/cable_cubit.dart';
 import 'package:itdata/data/cubits/services/data/data_cubit.dart';
 import 'package:itdata/data/cubits/services/edu/edu_cubit.dart';
 import 'package:itdata/data/cubits/services/electricity/electricity_cubit.dart';
+import 'package:itdata/data/cubits/setpin-buttons/setpin_buttons_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_cubit.dart';
 import 'package:itdata/data/cubits/theme/theme_state.dart';
 import 'package:itdata/data/cubits/transaction/transaction_cubit.dart';
 import 'package:itdata/data/cubits/user-data/user_data_cubit.dart';
+import 'package:itdata/features/auth/login.dart';
 import 'package:itdata/features/settings/change_pin.dart';
-import 'package:itdata/services/network_providers_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -58,26 +59,37 @@ class _SignupPageState extends State<SignupPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     BlocListener<AuthCubit, AuthState>(
-                      listener: (context, state) async {
+                      listener: (context, state) {
                         if (state is SignupLoading) {
                           showProcessDialog(context);
                         } else if (state is SignupSuccess) {
                           final id = state.userInfo?.id;
-                          print("AM LOGGED IN");
+                          //print("AM LOGGED IN");
+                          // context.read<AuthCubit>().logout();
+                          context.read<UserDataCubit>().reset();
+                          context.read<ThemeCubit>().reset();
+                          context.read<TransactionCubit>().reset();
+                          context.read<NotificationListCubit>().reset();
+                          context.read<SetpinButtonsCubit>().reset();
+                          context.read<DataCubit>().reset();
+                          context.read<AirtimeCubit>().reset();
+                          context.read<EduCubit>().reset();
+                          context.read<CableCubit>().reset();
+                          context.read<ElectricityCubit>().reset();
+                          context.read<NetworkProvidersCubit>().reset();
                           context.read<UserDataCubit>().setUser(
                             state.userInfo!,
                             isNewUser: true
                           );
                           context.read<NotificationListCubit>().setUserId(id!);
                           context.read<TransactionCubit>().setUserId(id);
-                          final networkProviders = await NetworkProvidersService().loadNetworkProviders();
-                          context.read<NetworkProvidersCubit>().setNetworkProviders(networkProviders);
+                          context.read<NetworkProvidersCubit>().loadNetworkProviders();
                           context.read<AirtimeCubit>().loadAirtimeTypes();
                           context.read<DataCubit>().loadDataPlans();
                           context.read<CableCubit>().loadCablePlans();
                           context.read<EduCubit>().loadExamTypes();
                           context.read<ElectricityCubit>().loadDiscos();
-                          print("<============ PASSED ===============>");
+                          //print("<============ PASSED ===============>");
                           Navigator.pop(context);
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChangePin()));
                         } else if (state is SignupFailure) {
@@ -137,10 +149,7 @@ class _SignupPageState extends State<SignupPage> {
                                   context
                                       .read<InputValidationCubit>()
                                       .reInitialize();
-                                  Navigator.popAndPushNamed(
-                                    context,
-                                    "/login",
-                                  );
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));
                                 },
                                 child: Text(
                                   'Login',
